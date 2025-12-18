@@ -1,1 +1,80 @@
-/* You can add global styles to this file, and also import other style files */
+.sheet {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    width: calc(100vw / 3);
+    font-family: 'Mikodacs';
+    background-color: #010101;
+    color: aliceblue;
+    border-left: 0.4vh solid #EF944D;
+    text-align: center;
+    text-justify: center;
+    font-size: 120%;
+    overflow-x: hidden;
+    scrollbar-color: #010101 #EF944D;
+    min-width: 500px;
+    width: calc(100vw / 3);
+    max-height: 100vh;
+    min-height: 100vh;
+}
+@font-face {
+  font-family: Mikodacs;
+  src: url(/public/Mikodacs.otf);
+}
+@font-face {
+  font-family: BebasKai;
+  src: url(/public/BebasKai.otf);
+}
+
+
+.sheet .intro {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    max-height: 100%;
+    gap: 1%;
+    margin-top:0.7%;
+}
+
+.intro .icon {
+    grid-row: 1/4;
+    grid-column: 1;
+    border: 5px solid aquamarine;
+    max-width: 90%;
+    max-height: 90%;
+    contain: scale-down;
+    margin-left: 4vh;
+}
+
+.sheet .gridbox{
+    margin: 0.8%;
+    background-clip: padding-box;
+    align-content: center;
+    padding: 1.5%;
+}
+
+.intro .equip {
+    grid-column: 2;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 0.3vh solid #E2E6AE;
+    padding: 5px;
+    contain: scale-down;
+    max-height: 100%;
+    margin: 1%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+}
+
+.equip .equips {
+    max-height: 100%;
+    max-width: 100%;
+    contain: scale-down;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0;}

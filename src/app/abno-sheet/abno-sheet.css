@@ -1,0 +1,29 @@
+.abnosh {
+    display: grid;
+    grid-template-rows: 20% 20% auto;
+}
+
+.intro{
+    grid-template-rows: 1.5fr 1.5fr 1fr;
+}
+
+.intro .abnoname{
+    background-color: black;
+    color: #f1f1f1;
+    grid-template-columns: 1fr;
+}
+
+.intro .danger {
+    background-color: rgb(255, 238, 0);
+    align-content: center;
+    grid-column: 2;
+    grid-row: 2;
+    color: #010101;
+}
+.intro .equip{
+    max-height: 50%;
+    align-self: flex-end;
+}
+.equip .equips {
+    max-height: 50%;
+}

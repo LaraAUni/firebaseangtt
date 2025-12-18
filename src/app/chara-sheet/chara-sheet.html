@@ -1,0 +1,143 @@
+<div class="sheet">
+    <div class="grid">
+        <div class="intro">
+            <img class="icon" src="Charas/111.png" alt="">
+            <div class="agentname">
+                <div>Olive</div>
+                <div>Spencer</div>
+            </div>
+            <div class="role">
+                <div class="gridbox" style="background-color: aquamarine;"><span>Agent</span></div>
+                <div class="gridbox" style="background-color: aquamarine;"><span>Control</span></div>
+            </div>
+            <div class="equip">
+                <div><img class="equips" src="EGOs/EGOWeaponFrostShard.png" alt="Weapon"></div>
+                <div><img class="equips" src="EGOs/EGOSuitFrostShard.png" alt="Suit"></div>
+            </div>
+        </div>
+        <div class="ability">
+            <div>Coordinazione</div>
+            <div>Volontà di Ergersi</div>
+            <div>Blank</div>
+        </div>
+
+        <div class="stresstraumas">
+            <div class="stresstrauma">Stress</div>
+            <div class="stresstrauma">Trauma</div>
+            <div class="stresstrauma">Trauma</div>
+            <div class="stresstrauma">Trauma</div>
+        </div>
+
+        <div class="health">
+            <div class="physical">X</div>
+            <div class="physical">X</div>
+            <div class="physical">X</div>
+            <div class="physical">X</div>
+            <div class="physical">X</div>
+            <div class="physical"></div>
+            <div class="physical"></div>
+            <div class="mental">X</div>
+            <div class="mental">X</div>
+            <div class="mental">X</div>
+            <div class="mental"></div>
+            <div class="mental">X</div>
+            <div class="mental"></div>
+            <div class="mental"></div>
+        </div>
+
+        <div class="exp">Exp: 0</div>
+
+        <div class="skills">
+            <div class="skill" style="background-color: #CB2642">Eccellere</div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#CB2642,#CB2642 , #EFECC0, #EFECC0)">Sopportare
+            </div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#CB2642,#CB2642, #814A84, #814A84)">Celarsi</div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#CB2642,#CB2642, #3FCCBD, #3FCCBD)">Correre</div>
+            <div class="skillnum">0</div>
+            <div class="skill" style="background-color: #EFECC0">Analizzare</div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#EFECC0 ,#EFECC0, #814A84, #814A84)">Rapportarsi
+            </div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#EFECC0 ,#EFECC0, #3FCCBD, #3FCCBD)">Mirare</div>
+            <div class="skillnum">0</div>
+            <div class="skill" style="background-color: #3FCCBD">Operare</div>
+            <div class="skillnum">0</div>
+            <div class="skill"
+                style="background-image: linear-gradient(to top right,#814A84 ,#814A84, #3FCCBD, #3FCCBD)">Comandare
+            </div>
+            <div class="skillnum">0</div>
+            <div class="skill" style="background-color: #814A84">Schermire</div>
+            <div class="skillnum">0</div>
+        </div>
+        <div class="virtues">
+            <ng-template #virtue>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+                <div class="virtueborder"></div>
+            </ng-template>
+            <div class="virtueshell" style="background-color: #CB2642; border-color: #CB2642; color:#CB2642;">
+                <div class="virtue">
+                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt=""></div>
+                    <div class="virtueitem2">3</div>
+                </div>
+            </div>
+            <div class="virtueshell" style="background-color: #EFECC0; border-color: #EFECC0; color:#EFECC0;">
+                <div class="virtue">
+                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt=""></div>
+                    <div class="virtueitem2">3</div>
+                </div>
+            </div>
+            <div class="virtueshell" style="background-color: #814A84; border-color: #814A84; color:#814A84;">
+                <div class="virtue">
+                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt=""></div>
+                    <div class="virtueitem2">3</div>
+                </div>
+            </div>
+            <div class="virtueshell" style="background-color: #3FCCBD; border-color: #3FCCBD; color:#3FCCBD;">
+                <div class="virtue">
+                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt=""></div>
+                    <div class="virtueitem2">3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gifts">
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words of a
+                Feather: 0 Exp</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Made to
+                Measure: 0 Exp</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Winter</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
+            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
+        </div>
+    </div>
+</div>
+<router-outlet />

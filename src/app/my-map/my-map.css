@@ -1,0 +1,22 @@
+.map {
+    position: fixed;
+    left: 0;
+    top: 4vh;
+    display: grid;
+    grid-template-columns: repeat(32, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-position: top;
+    background-size: 1600px 1000px;
+    height: 1000px;
+    width: 1600px;
+}
+
+.pawn {
+    max-width: 90%;
+    border: 0.4vh solid #177B6E;
+    border-radius: 50%;
+    right: 0;
+    cursor: crosshair;
+}

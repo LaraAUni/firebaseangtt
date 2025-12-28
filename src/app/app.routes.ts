@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { CharaSheet } from './chara-sheet/chara-sheet';
 import { AbnoSheet } from './abno-sheet/abno-sheet';
 import { Armoury } from './armoury/armoury';
-import { Auth } from './auth/auth';
 import { App } from './app';
+import { LoginPage } from './login-page/login-page';
 
 export const routes: Routes = [
   {
@@ -33,7 +33,7 @@ export const routes: Routes = [
   },
   {
     path:'sign-in',
-    component: Auth,
+    component: LoginPage,
     title: 'Sign In'
   }
 ];

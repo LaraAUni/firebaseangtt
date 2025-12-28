@@ -1,4 +1,3 @@
-
 <mat-drawer-container>
   <mat-drawer-content class="page">
     <header class="barra">
@@ -34,8 +33,7 @@
 </mat-drawer-container>
 
 @if(showRouterOutlet>0){
-
     <img class="closebtn" (click)="drawer.toggle(); showRouterOutlet=0" src="buttonclose.png" alt="">
+    <app-chara-sheet></app-chara-sheet>
     <router-outlet name="sheetOut"/>
     }
-<router-outlet />

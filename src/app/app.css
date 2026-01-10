@@ -52,7 +52,7 @@
     max-height: 8vh;
     max-width: 4vh;
     cursor: pointer;
-    z-index: 1;
+    z-index: 2;
 }
 .openbtn {
     position: fixed;

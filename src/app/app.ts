@@ -39,7 +39,7 @@ export class App {
   }
   
   charaPress(id:number){
-    this.showRouterOutlet=0;
+    this.showRouterOutlet=1;
     //poi vai al numero aaaa
   }
 }

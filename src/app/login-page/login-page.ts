@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { GoogleAuthProvider, signInWithPopup, signOut, user, Auth } from  '@angular/fire/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut, user } from  '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 import { inject } from '@angular/core';
-
 @Component({
   selector: 'app-login-page',
   imports: [],

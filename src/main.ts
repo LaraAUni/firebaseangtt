@@ -15,7 +15,6 @@ import { GoogleAuthProvider } from "@firebase/auth";
 import { environment } from "./environments/environment";
 import { LoginPage } from './app/login-page/login-page';
 
-
 @Directive({
   selector: "[googleSso]",
 })
@@ -37,17 +36,17 @@ const firebaseConfig = {
   appId: "1:218218565698:web:e02d7bf55af32ab7251ddb",
   measurementId: "G-3RHTFBTNWY"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
+import { addDoc, collection } from "firebase/firestore"; 
+
 //TestUser: alphatt@gmail.com Password: sonoio
 //CharID: Dep/(Player: Abno: Ego: Clerk)?1:2:3:4/CharaNum
-
-//try {
 /*
+try {
   const docRef = await addDoc(collection(db, "users"), {
     email: "alphatt@gmail.com",
     nickname: "AlphaTT",
@@ -64,13 +63,10 @@ const db = getFirestore(app);
     coords: [[1101,32],[2102, 57], [1201, 33]],
     messages:"[Game Start!,AlphaTT: Welcome!]"
   });
-  */
- /*
   const docRef = await addDoc(collection(db, "charas"), {
     gameID: "00001",
-    charID: 0000,
-    playerID: [["alphatt"],[]], //Owner, Borrower (can't pass ownership),
-        "ImgUrl":"public/Charas/0000.png",
+    charID: 1400,
+    playerID: "AlphaTT",
         "name":"Alpha",
         "surname":"",
         "role":"Clerk",
@@ -90,6 +86,8 @@ const db = getFirestore(app);
 } catch (e) {
   console.error("Error adding document: ", e);
 }
-*/
+  */
+
+
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));

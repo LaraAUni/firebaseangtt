@@ -2,6 +2,7 @@
   <mat-drawer-content class="page">
     <header class="barra">
       <span class="title">THIRD TRUMPET !!!</span>
+      <app-login-page></app-login-page>
     </header>
     <div>
       <img class="buttonanim" src="buttonanim.png" alt="B">
@@ -17,23 +18,29 @@
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agenti</mat-expansion-panel-header>
-          <img class="iconbtn" src="Charas/111.png" alt="" mat-list-item routerLink="characters" (click)="showRouterOutlet=1; drawer.toggle();">
-          <a routerLink="characters" class="links">Agent</a>
+          <img class="iconbtn" src="Charas/111.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle();">
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
-          <img class="iconbtn" src="Charas/211.png" alt="" mat-list-item routerLink="abnormalities" (click)="showRouterOutlet=1; drawer.toggle();">
+          <img class="iconbtn" src="Charas/211.png" alt="" mat-list-item  (click)="showAbno=1; drawer.toggle();">
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Armoury</mat-expansion-panel-header>
-          <img class="weapbtn" src="EGOs/EGOWeaponFrostShard.png" alt="" mat-list-item routerLink="armoury" (click)="showRouterOutlet=1; drawer.toggle();">
+          <img class="weapbtn" src="EGOs/EGOWeaponFrostShard.png" alt="" mat-list-item (click)="showArmo=1; drawer.toggle();">
       </mat-expansion-panel>
     </mat-list>
   </mat-drawer>
 </mat-drawer-container>
 
-@if(showRouterOutlet>0){
-    <img class="closebtn" (click)="drawer.toggle(); showRouterOutlet=0" src="buttonclose.png" alt="">
+@if(showChara>0){
+    <img class="closebtn" (click)="drawer.toggle(); showChara=0" src="buttonclose.png" alt="">
     <app-chara-sheet></app-chara-sheet>
-    <router-outlet name="sheetOut"/>
     }
+@if(showAbno>0){
+    <img class="closebtn" (click)="drawer.toggle(); showAbno=0" src="buttonclose.png" alt="">
+    <app-abno-sheet></app-abno-sheet>
+  }
+@if(showArmo>0){
+    <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
+    <app-armoury></app-armoury>
+    }    

@@ -10,7 +10,7 @@
     border-left: 0.4vh solid #EF944D;
     text-align: center;
     text-justify: center;
-    font-size: 120%;
+    font-size: 160%;
     overflow-x: hidden;
     scrollbar-color: #010101 #EF944D;
     min-width: 500px;
@@ -19,12 +19,12 @@
     min-height: 100vh;
 }
 @font-face {
-  font-family: Mikodacs;
-  src: url(/public/Mikodacs.otf);
+  font-family: 'Mikodacs';
+  src: url('/public/Mikodacs.otf');
 }
 @font-face {
-  font-family: BebasKai;
-  src: url(/public/BebasKai.otf);
+  font-family: 'BebasKai';
+  src: url('/public/BebasKai.otf');
 }
 
 

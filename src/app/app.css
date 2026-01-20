@@ -1,16 +1,14 @@
 
 @font-face {
-  font-family: Mikodacs;
-  src: url(/public/Mikodacs.otf);
+  font-family: 'Mikodacs';
+  src: url('../../public/Mikodacs.otf');
 }
 @font-face {
-  font-family: BebasKai;
-  src: url(/public/BebasKai.otf);
+  font-family: 'BebasKai';
+  src: url('../../public/BebasKai.otf');
 }
-
 .page {
     /*PC*/
-    font-family: 'Mikodacs';
     font-size: large;
     min-width: 100vw;
     min-height: 100vh;
@@ -35,11 +33,12 @@
     padding: 3%;
     text-decoration: none;
     font-size: 3vh;
-    color: #818181;
+    color: #EF944D;
     display: block;
     transition: 0.3s;
     left: 4vh;
-    font-family: "BebasKai";
+    font-family: "BebasKai" !important;
+    line-height: unset;
 }
 .links:hover {
     color: #f1f1f1;
@@ -52,7 +51,7 @@
     max-height: 8vh;
     max-width: 4vh;
     cursor: pointer;
-    z-index: 1;
+    z-index: 3;
 }
 .openbtn {
     position: fixed;
@@ -63,7 +62,7 @@
     top: 0.5vh;
     right: 0.2vw;
     max-height: 3vh;
-    z-index: 1;
+    z-index: 2;
 }
 
 .buttonanim {
@@ -131,9 +130,10 @@
     height: 100vh;
     background-color: #010101;
     overflow-x: hidden;
-    border-left: 0.4vh solid #EF944D;
+    border-left: 0.4vh solid #EF944D !important;
     scrollbar-color: #010101 #EF944D;
-    padding: 0.4vh #010101;
+    box-sizing: content-box;
+    font-family: 'BebasKai' !important;
 }
 
 .sidenav .mat-toolbar {

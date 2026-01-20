@@ -14,6 +14,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { GoogleAuthProvider } from "@firebase/auth";
 import { environment } from "./environments/environment";
 import { LoginPage } from './app/login-page/login-page';
+import { FireInit } from './app/fire-init';
 
 @Directive({
   selector: "[googleSso]",
@@ -27,26 +28,14 @@ export class GoogleSsoDirective {
     );
   }
 }
-const firebaseConfig = {
-  apiKey: "AIzaSyAl6MOHLbKkHSp2UTNmmkzRZphfthmEn3E",
-  authDomain: "third-trumpet.firebaseapp.com",
-  projectId: "third-trumpet",
-  storageBucket: "third-trumpet.firebasestorage.app",
-  messagingSenderId: "218218565698",
-  appId: "1:218218565698:web:e02d7bf55af32ab7251ddb",
-  measurementId: "G-3RHTFBTNWY"
-};
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-
-import { addDoc, collection } from "firebase/firestore"; 
 
 //TestUser: alphatt@gmail.com Password: sonoio
 //CharID: Dep/(Player: Abno: Ego: Clerk)?1:2:3:4/CharaNum
+
 /*
 try {
+
   const docRef = await addDoc(collection(db, "users"), {
     email: "alphatt@gmail.com",
     nickname: "AlphaTT",
@@ -58,11 +47,13 @@ try {
     DMList: ["AlphaTT"],
     playerList: ["BetaTT", "GammaTT"],
   });
+
   const docRef = await addDoc(collection(db, "gamedata"), {
     gameID: "00001",
     coords: [[1101,32],[2102, 57], [1201, 33]],
     messages:"[Game Start!,AlphaTT: Welcome!]"
   });
+
   const docRef = await addDoc(collection(db, "charas"), {
     gameID: "00001",
     charID: 1400,
@@ -79,9 +70,9 @@ try {
         "exp":0,
         "skills":[0,0,0,0,0,0,0,0,0,0],
         "virtues":[0,0,0,0],
-        "gifts":[["",0],["",0],["",0],["",0],["",0]]
-    
+        "gifts":[{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0}]
   });
+
   console.log("Document written with ID: ", docRef.id);
 } catch (e) {
   console.error("Error adding document: ", e);

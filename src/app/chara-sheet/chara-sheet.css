@@ -2,7 +2,9 @@
     display: grid;
     grid-template-rows: 20% 5% 5% 6% 4% 20% 20% auto;
     scrollbar-color: #010101 #EF944D;
+    gap: 1%;
 }
+
 
 .sheet .intro {
     grid-row: 1;
@@ -17,7 +19,7 @@
 .intro .icon {
     grid-row: 1/4;
     grid-column: 1;
-    border: 5px solid aquamarine;
+    border: 2% solid aquamarine;
     max-width: 90%;
     max-height: 90%;
     contain: scale-down;
@@ -40,7 +42,7 @@
 
 .intro .agentname{
     grid-template-columns: 1fr 1fr;
-    padding:1%
+    padding:1%;
 }
 .intro .role{
     grid-row: 2;
@@ -63,7 +65,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     border: 0.3vh solid #E2E6AE;
-    padding: 5px;
+    padding: 2%;
     contain: scale-down;
     max-height: 100%;
     margin: 1%;
@@ -182,7 +184,7 @@
     background-clip: padding-box;
     max-height: 95%;
     align-content: center;
-    font-size: 120%;
+    font-size: 150%;
 }
 
 .skills .skillnum {
@@ -192,7 +194,7 @@
     background-clip: padding-box;
     max-height: 95%;
     align-content: center;
-    font-size: 140%;
+    font-size: 150%;
     color: #EF944D;
 }
 
@@ -274,7 +276,7 @@
     background-clip: padding-box;
     min-height: max-content;
     flex-direction: column;
-    margin: 2%;
+    margin: 3%;
     margin-left: 10%;
     margin-right: 10%;
 }
@@ -283,6 +285,7 @@
 .gifts .giftname {
     background-color: #010101;
     max-height: min-content;
+    font-size: 150%;
 }
 
 .gifts .gifticon {

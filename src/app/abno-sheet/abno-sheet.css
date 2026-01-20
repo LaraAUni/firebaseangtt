@@ -1,16 +1,23 @@
 .abnosh {
     display: grid;
-    grid-template-rows: 20% 20% auto;
+    grid-template-rows: 20% 20% 20% auto;
 }
 
 .intro{
     grid-template-rows: 1.5fr 1.5fr 1fr;
+    font-size: 150%;
 }
 
 .intro .abnoname{
-    background-color: black;
-    color: #f1f1f1;
     grid-template-columns: 1fr;
+    background-color: #010101;
+    color: aliceblue;
+    align-content: center;
+    background-clip: padding-box;
+    font-size: 130%;
+    max-height: 110%;
+    margin-right: 2%;
+    padding: 2%;
 }
 
 .intro .danger {
@@ -19,11 +26,72 @@
     grid-column: 2;
     grid-row: 2;
     color: #010101;
+    font-size: 140%;
+    margin-right: 3%;
+    margin-left: 3%;
+    padding: 3%;
 }
 .intro .equip{
-    max-height: 50%;
+    max-height: 90%;
     align-self: flex-end;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 .equip .equips {
-    max-height: 50%;
+    max-height: 80%;
+    contain: scale-down;
+    margin: 2%;
+}
+
+
+.sheet .resistances {
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4%;
+    background-color: #010101;
+    max-height: 100%;
+    contain: scale-down;
+    background-clip: padding-box;
+    margin: 2%;
+    padding: 3%;
+}
+
+.resistances .resistance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 0.4vh solid;
+    max-height: 110%;
+    border: 1%;
+    contain: scale-down;
+    background-color: #010101;
+}
+
+
+.resistance .resitem1 {
+    grid-column: 1;
+    background-color: #010101;
+    align-content: center;
+    justify-content: space-around;
+    contain: scale-down;
+    max-height: 100%;
+    margin: 0.4vh;
+    margin-right: 0;
+}
+
+.resistance .resitem2 {
+    grid-column: 2;
+    background-color: #010101;
+    align-content: center;
+    justify-content: center;
+    contain: scale-down;
+    max-height: 100%;
+    margin: 0.4vh;
+    margin-left: 0;
+    font-size: 3vh;
+}
+
+.resistance .resicon {
+    max-height: 4vh;
+    contain: scale-down;
 }

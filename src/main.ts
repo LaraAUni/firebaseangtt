@@ -15,12 +15,17 @@ import { GoogleAuthProvider } from "@firebase/auth";
 import { environment } from "./environments/environment";
 import { LoginPage } from './app/login-page/login-page';
 import { FireInit } from './app/fire-init';
+import { addDoc, collection } from "firebase/firestore";
+import { inject } from '@angular/core';
 
 @Directive({
   selector: "[googleSso]",
 })
 export class GoogleSsoDirective {
-  constructor(private angularFireAuth: AngularFireAuth) {}
+
+  constructor(private angularFireAuth: AngularFireAuth) {
+    
+  }
   @HostListener("click")
   async onClick() {
     const creds = await this.angularFireAuth.signInWithPopup(
@@ -30,12 +35,35 @@ export class GoogleSsoDirective {
 }
 
 
+
 //TestUser: alphatt@gmail.com Password: sonoio
 //CharID: Dep/(Player: Abno: Ego: Clerk)?1:2:3:4/CharaNum
-
 /*
 try {
-
+  console.log("APP passato come ", app);
+  console.log("DB passato come ", db);
+  const docRef = addDoc(collection(db, "charas"), {
+    gameID: 0,
+    charID: 0,
+    playerID: {Owner: ["AlphaTT"], Borrower: []},
+    ImgUrl: "public/Charas/0000.png",
+    fullName: { Name: "Alpha", Nickname: "", Surname: ""},
+    role: ["Clerk","Control"],
+    equip : [{imgUrl: "StandardW", Name: "Riot Stick"}, {imgUrl: "StandardS", Name: "Suit"}],
+    abilities: ["","",""],
+    stress: 0,
+    trauma: ["","",""],
+    physHealth: [false, false, false, false, false, false, false, false, false],
+    mindHealth: [false, false, false, false, false, false, false, false, false],
+    exp: 0,
+    skills: [0,0,0,0,0,0,0,0,0,0],
+    gifts : [{ imgUrl: "", Name: "", "Exp": 0 }],
+    mapCoord: [0,0]
+  });
+} catch (e) {
+  console.error("Error adding document: ", e);
+}*/
+/*
   const docRef = await addDoc(collection(db, "users"), {
     email: "alphatt@gmail.com",
     nickname: "AlphaTT",
@@ -54,31 +82,11 @@ try {
     messages:"[Game Start!,AlphaTT: Welcome!]"
   });
 
-  const docRef = await addDoc(collection(db, "charas"), {
-    gameID: "00001",
-    charID: 1400,
-    playerID: "AlphaTT",
-        "name":"Alpha",
-        "surname":"",
-        "role":"Clerk",
-        "equip":["StandardW","StandardW"],
-        "abilities":["","",""],
-        "stress":0,
-        "trauma":["","",""],
-        "physHealth":[0,0,0,0,0,0,0,0,0],
-        "mindHealth":[0,0,0,0,0,0,0,0,0],
-        "exp":0,
-        "skills":[0,0,0,0,0,0,0,0,0,0],
-        "virtues":[0,0,0,0],
-        "gifts":[{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0},{Name: "",Exp: 0}]
-  });
-
   console.log("Document written with ID: ", docRef.id);
 } catch (e) {
   console.error("Error adding document: ", e);
 }
-  */
-
+*/
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));

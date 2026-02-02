@@ -1,83 +1,85 @@
 
+
 <div class="sheet">
     <div class="grid">
         <div class="intro">
-            <img class="icon" src="Charas/111.png" alt="">
+            <img class="icon" src="Charas/{{Chara.ImgUrl}}.png" alt="" (click)="addChara()" style="cursor: pointer;">
             <div class="agentname">
-                <div>Olive</div>
-                <div>Spencer</div>
+                <div>{{Chara.fullName.Name}}</div>
+                <div>{{Chara.fullName.Surname}}</div>
             </div>
-            <div class="role">
-                <div class="gridbox" style="background-color: aquamarine;"><span>Agent</span></div>
-                <div class="gridbox" style="background-color: aquamarine;"><span>Control</span></div>
+            <div class="role" onclick="document.querySelector('.gridbox').style.backgroundColor='var(--control-color)'">
+                <div class="gridbox"><span>{{Chara.role[0]}}</span></div>
+                <div class="gridbox" ><span>{{Chara.role[1]}}</span></div>
             </div>
-            <div class="equip">
-                <div><img class="equips" src="EGOs/EGOWeaponFrostShard.png" alt="Weapon"></div>
-                <div><img class="equips" src="EGOs/EGOSuitFrostShard.png" alt="Suit"></div>
+            <div class="equip"><img class="equips" src="EGOs/{{Chara.equip[0].imgUrl}}.png" alt="">
+            <div class="equiptxt">{{Chara.equip[0].Name}}</div>
+            <img class="equips" src="EGOs/{{Chara.equip[1].imgUrl}}.png" alt="">
+            <div class="equiptxt">{{Chara.equip[1].Name}}</div>
             </div>
         </div>
         <div class="ability">
-            <div>Coordinazione</div>
-            <div>Volontà di Ergersi</div>
-            <div>Blank</div>
+            <div>{{Chara.abilities[0]}}</div>
+            <div>{{Chara.abilities[1]}}</div>
+            <div>{{Chara.abilities[2]}}</div>
         </div>
 
         <div class="stresstraumas">
-            <div class="stresstrauma">Stress</div>
-            <div class="stresstrauma">Trauma</div>
-            <div class="stresstrauma">Trauma</div>
-            <div class="stresstrauma">Trauma</div>
+            <div class="stresstrauma">Stress: {{Chara.stress}}</div>
+            <div class="stresstrauma">{{Chara.trauma[0]}}</div>
+            <div class="stresstrauma">{{Chara.trauma[1]}}</div>
+            <div class="stresstrauma">{{Chara.trauma[2]}}</div>
         </div>
 
         <div class="health">
-            <div class="physical">X</div>
-            <div class="physical">X</div>
-            <div class="physical">X</div>
-            <div class="physical">X</div>
-            <div class="physical">X</div>
-            <div class="physical"></div>
-            <div class="physical"></div>
-            <div class="mental">X</div>
-            <div class="mental">X</div>
-            <div class="mental">X</div>
-            <div class="mental"></div>
-            <div class="mental">X</div>
-            <div class="mental"></div>
-            <div class="mental"></div>
+            <div class="physical">{{hurt(Chara.physHealth[0])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[1])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[2])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[3])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[4])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[5])}}</div>
+            <div class="physical">{{hurt(Chara.physHealth[6])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[0])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[1])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[2])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[3])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[4])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[5])}}</div>
+            <div class="mental">{{hurt(Chara.mindHealth[6])}}</div>
         </div>
 
-        <div class="exp">Exp: 0</div>
+        <div class="exp">Exp: {{Chara.exp[0]}}</div>
 
         <div class="skills">
-            <div class="skill" style="background-color: #CB2642">Eccellere</div>
-            <div class="skillnum">0</div>
+            <div class="skill" style="background-color: var(--reddam-color)">Eccellere</div>
+            <div class="skillnum">{{Chara.skills[0]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#CB2642,#CB2642 , #EFECC0, #EFECC0)">Sopportare
+                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))">Sopportare
             </div>
-            <div class="skillnum">0</div>
+            <div class="skillnum">{{Chara.skills[1]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#CB2642,#CB2642, #814A84, #814A84)">Celarsi</div>
-            <div class="skillnum">0</div>
+                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))">Celarsi</div>
+            <div class="skillnum">{{Chara.skills[2]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#CB2642,#CB2642, #3FCCBD, #3FCCBD)">Correre</div>
-            <div class="skillnum">0</div>
-            <div class="skill" style="background-color: #EFECC0">Analizzare</div>
-            <div class="skillnum">0</div>
+                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))">Correre</div>
+            <div class="skillnum">{{Chara.skills[3]}}</div>
+            <div class="skill" style="background-color: var(--whitedam-color)">Analizzare</div>
+            <div class="skillnum">{{Chara.skills[4]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#EFECC0 ,#EFECC0, #814A84, #814A84)">Rapportarsi
+                style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))">Rapportarsi
             </div>
-            <div class="skillnum">0</div>
+            <div class="skillnum">{{Chara.skills[5]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#EFECC0 ,#EFECC0, #3FCCBD, #3FCCBD)">Mirare</div>
-            <div class="skillnum">0</div>
-            <div class="skill" style="background-color: #3FCCBD">Operare</div>
-            <div class="skillnum">0</div>
+                style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))">Mirare</div>
+            <div class="skillnum">{{Chara.skills[6]}}</div>
+            <div class="skill" style="background-color: var(--paledam-color)">Operare</div>
+            <div class="skillnum">{{Chara.skills[7]}}</div>
             <div class="skill"
-                style="background-image: linear-gradient(to top right,#814A84 ,#814A84, #3FCCBD, #3FCCBD)">Comandare
+                style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))">Comandare
             </div>
-            <div class="skillnum">0</div>
-            <div class="skill" style="background-color: #814A84">Schermire</div>
-            <div class="skillnum">0</div>
+            <div class="skillnum">{{Chara.skills[8]}}</div>
+            <div class="skill" style="background-color: var(--blackdam-color)">Schermire</div>
+            <div class="skillnum">{{Chara.skills[9]}}</div>
         </div>
         <div class="virtues">
             <ng-template #virtue>
@@ -98,46 +100,42 @@
                 <div class="virtueborder"></div>
                 <div class="virtueborder"></div>
             </ng-template>
-            <div class="virtueshell" style="background-color: #CB2642; border-color: #CB2642; color:#CB2642;">
+            <div class="virtueshell" style="background-color: var(--reddam-color); border-color: var(--reddam-color); color:var(--reddam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt=""></div>
-                    <div class="virtueitem2">3</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt="Fortitude"></div>
+                    <div class="virtueitem2" title="+">{{VirtCalc(0,1,2,3)}}</div>
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: #EFECC0; border-color: #EFECC0; color:#EFECC0;">
+            <div class="virtueshell" style="background-color: var(--whitedam-color); border-color: var(--whitedam-color); color:var(--whitedam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt=""></div>
-                    <div class="virtueitem2">3</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt="Prudence"></div>
+                    <div class="virtueitem2" title="+">{{VirtCalc(1,4,5,6)}}</div>
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: #814A84; border-color: #814A84; color:#814A84;">
+            <div class="virtueshell" style="background-color: var(--blackdam-color); border-color: var(--blackdam-color); color:var(--blackdam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt=""></div>
-                    <div class="virtueitem2">3</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt="Temperance"></div>
+                    <div class="virtueitem2" title="+">{{VirtCalc(2,5,8,9)}}</div>
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: #3FCCBD; border-color: #3FCCBD; color:#3FCCBD;">
+            <div class="virtueshell" style="background-color: var(--paledam-color); border-color: var(--paledam-color); color:var(--paledam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt=""></div>
-                    <div class="virtueitem2">3</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt="Justice"></div>
+                    <div class="virtueitem2" title="+">{{VirtCalc(3,6,7,8)}}</div>
                 </div>
             </div>
         </div>
-
         <div class="gifts">
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words of a
-                Feather: 0 Exp</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Made to
-                Measure: 0 Exp</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Winter</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
-            <div class="giftname"><img class="gifticon" src="EGOs/EGOGiftFrostShard.png" alt="">Words</div>
+             @for ( i of Chara.gifts ; track i) {
+                <div class="giftname">
+                    <img class="gifticon" src='EGOs/{{i.imgUrl}}.png' alt="">
+                    {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
+                </div>}
+            @empty {<div></div>}
         </div>
     </div>
 </div>

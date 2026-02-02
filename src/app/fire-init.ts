@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 
 @Injectable({
@@ -8,10 +8,9 @@ import { initializeApp } from "firebase/app";
 })
 
 export class FireInit {
-  private firebaseConfig;
-  private APP;
-  private DB;
-
+  public firebaseConfig;
+  public APP;
+  public DB;
 constructor() { 
   this.firebaseConfig = {
   apiKey: "AIzaSyAl6MOHLbKkHSp2UTNmmkzRZphfthmEn3E",
@@ -26,11 +25,10 @@ constructor() {
 }
 // Initialize Firebase
 
-
-public get db() {
-  return this.DB;
-}
 public get app(){
   return this.APP;
+}
+public get db() {
+  return this.DB;
 }
 }

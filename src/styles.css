@@ -11,12 +11,13 @@
     text-align: center;
     text-justify: center;
     font-size: 160%;
-    overflow-x: hidden;
+    overflow: hidden;
     scrollbar-color: #010101 #EF944D;
     min-width: 500px;
     width: calc(100vw / 3);
     max-height: 100vh;
     min-height: 100vh;
+    padding-top: 0.5%;
 }
 @font-face {
   font-family: 'Mikodacs';
@@ -27,15 +28,33 @@
   src: url('/public/BebasKai.otf');
 }
 
+:root{
+    --background-color: #010101;
+    --border-color: #EF944D;
+    --textcolor: aliceblue;
+    --reddam-color: #CB2642;
+    --whitedam-color: #EFECC0;
+    --blackdam-color: #814A84;
+    --paledam-color: #3FCCBD;
+    --control-color: #CFDD1D;
+    --info-color: #6e28ca;
+    --training-color: #C88614;
+    --safety-color: #73A924;
+    --central-color: #EDCF00;
+    --disc-color: #A13126;
+    --welfare-color: #3247ff;
+    --extraction-color: #2D2D2D;
+    --records-color: #5F5F5F;
+    --bonusdep-color: #9AC2FF;
+}
 
 .sheet .intro {
     grid-row: 1;
     display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr 1fr 2fr;
+    grid-template-rows: 1.3fr 1fr 2fr;
     max-height: 100%;
     gap: 1%;
-    margin-top:0.7%;
 }
 
 .intro .icon {
@@ -45,7 +64,7 @@
     max-width: 90%;
     max-height: 90%;
     contain: scale-down;
-    margin-left: 4vh;
+    margin-left: 5%;
 }
 
 .sheet .gridbox{
@@ -76,5 +95,6 @@
 }
 
 
-html, body { height: 100%; }
+html, body { height: 100%;
+    overflow-y: hidden;}
 body { margin: 0;}

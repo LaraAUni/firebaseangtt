@@ -1,6 +1,6 @@
 .abnosh {
     display: grid;
-    grid-template-rows: 20% 20% 20% auto;
+    grid-template-rows: 20% 20% 10% 20% auto;
 }
 
 .intro{
@@ -40,6 +40,40 @@
     max-height: 80%;
     contain: scale-down;
     margin: 2%;
+}
+
+
+
+.sheet .skills {
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 40% 10% 40% 10%;
+    grid-template-rows: repeat(5, 1fr);
+    color: #010101;
+    margin: 2%;
+    background-color: gray;
+    border: 2px solid gray;
+    max-height: 100%;
+}
+
+.skills .skill {
+    grid-column: 1, 3;
+    margin: 0.8%;
+    background-clip: padding-box;
+    max-height: 95%;
+    align-content: center;
+    font-size: 150%;
+}
+
+.skills .skillnum {
+    grid-column: 2, 4;
+    margin: 0.8%;
+    background-color: #010101;
+    background-clip: padding-box;
+    max-height: 95%;
+    align-content: center;
+    font-size: 150%;
+    color: #EF944D;
 }
 
 

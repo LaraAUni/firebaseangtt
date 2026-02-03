@@ -3,14 +3,14 @@
 <div class="sheet">
     <div class="grid">
         <div class="intro">
-            <img class="icon" src="Charas/{{Chara.ImgUrl}}.png" alt="" (click)="addChara()" style="cursor: pointer;">
+            <img class="icon" src="Charas/{{Chara.ImgUrl}}.png" alt="" (click)="findChara(0)" style="cursor: pointer;" [ngStyle]="{'border-color': depColorUp()}">
             <div class="agentname">
                 <div>{{Chara.fullName.Name}}</div>
                 <div>{{Chara.fullName.Surname}}</div>
             </div>
-            <div class="role" onclick="document.querySelector('.gridbox').style.backgroundColor='var(--control-color)'">
-                <div class="gridbox"><span>{{Chara.role[0]}}</span></div>
-                <div class="gridbox" ><span>{{Chara.role[1]}}</span></div>
+            <div class="role">
+                <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[0]}}</span></div>
+                <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[1]}}</span></div>
             </div>
             <div class="equip"><img class="equips" src="EGOs/{{Chara.equip[0].imgUrl}}.png" alt="">
             <div class="equiptxt">{{Chara.equip[0].Name}}</div>
@@ -81,61 +81,62 @@
             <div class="skill" style="background-color: var(--blackdam-color)">Schermire</div>
             <div class="skillnum">{{Chara.skills[9]}}</div>
         </div>
-        <div class="virtues">
+        <div class="virtues" title="Click Left-Right to add Exp to Virtue">
             <ng-template #virtue>
                 <div class="virtueborder"></div>
+                <div class="virtueborder" style="margin-right: 5%;"></div>
+                <div class="virtueborder" style="margin-left: 5%;"></div>
+                <div class="virtueborder" style="margin-right: 5%;"></div>
+                <div class="virtueborder" style="margin-left: 5%;"></div>
                 <div class="virtueborder"></div>
+                <div class="virtueborder" style="margin-bottom: 8%;"></div>
+                <div class="virtueborder" style="margin-bottom: 8%;"></div>
+                <div class="virtueborder" style="margin-top: 8%;"></div>
+                <div class="virtueborder" style="margin-top: 8%;"></div>
                 <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder"></div>
+                <div class="virtueborder" style="margin-right: 5%;"></div>
+                <div class="virtueborder" style="margin-left: 5%;"></div>
+                <div class="virtueborder" style="margin-right: 5%;"></div>
+                <div class="virtueborder" style="margin-left: 5%;"></div>
                 <div class="virtueborder"></div>
             </ng-template>
             <div class="virtueshell" style="background-color: var(--reddam-color); border-color: var(--reddam-color); color:var(--reddam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt="Fortitude"></div>
-                    <div class="virtueitem2" title="+">{{VirtCalc(0,1,2,3)}}</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt="Fortitude" title="-"></div>
+                    <div class="virtueitem2" title="+">{{virtCalc(0,1,2,3)}}</div>
                 </div>
             </div>
             <div class="virtueshell" style="background-color: var(--whitedam-color); border-color: var(--whitedam-color); color:var(--whitedam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt="Prudence"></div>
-                    <div class="virtueitem2" title="+">{{VirtCalc(1,4,5,6)}}</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt="Prudence" title="-"></div>
+                    <div class="virtueitem2" title="+">{{virtCalc(1,4,5,6)}}</div>
                 </div>
             </div>
             <div class="virtueshell" style="background-color: var(--blackdam-color); border-color: var(--blackdam-color); color:var(--blackdam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt="Temperance"></div>
-                    <div class="virtueitem2" title="+">{{VirtCalc(2,5,8,9)}}</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt="Temperance" title="-"></div>
+                    <div class="virtueitem2" title="+">{{virtCalc(2,5,8,9)}}</div>
                 </div>
             </div>
             <div class="virtueshell" style="background-color: var(--paledam-color); border-color: var(--paledam-color); color:var(--paledam-color);">
                 <div class="virtue">
                     <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt="Justice"></div>
-                    <div class="virtueitem2" title="+">{{VirtCalc(3,6,7,8)}}</div>
+                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt="Justice" title="-"></div>
+                    <div class="virtueitem2" title="+">{{virtCalc(3,6,7,8)}}</div>
                 </div>
             </div>
         </div>
         <div class="gifts">
-             @for ( i of Chara.gifts ; track i) {
-                <div class="giftname">
+             @for ( i of Chara.gifts ; track i;) {
+                @if(i!=null){<div class="giftname">
                     <img class="gifticon" src='EGOs/{{i.imgUrl}}.png' alt="">
                     {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
                 </div>}
-            @empty {<div></div>}
+            }
+            @empty{<div class="giftname" style="padding: 2%; padding-bottom: 24%;">Nessun Dono Acquisito</div>}
         </div>
     </div>
 </div>

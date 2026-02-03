@@ -1,12 +1,13 @@
 .grid {
     display: grid;
-    grid-template-rows: 23% 4% 4% 5% 4% 20% 20% 20%;
+    grid-template-rows: 23% 4% 4% 5% 3% 20% 22% 17%;
     gap: 1%;
 }
 
 .sheet .intro {
     margin-top:0.7%;
     font-size: 180%;
+    margin-right: 3%;
 }
 
 .intro .icon {
@@ -19,17 +20,16 @@
     grid-column: 2;
     grid-row: 1;
     background-color: aliceblue;
-    color: #010101;
+    color: var(--blacktext-color);
     border: 0.3vh solid gray;
     align-content: center;
     background-clip: padding-box;
     max-height: 110%;
-    margin-right: 2%;
 }
 
 .intro .agentname{
     grid-template-columns: 1fr 1fr;
-    padding:1%;
+    padding:2%;
     font-size: 120%;
 }
 .intro .role{
@@ -46,7 +46,6 @@
     background-clip: padding-box;
     align-content: center;
     padding: 1.5%;
-    background-color: var(--bonusdep-color);
     padding-top: 5%;
 }
 
@@ -56,18 +55,15 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 0.1fr;
-    border: 0.3vh solid #E2E6AE;
+    border: 1% solid #E2E6AE;
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
     margin: 1%;
-    margin-right: 2%;
     margin-bottom: 0.3%;
 }
 
 .equip .equips {
-    max-height: 100%;
-    max-width: 100%;
     contain: scale-down;
     grid-row: 1;
     align-self: center;
@@ -91,7 +87,7 @@
     margin-top: 0.5%;
     margin-left: 2%;
     margin-right: 2%;
-    padding: 0.5%;
+    padding: 2%;
 }
 
 .sheet .stresstraumas {
@@ -104,7 +100,7 @@
     background-clip: padding-box;
     margin: 0.5%;
     gap: 1%;
-    font-size: 120%;
+    font-size: 130%;
     margin-left: 2%;
     margin-right: 2%;
     max-height: 100%;
@@ -174,7 +170,8 @@
     grid-template-columns: 40% 10% 40% 10%;
     grid-template-rows: repeat(5, 1fr);
     color: #010101;
-    margin: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
     background-color: gray;
     border: 2px solid gray;
     max-height: 100%;
@@ -215,7 +212,7 @@
     max-height: 100%;
     contain: scale-down;
     background-clip: padding-box;
-    margin: 2%;
+    margin: 1%;
     cursor: pointer;
 }
 
@@ -224,7 +221,7 @@
     grid-template-columns: 1fr 3fr 1.5fr 1.5fr 3fr 1fr;
     grid-template-rows: 1fr 2fr 2fr 1fr;
     border: 0.4vh solid;
-    max-height: 110%;
+    max-height: 100%;
     border: 1%;
     contain: scale-down;
 }
@@ -245,8 +242,9 @@
     justify-content: space-around;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
+    margin: 5%;
     margin-right: 0;
+    padding-top: 3%;
 }
 
 .virtue .virtueitem2 {
@@ -257,9 +255,10 @@
     justify-content: center;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
+    margin: 5%;
     margin-left: 0;
     font-size: 4vh;
+    padding-top: 8%;
 }
 
 .virtue .virtueicon {
@@ -271,12 +270,12 @@
 .sheet .gifts {
     grid-row: 8;
     border: 0.3vh solid #EF944D;
-    max-height: 100%;
+    height: 100%;
     background-color: #EF944D;
     color: #EF944D;
     gap: 1%;
     background-clip: padding-box;
-    margin: 3%;
+    margin: 5%;
     margin-left: 10%;
     margin-right: 10%;
     overflow-y: scroll;
@@ -286,7 +285,7 @@
 .gifts .giftname {
     background-color: #010101;
     max-height: min-content;
-    font-size: 150%;
+    font-size: 170%;
     padding: 0.5%;
     margin: 0.2%;
 }

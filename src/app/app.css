@@ -4,8 +4,8 @@
   src: url('../../public/Mikodacs.otf');
 }
 @font-face {
-  font-family: 'BebasKai';
-  src: url('../../public/BebasKai.otf');
+  font-family: 'Norwester';
+  src: url('../../public/Norwester.otf');
 }
 .page {
     /*PC*/
@@ -18,6 +18,7 @@
 .expansion{
     background-color: #010101;
     font: initial;
+    box-shadow: none !important;
 }
 
 .iconbtn{
@@ -37,7 +38,7 @@
     display: block;
     transition: 0.3s;
     left: 4vh;
-    font-family: "BebasKai" !important;
+    font-family: "Norwester" !important;
     line-height: unset;
 }
 .links:hover {
@@ -133,7 +134,7 @@
     border-left: 0.4vh solid #EF944D !important;
     scrollbar-color: #010101 #EF944D;
     box-sizing: content-box;
-    font-family: 'BebasKai' !important;
+    font-family: 'Norwester' !important;
 }
 
 .sidenav .mat-toolbar {
@@ -150,7 +151,7 @@
 .barra {
     font: initial; /*ereditava cose in più da mat che lo rompono*/
     position: fixed;
-    font-family: 'BebasKai';
+    font-family: 'Norwester';
     top: 0;
     right: 0;
     background-color: #010101;
@@ -162,6 +163,63 @@
     font-size: 2vh;
 }
 
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 68px;
+  left: 10%;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff8d3;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 68px;  
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 52px;
+  width: 52px;
+  left: 8px;
+  bottom: 8px;
+  background-color: grey;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #010101;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #010101;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(52px);
+  -ms-transform: translateX(52px);
+  transform: translateX(52px);
+}
+
 
 .title {
     position: absolute;
@@ -169,7 +227,7 @@
     padding: 0.5vh;
     color: #ED0506;
     left: 45vw;
-    font-family: 'BebasKai';
+    font-family: 'Norwester';
 }
 
 .recap {

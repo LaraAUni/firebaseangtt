@@ -5,47 +5,61 @@
     z-index: 2;
     width: calc(100vw / 3);
     font-family: 'Mikodacs';
-    background-color: #010101;
+    background-color: var(--background-color);
     color: aliceblue;
     border-left: 0.4vh solid #EF944D;
     text-align: center;
     text-justify: center;
     font-size: 160%;
-    overflow: hidden;
+    overflow-x: hidden;
     scrollbar-color: #010101 #EF944D;
-    min-width: 500px;
     width: calc(100vw / 3);
+    min-width: 700px;
     max-height: 100vh;
     min-height: 100vh;
     padding-top: 0.5%;
 }
+
+@media screen {
+    
+}
+
 @font-face {
   font-family: 'Mikodacs';
   src: url('/public/Mikodacs.otf');
 }
 @font-face {
-  font-family: 'BebasKai';
-  src: url('/public/BebasKai.otf');
+  font-family: 'Norwester';
+  src: url('/public/Norwester.otf');
 }
 
 :root{
     --background-color: #010101;
+    --lightbackg-color: #fff8d3;
+    --blacktext-color: #010101;
+    --whitetext-color: aliceblue;
     --border-color: #EF944D;
-    --textcolor: aliceblue;
     --reddam-color: #CB2642;
     --whitedam-color: #EFECC0;
     --blackdam-color: #814A84;
     --paledam-color: #3FCCBD;
-    --control-color: #CFDD1D;
-    --info-color: #6e28ca;
-    --training-color: #C88614;
-    --safety-color: #73A924;
-    --central-color: #EDCF00;
-    --disc-color: #A13126;
-    --welfare-color: #3247ff;
-    --extraction-color: #2D2D2D;
-    --records-color: #5F5F5F;
+    --control-color: #D1DE22;
+    --info-color: #7B0BA4;
+    --training-color: #C88611;
+    --safety-color: #73AA2A;
+    --central-color: #EFCF00;
+    --disc-color: #E4200C;
+    --welfare-color: #6949FF;
+    --extraction-color: #2E2E2E;
+    --records-color: #606060;
+    --architecture-color: #FFFFFF;
+    --customdep1-color: #FF69B4;
+    --customep2-color: #7CFC00;
+    --customdep3-color: #00ffff;
     --bonusdep-color: #9AC2FF;
+    --asiya-color: #F7FF00;
+    --briah-color: #6DFF00;
+    --atziluth-color: #C0C0C0;
 }
 
 .sheet .intro {
@@ -55,12 +69,13 @@
     grid-template-rows: 1.3fr 1fr 2fr;
     max-height: 100%;
     gap: 1%;
+    padding-bottom: 3%;
 }
 
 .intro .icon {
     grid-row: 1/4;
     grid-column: 1;
-    border: 5px solid aquamarine;
+    border: 5px solid var(--bonusdep-color);
     max-width: 90%;
     max-height: 90%;
     contain: scale-down;
@@ -79,17 +94,18 @@
     grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 0.1fr;
     border: 0.3vh solid #E2E6AE;
-    padding: 5px;
+    border: 1% solid #E2E6AE;
+    padding: 1%;
     contain: scale-down;
     max-height: 100%;
     margin: 1%;
-    margin-right: 2%;
-    margin-bottom: 2%;
+    margin-bottom: 0.3%;
 }
 
 .equip .equips {
-    max-height: 100%;
+    max-height: 10vh;
     max-width: 100%;
     contain: scale-down;
 }

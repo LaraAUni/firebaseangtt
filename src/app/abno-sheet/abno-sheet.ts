@@ -35,25 +35,8 @@ export class AbnoSheet {
   }
 }
 addChara() {
-    const app= this.fireInit.app;
-    const db = this.fireInit.db;
-    const docRef = addDoc(collection(db, "charas"), {
-    gameID: 0,
-    charID: 0,
-    playerID: {Owner: ["AlphaTT"], Borrower: []},
-    ImgUrl: "public/Charas/0000.png",
-    fullName: { Name: "Alpha", Nickname: "", Surname: ""},
-    role: ["Clerk","Control"],
-    equip : [{imgUrl: "StandardW", Name: "Riot Stick"}, {imgUrl: "StandardS", Name: "Suit"}],
-    abilities: ["","",""],
-    stress: 0,
-    trauma: ["","",""],
-    physHealth: [false, false, false, false, false, false, false, false, false],
-    mindHealth: [false, false, false, false, false, false, false, false, false],
-    exp: 0,
-    skills: [0,0,0,0,0,0,0,0,0,0],
-    gifts : [{ imgUrl: "", Name: "", "Exp": 0 }],
-    mapCoord: [0,0]
+  const uChara=this.Chara;
+    const docRef = addDoc(collection(this.db, "charas"), {uChara
   });
 }
 }

@@ -1,7 +1,12 @@
-import { Characlass } from './characlass';
+import { Character, CharaConverter } from './characlass';
 
-describe('Characlass', () => {
+describe('Character', () => {
   it('should create an instance', () => {
-    expect(new Characlass()).toBeTruthy();
+    expect(new Character()).toBeTruthy();
+  });
+});
+describe('CharaConverter', () => {
+  it('should create an instance', () => {
+    expect(new CharaConverter()).toBeTruthy();
   });
 });

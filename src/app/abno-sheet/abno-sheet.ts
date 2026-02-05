@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import { FireInit } from '../fire-init';
 import { addDoc, collection } from "firebase/firestore";
 
 @Component({
   selector: 'app-abno-sheet',
-  imports: [NgTemplateOutlet],
+  imports: [],
   templateUrl: './abno-sheet.html',
   styleUrl: './abno-sheet.css',
 })

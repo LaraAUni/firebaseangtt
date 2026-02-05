@@ -2,16 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
 import { FireInit } from '../fire-init';
-import { addDoc, getDocs, collection, setDoc, query, where } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import { addDoc, getDoc, collection, setDoc, query, where, getFirestore, doc, DocumentSnapshot } from "firebase/firestore";
 import { NgTemplateOutlet } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { initializeApp } from "firebase/app";
-import { Characlass } from './characlass';
+import { Character, CharaConverter } from './characlass';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
   selector: 'app-chara-sheet',
-  imports: [CommonModule, RouterOutlet, NgTemplateOutlet, MatListModule],
+  imports: [CommonModule, RouterOutlet, NgTemplateOutlet, MatListModule, MatFormFieldModule, MatSelectModule],
   templateUrl: './chara-sheet.html',
   styleUrl: './chara-sheet.css',
 })
@@ -20,21 +21,23 @@ export class CharaSheet {
   fireInit = inject(FireInit);
   app = this.fireInit.app;
   db = this.fireInit.db;
-  Chara : Characlass;
+  Chara : Character;
+  abilities=["Fearlessness to Keep on Living","Discretion","Courage"]
 constructor(){
-  this.Chara=new Characlass();
-  this.Chara.gifts=[];
+  this.Chara = new Character();
 }
+  ngOnInit(){
+    this.getChara(1);
+  }
 
-  async findChara(id:number){
-    const charaRef = collection(this.db, "charas");
-// Create a query against the collection.
-    const q = query(charaRef, where("charID", "==", id));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-  });
+  async getChara(id:number): Promise<void> {
+    const charRef = doc(this.db, 'charas/'+id).withConverter(new CharaConverter());
+    const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
+    const uChara: Character = snapshot1.data()!;
+    if (uChara) {
+    this.Chara = uChara;
+    }
+    console.log("thisChara: ", this.Chara);
   }
 
   depColorUp(c: string=this.Chara.role[1]){
@@ -70,12 +73,10 @@ constructor(){
   virtCalc(a : number, b : number, c : number, d : number){
     return (this.Chara.skills[a]?1:0) + (this.Chara.skills[b]?1:0) + (this.Chara.skills[c]?1:0) + (this.Chara.skills[d]?1:0);
   }
-
-  addChara() {
-    const uChara=this.Chara;
-    const docRef = addDoc(collection(this.db, "charas"), {uChara
-  });
+  async addChara() : Promise<void>{
+    const charRef = doc(this.db, 'charas/'+this.Chara.charID).withConverter(new CharaConverter());
+    await setDoc(charRef, this.Chara);
+    const snapshot1 = await getDoc(charRef);
+    console.log("Chara salvato: ", snapshot1.data());
   }
-
-
 }

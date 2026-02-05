@@ -1,3 +1,16 @@
+
+@media screen {
+    
+}
+
+@font-face {
+  font-family: 'Mikodacs';
+  src: url('/public/Mikodacs.otf');
+}
+@font-face {
+  font-family: 'Norwester';
+  src: url('/public/Norwester.otf');
+}
 .sheet {
     position: fixed;
     right: 0;
@@ -14,23 +27,9 @@
     overflow-x: hidden;
     scrollbar-color: #010101 #EF944D;
     width: calc(100vw / 3);
-    min-width: 700px;
     max-height: 100vh;
     min-height: 100vh;
     padding-top: 0.5%;
-}
-
-@media screen {
-    
-}
-
-@font-face {
-  font-family: 'Mikodacs';
-  src: url('/public/Mikodacs.otf');
-}
-@font-face {
-  font-family: 'Norwester';
-  src: url('/public/Norwester.otf');
 }
 
 :root{
@@ -70,14 +69,17 @@
     max-height: 100%;
     gap: 1%;
     padding-bottom: 3%;
+    margin-top:0.7%;
+    font-size: 180%;
+    margin-right: 3%;
 }
 
 .intro .icon {
     grid-row: 1/4;
     grid-column: 1;
-    border: 5px solid var(--bonusdep-color);
-    max-width: 90%;
-    max-height: 90%;
+    border: 0.3vh solid var(--bonusdep-color);
+    max-width: 95%;
+    max-height: 95%;
     contain: scale-down;
     margin-left: 5%;
 }

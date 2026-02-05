@@ -3,21 +3,22 @@
 <div class="sheet">
     <div class="grid">
         <div class="intro">
-            <img class="icon" src="Charas/{{Chara.ImgUrl}}.png" alt="" (click)="findChara(0)" style="cursor: pointer;" [ngStyle]="{'border-color': depColorUp()}">
+            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="" style="cursor: pointer;" (click)="getChara(1)" [ngStyle]="{'border-color': depColorUp()}">
             <div class="agentname">
-                <div>{{Chara.fullName.Name}}</div>
-                <div>{{Chara.fullName.Surname}}</div>
+                <div>{{Chara.fullName}}</div>
             </div>
             <div class="role">
                 <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[0]}}</span></div>
                 <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[1]}}</span></div>
             </div>
+
             <div class="equip"><img class="equips" src="EGOs/{{Chara.equip[0].imgUrl}}.png" alt="">
             <div class="equiptxt">{{Chara.equip[0].Name}}</div>
             <img class="equips" src="EGOs/{{Chara.equip[1].imgUrl}}.png" alt="">
             <div class="equiptxt">{{Chara.equip[1].Name}}</div>
             </div>
         </div>
+
         <div class="ability">
             <div>{{Chara.abilities[0]}}</div>
             <div>{{Chara.abilities[1]}}</div>
@@ -135,8 +136,11 @@
                     <img class="gifticon" src='EGOs/{{i.imgUrl}}.png' alt="">
                     {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
                 </div>}
+            @if (Chara.gifts.length<8) {
+                <div class="giftname" style="padding: 2%; padding-bottom: 24%;"></div>
             }
-            @empty{<div class="giftname" style="padding: 2%; padding-bottom: 24%;">Nessun Dono Acquisito</div>}
+            }
+            @empty{<div class="giftname" style="padding: 2%; padding-bottom: 24%;">Nessun Dono Ottenuto</div>}
         </div>
     </div>
 </div>

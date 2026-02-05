@@ -1,18 +1,8 @@
+
 .grid {
     display: grid;
-    grid-template-rows: 23% 4% 4% 5% 3% 20% 22% 17%;
-    gap: 1%;
-}
-
-.sheet .intro {
-    margin-top:0.7%;
-    font-size: 180%;
-    margin-right: 3%;
-}
-
-.intro .icon {
-    grid-row: 1/4;
-    grid-column: 1; 
+    grid-template-rows: 23% 5% 5% 5% 4% 20% 19% 17%;
+    gap: 1.5%;
 }
 
 .intro .agentname, .role{
@@ -29,8 +19,9 @@
 
 .intro .agentname{
     grid-template-columns: 1fr 1fr;
-    padding:2%;
+    padding: 1%;
     font-size: 120%;
+    padding-top: 3%;
 }
 .intro .role{
     grid-row: 2;

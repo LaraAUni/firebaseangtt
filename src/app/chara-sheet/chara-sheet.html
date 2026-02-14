@@ -1,147 +1,282 @@
-
-
 <div class="sheet">
-    <div class="grid">
+    <form for="charSheet" class="grid" name="charForm">
         <div class="intro">
-            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="" style="cursor: pointer;" (click)="getChara(1)" [ngStyle]="{'border-color': depColorUp()}">
-            <div class="agentname">
-                <div>{{Chara.fullName}}</div>
-            </div>
-            <div class="role">
-                <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[0]}}</span></div>
-                <div class="gridbox" [ngStyle]="{'background-color': depColorUp(), 'color': depText()}"><span>{{Chara.role[1]}}</span></div>
-            </div>
+            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="" style="cursor: pointer;" (click)="getChara(1)"
+                [ngStyle]="{'border-color': depColorUp()}">
+            <input type="text" class="agentname" id="name" placeholder="{{Chara.fullName}}">
 
+            <label for="role" style="max-height: 0; opacity: 0;">Carica</label>
+            <div class="role" alt="incarico">
+                <select class="role" id="role" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                @for(i of ["Captain", "Agent", "Clerk"]; track i){
+                    @if(i==Chara.role[0]){<option selected>{{i}}</option>}
+                    @else{<option>{{i}}</option>}
+                }
+                </select>
+                <select class="role" id="role" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                @for(i of activeDeps; track i){
+                    @if(i==Chara.role[1]){<option selected>{{i}}</option>}
+                    @else{<option (click)="depAbsUp(i)">{{i}}</option>}
+                }
+                </select>
+            </div>
             <div class="equip"><img class="equips" src="EGOs/{{Chara.equip[0].imgUrl}}.png" alt="">
-            <div class="equiptxt">{{Chara.equip[0].Name}}</div>
-            <img class="equips" src="EGOs/{{Chara.equip[1].imgUrl}}.png" alt="">
-            <div class="equiptxt">{{Chara.equip[1].Name}}</div>
+                <div class="equiptxt">{{Chara.equip[0].Name}}</div>
+                <img class="equips" src="EGOs/{{Chara.equip[1].imgUrl}}.png" alt="">
+                <div class="equiptxt">{{Chara.equip[1].Name}}</div>
             </div>
         </div>
 
-        <div class="ability">
-            <div>{{Chara.abilities[0]}}</div>
-            <div>{{Chara.abilities[1]}}</div>
-            <div>{{Chara.abilities[2]}}</div>
+        <label for="abilities" style="max-height: 0; opacity: 0;">Scegli un'abilità</label>
+        <div class="abilities" id="abilities">
+            @if(Chara.role[0]=="Clerk"){
+            <div class="ability">---</div>
+            <div class="ability"></div>
+            <div class="ability"></div>
+            }@else {
+            @for(i of [0,1,2]; track i){
+            @if(i==0 || Chara.abilities[i-1]){
+            @if(Chara.role[0]=="Agent"){
+            <select name="agentAbs" id="abilities" class="ability">
+                <option selected>{{Chara.abilities[i]}}</option>
+                @if(Chara.abilities[i]){<option value="Empty"></option>}
+                @for(l of agentAbs; track l){
+                    @if(Chara.abilities[i]!=l){<option>{{l}}</option>}
+                }
+                <optgroup label="Lieutenant"></optgroup>
+                @for(l of abilitylist; track l){
+                    @if(Chara.abilities[i]!=l){<option>{{l}}</option>}
+                }
+            </select>
+            }
+            @if(Chara.role[0]=="Captain"){
+            <select name="captAbs" id="abilities" class="ability">
+                <option value="Empty"></option>
+                @for(l of abilitylist; track l){
+               @if(Chara.abilities[i]==l){
+                    <option selected>{{l}}</option>
+                }@else{<option>{{l}}</option>}
+                }
+                <optgroup label="Experienced Agent"></optgroup>
+                @for(l of agentAbs; track l){
+                @if(Chara.abilities[i]==l){
+                    <option selected>{{l}}</option>
+                }@else{<option>{{l}}</option>}}
+            </select>}
+            }@else{<div class="ability"></div>}
+            }
+            }
         </div>
-
+        <label for="traumas"  style="max-height: 0; opacity: 0;">Trauma</label>
         <div class="stresstraumas">
-            <div class="stresstrauma">Stress: {{Chara.stress}}</div>
-            <div class="stresstrauma">{{Chara.trauma[0]}}</div>
-            <div class="stresstrauma">{{Chara.trauma[1]}}</div>
-            <div class="stresstrauma">{{Chara.trauma[2]}}</div>
+            <div class="stresstrauma">Stress: {{Chara.stress}}<span style="opacity: 0;">-</span><label class="container"
+                    title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor">
+                    <span class="checkmark"></span>
+                </label></div>
+                @for(i of [0,1,2]; track i){
+                    @if(i==0||Chara.trauma[i-1]){
+                    @if(i<2 || Chara.role[0]=="Captain"||traum3nabled){
+                        <select id="traumas"class="stresstrauma">
+                        <option value="Empty"></option>
+                        @for(t of traumas; track t){
+                            @if(t==Chara.trauma[i]){
+                                <option selected>{{t}}</option>
+                            }@else{<option>{{t}}</option>}
+                        }
+                    </select>
+                    }@else{<div class="stresstrauma">N/E</div>}
+                    }@else{<div class="stresstrauma"></div>}
+                }
         </div>
 
         <div class="health">
-            <div class="physical">{{hurt(Chara.physHealth[0])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[1])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[2])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[3])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[4])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[5])}}</div>
-            <div class="physical">{{hurt(Chara.physHealth[6])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[0])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[1])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[2])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[3])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[4])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[5])}}</div>
-            <div class="mental">{{hurt(Chara.mindHealth[6])}}</div>
+            <div class="physical" alt="Tier 1 Damage" (click)="doubleHealthCic(0,1)">
+                @if(Chara.physHealth[0]){X}<span
+                    style="opacity:0;">-----</span>@if(Chara.physHealth[1]){X}</div>
+            <div class="physical" alt="Tier 2 Damage" (click)="doubleHealthCic(2,3)">@if(Chara.physHealth[2]){X}<span
+                    style="opacity:0;">-----</span>@if(Chara.physHealth[3]){X}</div>
+            <div class="physical" alt="Tier 3 Damage" (click)="Chara.physHealth[4]=!Chara.physHealth[4]">@if(Chara.physHealth[4]){X}</div>
+            <div class="physical" (click)="Chara.physHealth[5]=!Chara.physHealth[5]">
+                @if(Chara.physHealth[5]){<img src="/SkullIcon.png" alt="Death" style="max-height: 3vh;">}</div>
+            <div class="physical">
+                @if(Chara.physHealth[6]){<img src="/SkullIcon.png" alt="Death" (click)="Chara.physHealth[6]=!Chara.physHealth[6]" class="hicon">}
+                @else{<span style="opacity:0;" (click)="Chara.physHealth[6]=!Chara.physHealth[6]">----</span>}
+                <span style="opacity:0;">-</span>
+                @if(Chara.physHealth[7]){<img src="/SkullIcon.png" alt="Death" (click)="Chara.physHealth[7]=!Chara.physHealth[7]" class="hicon">}
+                @else{<span style="opacity:0;" (click)="Chara.physHealth[7]=!Chara.physHealth[7]">----</span>}
+                <span style="opacity:0;">-</span>
+                @if(Chara.physHealth[8]){<img src="/SkullIcon.png" alt="Death" (click)="Chara.physHealth[8]=!Chara.physHealth[8]" class="hicon">}
+                @else{<span style="opacity:0;" (click)="Chara.physHealth[8]=!Chara.physHealth[8]">----</span>}
+                <span style="opacity:0;">-</span>
+                @if(Chara.physHealth[9]){<img src="/SkullIcon.png" alt="Death" (click)="Chara.physHealth[9]=!Chara.physHealth[9]" class="hicon">}
+                @else{<span style="opacity:0;" (click)="Chara.physHealth[9]=!Chara.physHealth[9]">----</span>}
+            </div>
         </div>
-
-        <div class="exp">Exp: {{Chara.exp[0]}}</div>
-
+        
+        <div class="exp">
+            <label for="exp">Exp :</label>
+            <input type="text" id="exp" maxlength="1" max="6" size="1" class="expinp" placeholder="{{Chara.exp[0]}}"> -
+            <span style="color: var(--reddam-color);">{{Chara.exp[1]}}</span> - <span style="color: var(--whitedam-color);">{{Chara.exp[2]}}</span> - <span style="color: var(--blackdam-color);">{{Chara.exp[3]}}</span> - <span style="color: var(--paledam-color);">{{Chara.exp[4]}}</span></div>
+        @if(lang=='en'){
         <div class="skills">
-            <div class="skill" style="background-color: var(--reddam-color)">Eccellere</div>
-            <div class="skillnum">{{Chara.skills[0]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))">Sopportare
-            </div>
-            <div class="skillnum">{{Chara.skills[1]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))">Celarsi</div>
-            <div class="skillnum">{{Chara.skills[2]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))">Correre</div>
-            <div class="skillnum">{{Chara.skills[3]}}</div>
-            <div class="skill" style="background-color: var(--whitedam-color)">Analizzare</div>
-            <div class="skillnum">{{Chara.skills[4]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))">Rapportarsi
-            </div>
-            <div class="skillnum">{{Chara.skills[5]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))">Mirare</div>
-            <div class="skillnum">{{Chara.skills[6]}}</div>
-            <div class="skill" style="background-color: var(--paledam-color)">Operare</div>
-            <div class="skillnum">{{Chara.skills[7]}}</div>
-            <div class="skill"
-                style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))">Comandare
-            </div>
-            <div class="skillnum">{{Chara.skills[8]}}</div>
-            <div class="skill" style="background-color: var(--blackdam-color)">Schermire</div>
-            <div class="skillnum">{{Chara.skills[9]}}</div>
+            <label class="skill" style="background-color: var(--reddam-color)" for="Excel">
+                Excel</label>
+            <input type="text" class="skillnum" id="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))" for="Endure">
+                Endure</label>
+            <input type="text" class="skillnum" id="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))" for="Lurk">
+                Lurk</label>
+            <input type="text" class="skillnum" id="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))" for="Rush">
+                Rush</label>
+            <input type="text" class="skillnum" id="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--whitedam-color)" for="Observe">
+                Observe</label>
+            <input type="text" class="skillnum" id="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))" for="Consort">
+                Consort</label>
+            <input type="text" class="skillnum" id="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))" for="Hunt">
+                Hunt</label>
+            <input type="text" class="skillnum" id="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--paledam-color)" for="Operate">
+                Operate</label>
+            <input type="text" class="skillnum" id="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))" for="Command">
+                Command</label>
+            <input type="text" class="skillnum" id="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--blackdam-color)" for="Skirmish">
+                Skirmish</label>
+            <input type="text" class="skillnum" id="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
         </div>
+        }@else {
+        <div class="skills">
+            <label class="skill" style="background-color: var(--reddam-color)" for="Excel">
+                Eccellere</label>
+            <input type="text" class="skillnum" id="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))" for="Endure">
+                Sopportare</label>
+            <input type="text" class="skillnum" id="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))" for="Lurk">
+                Celarsi</label>
+            <input type="text" class="skillnum" id="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))" for="Rush">
+                Correre</label>
+            <input type="text" class="skillnum" id="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--whitedam-color)" for="Observe">
+                Osservare</label>
+            <input type="text" class="skillnum" id="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))" for="Consort">
+                Rapportarsi</label>
+            <input type="text" class="skillnum" id="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))" for="Hunt">
+                Mirare</label>
+            <input type="text" class="skillnum" id="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--paledam-color)" for="Operate">
+                Operare</label>
+            <input type="text" class="skillnum" id="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))" for="Command">
+                Comandare</label>
+            <input type="text" class="skillnum" id="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
+
+            <label class="skill" style="background-color: var(--blackdam-color)" for="Skirmish">
+                Schermire</label>
+            <input type="text" class="skillnum" id="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
+        </div>
+        }
+
         <div class="virtues" title="Click Left-Right to add Exp to Virtue">
-            <ng-template #virtue>
-                <div class="virtueborder"></div>
-                <div class="virtueborder" style="margin-right: 5%;"></div>
-                <div class="virtueborder" style="margin-left: 5%;"></div>
-                <div class="virtueborder" style="margin-right: 5%;"></div>
-                <div class="virtueborder" style="margin-left: 5%;"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder" style="margin-bottom: 8%;"></div>
-                <div class="virtueborder" style="margin-bottom: 8%;"></div>
-                <div class="virtueborder" style="margin-top: 8%;"></div>
-                <div class="virtueborder" style="margin-top: 8%;"></div>
-                <div class="virtueborder"></div>
-                <div class="virtueborder" style="margin-right: 5%;"></div>
-                <div class="virtueborder" style="margin-left: 5%;"></div>
-                <div class="virtueborder" style="margin-right: 5%;"></div>
-                <div class="virtueborder" style="margin-left: 5%;"></div>
-                <div class="virtueborder"></div>
+            <ng-template #virtue let-slot="track">
+                <div class="virtueborder" [ngStyle]="{'opacity':slot[4]}"></div>
+                <div class="virtueborder" style="margin-right: 5%;" [ngStyle]="{'opacity':slot[4]}"></div>
+                <div class="virtueborder" style="margin-left: 5%;" [ngStyle]="{'opacity':slot[5]}"></div>
+                <div class="virtueborder" style="margin-right: 5%;" [ngStyle]="{'opacity':slot[5]}"></div>
+                <div class="virtueborder" style="margin-left: 5%;" [ngStyle]="{'opacity':slot[0]}"></div>
+                <div class="virtueborder" [ngStyle]="{'opacity':slot[0]}"></div>
+                <div class="virtueborder" style="margin-bottom: 8%;" [ngStyle]="{'opacity':slot[4]}"></div>
+                <div class="virtueborder" style="margin-bottom: 8%;" [ngStyle]="{'opacity':slot[0]}"></div>
+                <div class="virtueborder" style="margin-top: 8%;" [ngStyle]="{'opacity':slot[3]}"></div>
+                <div class="virtueborder" style="margin-top: 8%;" [ngStyle]="{'opacity':slot[1]}"></div>
+                <div class="virtueborder" [ngStyle]="{'opacity':slot[3]}"></div>
+                <div class="virtueborder" style="margin-right: 5%;" [ngStyle]="{'opacity':slot[3]}"></div>
+                <div class="virtueborder" style="margin-left: 5%;" [ngStyle]="{'opacity':slot[2]}"></div>
+                <div class="virtueborder" style="margin-right: 5%;" [ngStyle]="{'opacity':slot[2]}"></div>
+                <div class="virtueborder" style="margin-left: 5%;" [ngStyle]="{'opacity':slot[1]}"></div>
+                <div class="virtueborder" [ngStyle]="{'opacity':slot[1]}"></div>
             </ng-template>
-            <div class="virtueshell" style="background-color: var(--reddam-color); border-color: var(--reddam-color); color:var(--reddam-color);">
+            <div class="virtueshell"
+                style="background-color: var(--reddam-color); border-color: var(--reddam-color); color:var(--reddam-color);">
                 <div class="virtue">
-                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt="Fortitude" title="-"></div>
-                    <div class="virtueitem2" title="+">{{virtCalc(0,1,2,3)}}</div>
+                    <ng-container *ngTemplateOutlet="virtue; context: Fort"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Fort.png" alt="Fortitude"></div>
+                    <img src="/-but.png" alt="-" class="virtbutton" style="grid-row: 2/4; grid-column: 2/4;" (click)="vexpDown(1)">
+                    <div class="virtueitem2">{{virtCalc(0,1,2,3)}}</div>
+                    <img src="/+but.png" alt="+" class="virtbutton" style="grid-row: 2/4; grid-column: 4/6;" (click)="vexpUp(1)">
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: var(--whitedam-color); border-color: var(--whitedam-color); color:var(--whitedam-color);">
+            <div class="virtueshell"
+                style="background-color: var(--whitedam-color); border-color: var(--whitedam-color); color:var(--whitedam-color);">
                 <div class="virtue">
-                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt="Prudence" title="-"></div>
-                    <div class="virtueitem2" title="+">{{virtCalc(1,4,5,6)}}</div>
+                    <ng-container *ngTemplateOutlet="virtue; context Prud"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Prud.png" alt="Prudence"></div>
+                    <img src="/-but.png" alt="-" class="virtbutton" style="grid-row: 2/4; grid-column: 2/4;" (click)="vexpDown(2)">
+                    <div class="virtueitem2">{{virtCalc(1,4,5,6)}}</div>
+                    <img src="/+but.png" alt="+" class="virtbutton" style="grid-row: 2/4; grid-column: 4/6;" (click)="vexpUp(2)">
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: var(--blackdam-color); border-color: var(--blackdam-color); color:var(--blackdam-color);">
+            <div class="virtueshell"
+                style="background-color: var(--blackdam-color); border-color: var(--blackdam-color); color:var(--blackdam-color);">
                 <div class="virtue">
-                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt="Temperance" title="-"></div>
-                    <div class="virtueitem2" title="+">{{virtCalc(2,5,8,9)}}</div>
+                    <ng-container *ngTemplateOutlet="virtue; context Temp"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Temp.png" alt="Temperance"></div>
+                    <img src="/-but.png" alt="-" class="virtbutton" style="grid-row: 2/4; grid-column: 2/4;" (click)="vexpDown(3)">
+                    <div class="virtueitem2">{{virtCalc(2,5,8,9)}}</div>
+                    <img src="/+but.png" alt="+" class="virtbutton" style="grid-row: 2/4; grid-column: 4/6;" (click)="vexpUp(3)">
                 </div>
             </div>
-            <div class="virtueshell" style="background-color: var(--paledam-color); border-color: var(--paledam-color); color:var(--paledam-color);">
+            <div class="virtueshell"
+                style="background-color: var(--paledam-color); border-color: var(--paledam-color); color:var(--paledam-color);">
                 <div class="virtue">
-                    <ng-container *ngTemplateOutlet="virtue"></ng-container>
-                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt="Justice" title="-"></div>
-                    <div class="virtueitem2" title="+">{{virtCalc(3,6,7,8)}}</div>
+                    <ng-container *ngTemplateOutlet="virtue; context Just"></ng-container>
+                    <div class="virtueitem1"><img class="virtueicon" src="Just.png" alt="Justice"></div>
+                    <img src="/-but.png" alt="-" class="virtbutton" style="grid-row: 2/4; grid-column: 2/4;" (click)="vexpDown(4)">
+                    <div class="virtueitem2">{{virtCalc(3,6,7,8)}}</div>
+                    <img src="/+but.png" alt="+" class="virtbutton" style="grid-row: 2/4; grid-column: 4/6;" (click)="vexpUp(4)">
                 </div>
             </div>
         </div>
         <div class="gifts">
-             @for ( i of Chara.gifts ; track i;) {
-                @if(i!=null){<div class="giftname">
-                    <img class="gifticon" src='EGOs/{{i.imgUrl}}.png' alt="">
-                    {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
-                </div>}
-            @if (Chara.gifts.length<8) {
-                <div class="giftname" style="padding: 2%; padding-bottom: 24%;"></div>
-            }
-            }
-            @empty{<div class="giftname" style="padding: 2%; padding-bottom: 24%;">Nessun Dono Ottenuto</div>}
-        </div>
-    </div>
+            @for ( i of Chara.gifts ; track i;) {
+            @if(i!=null){<div class="giftname">
+                <img class="gifticon" src='EGOs/{{i.imgUrl}}.png' alt="">
+                {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
+            </div>}
+            @if (Chara.gifts.length<8) { <div class="giftname" style="padding: 2%; padding-bottom: 27%;">
+        </div>}
+        }
+        @empty{
+        @if(lang=='en'){<div class="giftname" style="padding: 2%; padding-bottom: 27%;">No Gifts Acquired</div>}
+        @else{<div class="giftname" style="padding: 2%; padding-bottom: 27%;">Nessun Dono Ottenuto</div>}
+        }
+</div>
+</form>
 </div>
 <router-outlet />

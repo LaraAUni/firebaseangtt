@@ -3,7 +3,7 @@ import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, Snapshot
 
 export class Character{
     gameID: number;
-    charID: number=0;
+    charID: number;
     playerID : { Owner: string[], Borrower: string[] };
     icoUrl: string;
     fullName: string;
@@ -12,9 +12,10 @@ export class Character{
     abilities: string[];
     stress: number;
     trauma  : string[];
-    physHealth : boolean[];
+    armor: boolean; //Armatura Speciale
+    physHealth : boolean[]; //[0],[1] Tier 1, [2],[3] Tier 2, [4] Tier 3, [5] Tier 4 ecc
     mindHealth : boolean[];
-    exp : number[];
+    exp : number[]; //[Generale, Fort, Prud, Temp, Just]
     skills : number[];
     gifts: { imgUrl: string, Name: string, Exp: number }[];
     mapCoord : number[];
@@ -29,6 +30,7 @@ export class Character{
         abilities = Array(3).fill(""),
         stress = 0,
         trauma = Array(3).fill(""),
+        armor = true,
         physHealth = Array(9).fill(false),
         mindHealth = Array(9).fill(false),
         exp = Array(5).fill(0),
@@ -46,6 +48,7 @@ export class Character{
         this.abilities = abilities,
         this.stress = stress,
         this.trauma = trauma,
+        this.armor =true,
         this.physHealth = physHealth,
         this.mindHealth = mindHealth,
         this.exp = exp,
@@ -61,11 +64,12 @@ interface CharaFS{
     plr: { Owner: string[], Borrower: string[] };
     icoU: string;
     fName: string;
-    rl: [string,string];
+    rl: [string, string];
     eqp: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}];
     abs: string[];
     str: number;
     trm: string[];
+    arm: boolean;
     psH: boolean[];
     mdH: boolean[];
     xp: number[];
@@ -86,6 +90,7 @@ export class CharaConverter implements FirestoreDataConverter<Character, CharaFS
             abs: chara.abilities,
             str: chara.stress,
             trm: chara.trauma,
+            arm: chara.armor,
             psH: chara.physHealth,
             mdH: chara.mindHealth,
             xp: chara.exp,
@@ -97,6 +102,6 @@ export class CharaConverter implements FirestoreDataConverter<Character, CharaFS
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Character {
         const data = snapshot.data(options) as CharaFS;
-        return new Character(data.game, data.char, data.plr, data.icoU, data.fName, data.rl, data.eqp, data.abs, data.str, data.trm, data.psH, data.mdH, data.xp, data.sks, data.gfs, data.mapC);
+        return new Character(data.game, data.char, data.plr, data.icoU, data.fName, data.rl, data.eqp, data.abs, data.str, data.trm, data.arm, data.psH, data.mdH, data.xp, data.sks, data.gfs, data.mapC);
     }
 }

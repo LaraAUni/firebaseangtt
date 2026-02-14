@@ -1,44 +1,40 @@
-
 .grid {
     display: grid;
-    grid-template-rows: 23% 5% 5% 5% 4% 20% 19% 17%;
-    gap: 1.5%;
+    grid-template-rows: 26% 8% 5% 4% 4% 19% 17% 16%;
+    gap: 0.7%;
 }
 
-.intro .agentname, .role{
+.intro .agentname,
+.role {
     display: grid;
     grid-column: 2;
     grid-row: 1;
     background-color: aliceblue;
     color: var(--blacktext-color);
-    border: 0.3vh solid gray;
+    border: 0.2vh solid gray;
     align-content: center;
     background-clip: padding-box;
-    max-height: 110%;
+    max-height: 100%;
+    font-family: 'Mikodacs';
+    margin-left: 2%;
 }
 
-.intro .agentname{
+.intro .agentname {
     grid-template-columns: 1fr 1fr;
-    padding: 1%;
-    font-size: 120%;
-    padding-top: 3%;
+    font-size: 140%;
+    border: 0.35vh solid gray;
 }
-.intro .role{
+
+.intro .role {
     grid-row: 2;
     grid-template-columns: 1fr 1fr;
     background-color: gray;
     gap: 0.5%;
     margin-top: 1%;
     cursor: pointer;
+    font-size: 120%;
 }
 
-.sheet .gridbox{
-    margin: 0.8%;
-    background-clip: padding-box;
-    align-content: center;
-    padding: 1.5%;
-    padding-top: 5%;
-}
 
 .intro .equip {
     grid-column: 2;
@@ -50,8 +46,9 @@
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
-    margin: 1%;
-    margin-bottom: 0.3%;
+    margin: 1.5%;
+    margin-bottom: 0;
+    font-size: 100%;
 }
 
 .equip .equips {
@@ -62,82 +59,153 @@
 }
 
 .equip .equiptxt {
-    grid-row: 2;;
+    grid-row: 2;
 }
 
-.sheet .ability {
+.sheet .abilities {
     grid-row: 2;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    background-color: aliceblue;
-    color: #010101;
-    border: 0.3vh solid grey;
-    font-size: 140%;
-    align-content: center;
-    gap: 3%;
-    margin-top: 0.5%;
     margin-left: 2%;
     margin-right: 2%;
-    padding: 2%;
+}
+
+.sheet .ability {
+    background-color: aliceblue;
+    border: 0.3vh solid grey;
+    color: #010101;
+    font-size: 170%;
+    align-items: center;
+    justify-items: center;
+    padding-left: 1%;
 }
 
 .sheet .stresstraumas {
     grid-row: 3;
     display: grid;
     color: #E2E6AE;
-    grid-template-columns: 1.3fr 2fr 2fr 2fr;
+    grid-template-columns: 1.8fr 2fr 2fr 2fr;
     background-color: #E2E6AE;
-    border: 1% solid #E2E6AE;
+    border: 0.8% solid #E2E6AE;
     background-clip: padding-box;
-    margin: 0.5%;
-    gap: 1%;
-    font-size: 130%;
+    gap: 0.6%;
+    font-size: 180%;
     margin-left: 2%;
     margin-right: 2%;
     max-height: 100%;
-    padding: 0.5%;
 }
 
-.sheet .stresstrauma{
+.sheet .stresstrauma {
     margin: 0.8%;
-    background-clip: padding-box;
-    max-height: 95%;
-    align-content: center;
-    font-size: 120%;
+    text-align: center;
+    padding-top: 7%;
     background-color: #010101;
+}
+
+.stresstrauma input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.container {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    height: 1.5vh;
+    width: 1.5vh;
+    background-color: var(--background-color);
+    border: 0.3vh solid #E2E6AE;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input~.checkmark {
+    background-color: #E2E6AE;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked~.checkmark {
+    background-color: #EF944D;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 35%;
+    top: 15%;
+    width: 20%;
+    height: 60%;
+    border: solid white;
+    border-width: 0 0.3vh 0.3vh 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .sheet .health {
     grid-row: 4;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1.5fr 1.5fr 0.5fr 0.5fr 0.5fr;
+    grid-template-columns: 2fr 2fr 1.5fr 2fr 3fr;
     display: grid;
     border: 0.3vh solid #EF944D;
     background-color: #EF944D;
-    gap: 1%;
-    row-gap: 4%;
+    gap: 0.7%;
+    row-gap: 9%;
     color: #010101;
     max-height: 95%;
     margin-left: 2%;
     margin-right: 2%;
-    font-size: 130%;
+    font-size: 180%;
     font-family: Impact;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .health .physical {
-    display: grid;
-    grid-row: 1;
     background-color: rgb(255, 61, 61);
     justify-content: center;
     align-content: center;
+    contain: scale-down;
+    min-height: 3vh;
 }
-
-.health .mental {
-    display: grid;
-    grid-row: 2;
-    background-color: rgb(67, 233, 255);
-    justify-content: center;
-    align-content: center;
+.health .hicon{
+    max-height: 3vh;
+    contain: scale-down;
 }
 
 .sheet .exp {
@@ -151,8 +219,14 @@
     justify-content: center;
     align-content: center;
     height: 90%;
-    font-size: 160%;
-    margin-top: 0.5%;
+    font-size: 190%;
+}
+.sheet .expinp{
+    background-color: #010101;
+    padding: 0;
+    border-width: 0;
+    color: #EF944D;
+    font-size: 120%;
 }
 
 .sheet .skills {
@@ -164,33 +238,36 @@
     margin-left: 2%;
     margin-right: 2%;
     background-color: gray;
-    border: 2px solid gray;
+    border: 0.2vh solid gray;
     max-height: 100%;
+    overflow: hidden;
+    padding: 0%;
 }
 
 .skills .skill {
-    grid-column: 1, 3;
     margin: 0.8%;
     background-clip: padding-box;
     max-height: 95%;
     align-content: center;
-    font-size: 150%;
+    font-family: 'Mikodacs';
+    padding-top: 2%;
+    font-size: 210%;
 }
 
 .skills .skillnum {
-    grid-column: 2, 4;
     margin: 0.8%;
     background-color: #010101;
     background-clip: padding-box;
     max-height: 95%;
-    align-content: center;
-    font-size: 150%;
+    align-content: center;  
     color: #EF944D;
+    font-size: 200%;
+    padding: 0;
 }
 
-.virtueshell{
-    margin-left: 20%;
-    margin-right: 20%;
+.virtueshell {
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .sheet .virtues {
@@ -203,7 +280,6 @@
     max-height: 100%;
     contain: scale-down;
     background-clip: padding-box;
-    margin: 1%;
     cursor: pointer;
 }
 
@@ -211,12 +287,16 @@
     display: grid;
     grid-template-columns: 1fr 3fr 1.5fr 1.5fr 3fr 1fr;
     grid-template-rows: 1fr 2fr 2fr 1fr;
-    border: 0.4vh solid;
+    border: 0.3vh solid;
     max-height: 100%;
     border: 1%;
     contain: scale-down;
+    font-family: 'Mikodacs';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
 
 .virtue .virtueborder {
     background-color: #010101;
@@ -237,6 +317,72 @@
     margin-right: 0;
     padding-top: 3%;
 }
+.virtbutton{
+    align-content: center;
+    justify-content: space-around;
+    contain: scale-down;
+    position:sticky;    
+    contain: scale-down;
+    max-height: 4vh;
+    justify-self: center;
+    opacity: 0;
+    border-radius: 20%;
+    margin-top: 4%;
+}
+.virtbutton:hover{
+    -webkit-animation: fadein 1s;
+    animation: fadein 1s;
+    opacity: 1;
+}
+.virtbutton:active{
+    opacity: 1 !important;
+    transform: translateY(4px);
+}
+
+@-webkit-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 
 .virtue .virtueitem2 {
     grid-row: 2/4;
@@ -253,7 +399,7 @@
 }
 
 .virtue .virtueicon {
-    max-height: 4vh;
+    max-height: 3.7vh;
     contain: scale-down;
 }
 
@@ -266,7 +412,7 @@
     color: #EF944D;
     gap: 1%;
     background-clip: padding-box;
-    margin: 5%;
+    margin: 2%;
     margin-left: 10%;
     margin-right: 10%;
     overflow-y: scroll;

@@ -17,6 +17,7 @@
     max-height: 100%;
     font-family: 'Mikodacs';
     margin-left: 2%;
+    max-width: 100%;
 }
 
 .intro .agentname {
@@ -35,14 +36,32 @@
     font-size: 120%;
 }
 
+.intro .submit{
+    grid-column: 1;
+    grid-row: 3;
+    background-color: #010101;
+    color: #EF944D;
+    border: 0.3vh solid #EF944D;
+    max-width: 25%;
+    max-height: 15%;
+    margin-left: 35%;
+    position: relative;
+    align-self: end;
+    top: 3%;
+}
 
+@media (max-width: 600px){
+.submit{
+    margin-left: 50%;
+}
+}
 .intro .equip {
     grid-column: 2;
     grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 0.1fr;
-    border: 1% solid #E2E6AE;
+    border: 1% solid #EF944D;
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
@@ -83,10 +102,10 @@
 .sheet .stresstraumas {
     grid-row: 3;
     display: grid;
-    color: #E2E6AE;
+    color: var(--title-yellow);
     grid-template-columns: 1.8fr 2fr 2fr 2fr;
-    background-color: #E2E6AE;
-    border: 0.8% solid #E2E6AE;
+    background-color: var(--title-yellow);
+    border: 0.8% solid var(--title-yellow);
     background-clip: padding-box;
     gap: 0.6%;
     font-size: 180%;
@@ -137,12 +156,12 @@
     height: 1.5vh;
     width: 1.5vh;
     background-color: var(--background-color);
-    border: 0.3vh solid #E2E6AE;
+    border: 0.3vh solid var(--title-yellow);
 }
 
 /* On mouse-over, add a grey background color */
 .container:hover input~.checkmark {
-    background-color: #E2E6AE;
+    background-color: var(--title-yellow);
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -210,16 +229,17 @@
 
 .sheet .exp {
     grid-row: 5;
-    max-width: 50%;
-    min-width: 50%;
     border: 0.3vh solid #EF944D;
     background-color: #010101;
     color: #EF944D;
     justify-self: center;
     justify-content: center;
     align-content: center;
+    min-width: 50%;
     height: 90%;
     font-size: 190%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 .sheet .expinp{
     background-color: #010101;

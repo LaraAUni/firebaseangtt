@@ -16,17 +16,17 @@
 }
 
 .expansion{
-    background-color: #010101;
+    background-color: var(--background-color);
     font: initial;
     box-shadow: none !important;
 }
 
 .iconbtn{
-    border: 0.3vh solid aquamarine;
+    border: 0.3vh solid var(--bonusdep-color);
     max-width: 4.5vh;
 }
 .weapbtn{
-    border: 0.3vh solid aquamarine;
+    border: 0.3vh solid  var(--bonusdep-color);
     max-height: 5vh;
 }
 
@@ -34,7 +34,7 @@
     padding: 3%;
     text-decoration: none;
     font-size: 3vh;
-    color: #EF944D;
+    color: var(--border-color);
     display: block;
     transition: 0.3s;
     left: 4vh;
@@ -42,7 +42,7 @@
     line-height: unset;
 }
 .links:hover {
-    color: #f1f1f1;
+    color: aliceblue;
 }
 .closebtn {
     position: fixed;
@@ -53,6 +53,11 @@
     max-width: 4vh;
     cursor: pointer;
     z-index: 3;
+}
+@media (max-width: 600px) {
+    .closebtn{
+        left: 0;
+    }
 }
 .openbtn {
     position: fixed;

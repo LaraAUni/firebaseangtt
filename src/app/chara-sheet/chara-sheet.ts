@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventType, RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
 import { FireInit } from '../fire-init';
@@ -35,15 +35,8 @@ export class CharaSheet {
   depColor="var(--bonusdep-color)";
   depText="var(--blacktext-color)";
 
-constructor(){
+constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
-  this.Chara.role=["Agent","Disciplinary"];
-  this.Chara.abilities=["Solo Research","Unassuming"]
-  this.Chara.trauma=["Cold","Reckless",""]
-  this.Chara.armor=false;
-  this.Chara.exp[2]=3;
-  this.Chara.exp[3]=4;
-  this.Chara.exp[1]=1;
   this.vexpUpdate(1);
   this.vexpUpdate(2);
   this.vexpUpdate(3);
@@ -52,11 +45,83 @@ constructor(){
 ngOnInit(){
     //this.getChara(1);
     this.depAbsUp();
-    this.depColor=this.depColorUp();
-    addEventListener("formdata", (e)=>{
-      this.onsubmit(e.formData);
-    });
-  }
+    this.depColorUp();
+    const form = document.getElementById('charForm') as HTMLFormElement;
+// Add submit event listener
+  form.addEventListener('submit', async (event) => {
+
+  // Prevent default form submission (page reload)
+  event.preventDefault();
+
+  // Rest of the logic (collect data, updatewiew)
+  const formData = new FormData(form);
+
+let inp;
+inp=formData.get('charName');
+if(inp)this.Chara.fullName=inp.toString();
+inp=formData.get('role1');
+if(inp)this.Chara.role[0]=inp.toString();
+inp=formData.get('role2');
+if(inp)this.Chara.role[1]=inp.toString();
+this.depAbsUp();
+this.depColorUp();
+inp=formData.get('armor');
+if(inp)this.Chara.armor=(inp.toString()=='on'?true:false);
+inp=formData.get('ability0');
+if(inp){inp=inp.toString();
+  this.Chara.abilities[0]=(inp=='Empty'?"":inp)}
+inp=formData.get('ability1');
+if(inp){inp=inp.toString();
+  this.Chara.abilities[1]=(inp=='Empty'?"":inp)}
+inp=formData.get('ability2');
+if(inp){inp=inp.toString();
+  this.Chara.abilities[2]=(inp=='Empty'?"":inp)}
+inp=formData.get('trauma0');
+if(inp){inp=inp.toString();
+  this.Chara.trauma[0]=(inp=='Empty'?"":inp)}
+inp=formData.get('trauma1');
+if(inp){inp=inp.toString();
+  this.Chara.trauma[1]=(inp=='Empty'?"":inp)}
+inp=formData.get('trauma2');
+if(inp){inp=inp.toString();
+  this.Chara.trauma[2]=(inp=='Empty'?"":inp)}
+inp=formData.get('exp');
+if(inp)this.Chara.exp[0]=Number(inp);
+inp=formData.get('Excel');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[0]=inp;}
+inp=formData.get('Endure');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[1]=inp;}
+inp=formData.get('Lurk');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[2]=inp;}
+inp=formData.get('Rush');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[3]=inp;}
+inp=formData.get('Observe');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[4]=inp;}
+inp=formData.get('Consort');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[5]=inp;}
+inp=formData.get('Hunt');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[6]=inp;}
+inp=formData.get('Operate');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[7]=inp;}
+inp=formData.get('Command');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[8]=inp;}
+inp=formData.get('Skirmish');
+if(inp){inp=Number(inp);
+  if(inp>=0&&inp<5)this.Chara.skills[9]=inp;}
+this.ref.markForCheck();
+this.addChara();
+});
+}
+
   async getChara(id:number): Promise<void> {
     const charRef = doc(this.db, 'charas/'+id).withConverter(new CharaConverter());
     const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
@@ -65,7 +130,12 @@ ngOnInit(){
     this.Chara = uChara;
     }
     console.log("thisChara: ", this.Chara);
+    this.vexpUpdate(1);
+    this.vexpUpdate(2);
+    this.vexpUpdate(3);
+    this.vexpUpdate(4);
   }
+
   log(s:string){
     console.log(s)
   }
@@ -98,16 +168,25 @@ ngOnInit(){
   depColorUp(c: string=this.Chara.role[1]){
     this.depText="var(--blacktext-color)";
     switch(c){
-      case "Control": return "var(--control-color)";
-      case "Information": return "var(--info-color)";
-      case "Training": return "var(--training-color)";
-      case "Safety": return "var(--safety-color)";
-      case "Central-Command": return "var(--central-color)";
-      case "Disciplinary": return "var(--disc-color)";
-      case "Welfare": return "var(--welfare-color)";
-      case "Extraction": this.depText="var(--whitetext-color)"; return "var(--extraction-color)";
-      case "Records": return "var(--records-color)";
-      default: return "var(--bonusdep-color)";
+      case "Control": this.depColor="var(--control-color)";
+      break;
+      case "Information": this.depColor="var(--info-color)";
+      break;
+      case "Training": this.depColor="var(--training-color)";
+      break;
+      case "Safety": this.depColor="var(--safety-color)";
+      break;
+      case "Central-Command": this.depColor="var(--central-color)";
+      break;
+      case "Disciplinary": this.depColor="var(--disc-color)";
+      break;
+      case "Welfare": this.depColor="var(--welfare-color)";
+      break;
+      case "Extraction": this.depText="var(--whitetext-color)"; this.depColor="var(--extraction-color)";
+      break;
+      case "Records": this.depColor="var(--records-color)";
+      break;
+      default: this.depColor="var(--bonusdep-color)";
     } //se aggiungo Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--customdep1-color)
   }
   onsubmit(formdata: FormData){
@@ -188,6 +267,6 @@ ngOnInit(){
     const charRef = doc(this.db, 'charas/'+this.Chara.charID).withConverter(new CharaConverter());
     await setDoc(charRef, this.Chara);
     const snapshot1 = await getDoc(charRef);
-    console.log("Chara salvato: ", snapshot1.data());
+    console.log("Chara saved: ", snapshot1.data());
   }
 }

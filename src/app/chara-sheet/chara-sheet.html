@@ -1,22 +1,34 @@
-<div class="sheet">
-    <form for="charSheet" class="grid" name="charForm">
-        <div class="intro">
-            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="" style="cursor: pointer;" (click)="getChara(1)"
-                [ngStyle]="{'border-color': depColorUp()}">
-            <input type="text" class="agentname" id="name" placeholder="{{Chara.fullName}}">
+<script>   
+const form = document.getElementById('charForm');
+ 
+// Add submit event listener
+form.addEventListener('submit', async (event) => {
+  // Prevent default form submission (page reload)
+  event.preventDefault();
 
+  // Rest of the logic (collect data, send to server) will go here
+});
+</script>
+<div class="sheet">
+    <form for="charSheet" class="grid" name="form" id="charForm">
+        <div class="intro">
+            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor}">
+            <button type="submit" class="submit" style="margin-left: 5%;">Save</button>
+            <button type="button" class="submit" (click)="getChara(Chara.charID)">Reset</button>
+            <input type="text" class="agentname" name="charName" placeholder="{{Chara.fullName}}" autocomplete="off">
             <label for="role" style="max-height: 0; opacity: 0;">Carica</label>
+            <label for="role2" style="max-height: 0; opacity: 0;">Dipartimento</label>
             <div class="role" alt="incarico">
-                <select class="role" id="role" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                <select class="role" id="role" name="role1" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
                 @for(i of ["Captain", "Agent", "Clerk"]; track i){
                     @if(i==Chara.role[0]){<option selected>{{i}}</option>}
                     @else{<option>{{i}}</option>}
                 }
                 </select>
-                <select class="role" id="role" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                <select class="role2" id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
                 @for(i of activeDeps; track i){
                     @if(i==Chara.role[1]){<option selected>{{i}}</option>}
-                    @else{<option (click)="depAbsUp(i)">{{i}}</option>}
+                    @else{<option>{{i}}</option>}
                 }
                 </select>
             </div>
@@ -28,7 +40,7 @@
         </div>
 
         <label for="abilities" style="max-height: 0; opacity: 0;">Scegli un'abilità</label>
-        <div class="abilities" id="abilities">
+        <div class="abilities">
             @if(Chara.role[0]=="Clerk"){
             <div class="ability">---</div>
             <div class="ability"></div>
@@ -37,9 +49,12 @@
             @for(i of [0,1,2]; track i){
             @if(i==0 || Chara.abilities[i-1]){
             @if(Chara.role[0]=="Agent"){
-            <select name="agentAbs" id="abilities" class="ability">
+            <select name="ability{{i}}" id="abilities" class="ability">
                 <option selected>{{Chara.abilities[i]}}</option>
-                @if(Chara.abilities[i]){<option value="Empty"></option>}
+                @if(Chara.abilities[i]){
+                    @if(i==0||i==1){@if(!Chara.abilities[i+1]){<option value="Empty"></option>}}
+                    @else{<option value="Empty"></option>}
+                }
                 @for(l of agentAbs; track l){
                     @if(Chara.abilities[i]!=l){<option>{{l}}</option>}
                 }
@@ -50,7 +65,7 @@
             </select>
             }
             @if(Chara.role[0]=="Captain"){
-            <select name="captAbs" id="abilities" class="ability">
+            <select name="ability{{i}}" id="abilities" class="ability">
                 <option value="Empty"></option>
                 @for(l of abilitylist; track l){
                @if(Chara.abilities[i]==l){
@@ -70,13 +85,13 @@
         <label for="traumas"  style="max-height: 0; opacity: 0;">Trauma</label>
         <div class="stresstraumas">
             <div class="stresstrauma">Stress: {{Chara.stress}}<span style="opacity: 0;">-</span><label class="container"
-                    title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor">
+                    title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor" name="armor">
                     <span class="checkmark"></span>
                 </label></div>
                 @for(i of [0,1,2]; track i){
                     @if(i==0||Chara.trauma[i-1]){
                     @if(i<2 || Chara.role[0]=="Captain"||traum3nabled){
-                        <select id="traumas"class="stresstrauma">
+                        <select id="traumas" class="stresstrauma" name="trauma{{i}}">
                         <option value="Empty"></option>
                         @for(t of traumas; track t){
                             @if(t==Chara.trauma[i]){
@@ -115,91 +130,91 @@
         
         <div class="exp">
             <label for="exp">Exp :</label>
-            <input type="text" id="exp" maxlength="1" max="6" size="1" class="expinp" placeholder="{{Chara.exp[0]}}"> -
+            <input type="text" id="exp" name="exp" maxlength="1" max="6" size="1" class="expinp" placeholder="{{Chara.exp[0]}}"> -
             <span style="color: var(--reddam-color);">{{Chara.exp[1]}}</span> - <span style="color: var(--whitedam-color);">{{Chara.exp[2]}}</span> - <span style="color: var(--blackdam-color);">{{Chara.exp[3]}}</span> - <span style="color: var(--paledam-color);">{{Chara.exp[4]}}</span></div>
         @if(lang=='en'){
         <div class="skills">
             <label class="skill" style="background-color: var(--reddam-color)" for="Excel">
                 Excel</label>
-            <input type="text" class="skillnum" id="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Excel" name="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))" for="Endure">
                 Endure</label>
-            <input type="text" class="skillnum" id="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Endure" name="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))" for="Lurk">
                 Lurk</label>
-            <input type="text" class="skillnum" id="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Lurk" name="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))" for="Rush">
                 Rush</label>
-            <input type="text" class="skillnum" id="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Rush" name="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--whitedam-color)" for="Observe">
                 Observe</label>
-            <input type="text" class="skillnum" id="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Observe" name="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))" for="Consort">
                 Consort</label>
-            <input type="text" class="skillnum" id="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Consort" name="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))" for="Hunt">
                 Hunt</label>
-            <input type="text" class="skillnum" id="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Hunt" name="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--paledam-color)" for="Operate">
                 Operate</label>
-            <input type="text" class="skillnum" id="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Operate" name="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))" for="Command">
                 Command</label>
-            <input type="text" class="skillnum" id="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Command" name="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--blackdam-color)" for="Skirmish">
                 Skirmish</label>
-            <input type="text" class="skillnum" id="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Skirmish" name="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
         </div>
         }@else {
         <div class="skills">
             <label class="skill" style="background-color: var(--reddam-color)" for="Excel">
                 Eccellere</label>
-            <input type="text" class="skillnum" id="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Excel" name="Excel" placeholder="{{Chara.skills[0]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color) , var(--whitedam-color), var(--whitedam-color))" for="Endure">
                 Sopportare</label>
-            <input type="text" class="skillnum" id="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Endure" name="Endure" placeholder="{{Chara.skills[1]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--blackdam-color), var(--blackdam-color))" for="Lurk">
                 Celarsi</label>
-            <input type="text" class="skillnum" id="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Lurk" name="Lurk" placeholder="{{Chara.skills[2]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--reddam-color),var(--reddam-color), var(--paledam-color), var(--paledam-color))" for="Rush">
                 Correre</label>
-            <input type="text" class="skillnum" id="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Rush" name="Rush" placeholder="{{Chara.skills[3]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--whitedam-color)" for="Observe">
                 Osservare</label>
-            <input type="text" class="skillnum" id="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Observe" name="Observe" placeholder="{{Chara.skills[4]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--blackdam-color), var(--blackdam-color))" for="Consort">
                 Rapportarsi</label>
-            <input type="text" class="skillnum" id="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Consort" name="Consort" placeholder="{{Chara.skills[5]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--whitedam-color) ,var(--whitedam-color), var(--paledam-color), var(--paledam-color))" for="Hunt">
                 Mirare</label>
-            <input type="text" class="skillnum" id="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Hunt" name="Hunt" placeholder="{{Chara.skills[6]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--paledam-color)" for="Operate">
                 Operare</label>
-            <input type="text" class="skillnum" id="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Operate" name="Operate" placeholder="{{Chara.skills[7]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-image: linear-gradient(to top right,var(--blackdam-color) ,var(--blackdam-color), var(--paledam-color), var(--paledam-color))" for="Command">
                 Comandare</label>
-            <input type="text" class="skillnum" id="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Command" name="Command" placeholder="{{Chara.skills[8]}}" maxlength="1" max="4" size="1">
 
             <label class="skill" style="background-color: var(--blackdam-color)" for="Skirmish">
                 Schermire</label>
-            <input type="text" class="skillnum" id="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
+            <input type="text" inputmode="numeric" class="skillnum" id="Skirmish" name="Skirmish" placeholder="{{Chara.skills[9]}}" maxlength="1" max="4" size="1">
         </div>
         }
 

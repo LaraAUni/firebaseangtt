@@ -1,8 +1,6 @@
 body{
     color-scheme: light dark;
-}
-@media screen {
-    
+    line-height: normal;
 }
 
 @font-face {
@@ -72,15 +70,21 @@ body{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
     background-color: var(--background-color);
     color: aliceblue;
-    border-left: 0.4vh solid #EF944D;
+    border-left: 0.4vh solid var(--border-color);
     text-align: center;
     text-justify: center;
     overflow-x: hidden;
-    scrollbar-color: #010101 #EF944D;
+    scrollbar-color: #010101 var(--border-color);
     width: calc(100vw / 3);
     height: 100vh;
-    padding-top: 0.3%;
     contain: scale-down;
+    gap: 0.7%;
+}
+
+@media (max-width: 600px){
+.sheet{
+    width: 100vw;
+}
 }
 select{
     border-radius: 0%;
@@ -107,6 +111,15 @@ select optgroup {
     --blacktext-color: #010101;
     --whitetext-color: aliceblue;
     --border-color: #EF944D;
+    --title-yellow: #FAFF8E;
+    --summary-background: #83FFCE;
+    --zayin-color: #6FFF00;
+    --teth-color: #658FFF;
+    --he-color: #F6FF00;
+    --waw-color: #8100FF;
+    --aleph-color: #E4200C;
+    --hp-color: #E2433C;
+    --sp-color: #699CE4;
     --reddam-color: #CB2642;
     --whitedam-color: #EFECC0;
     --blackdam-color: #814A84;
@@ -122,6 +135,9 @@ select optgroup {
     --records-color: #606060;
     --architecture-color: #FFFFFF;
     --bonusdep-color: #9AC2FF;
+    --first-trumpet: #EEC700;
+    --second-trumpet: #E65B00;
+    --third-trumpet: #E4200C;
     --asiya-color: #F7FF00;
     --briah-color: #6DFF00;
     --atziluth-color: #C0C0C0;
@@ -134,7 +150,8 @@ select optgroup {
     grid-template-rows: 1.2fr 0.8fr 2fr;
     max-height: 100%;
     gap: 1%;
-    padding-bottom: 3%;
+    padding-top: 0.7%;
+    padding-bottom: 1%;
     margin-top:0.7%;
     font-size: 180%;
     margin-right: 3%;
@@ -145,9 +162,10 @@ select optgroup {
     grid-column: 1;
     border: 0.3vh solid var(--bonusdep-color);
     max-width: 95%; 
-    max-height: 95%;
+    max-height: 85%;
     contain: scale-down;
     margin-left: 5%;
+    padding-top: 0;
 }
 
 .sheet .gridbox{
@@ -172,7 +190,6 @@ input{
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 0.1fr;
     border: 0.3vh solid #E2E6AE;
-    border: 1% solid #E2E6AE;
     padding: 1%;
     contain: scale-down;
     max-height: 100%;

@@ -1,4 +1,4 @@
-.grid {
+.sheet {
     display: grid;
     grid-template-rows: 26% 8% 5% 4% 4% 19% 17% 16%;
     gap: 0.7%;
@@ -10,7 +10,7 @@
     grid-column: 2;
     grid-row: 1;
     background-color: aliceblue;
-    color: var(--blacktext-color);
+    color: black;
     border: 0.2vh solid gray;
     align-content: center;
     background-clip: padding-box;
@@ -42,12 +42,8 @@
     background-color: #010101;
     color: #EF944D;
     border: 0.3vh solid #EF944D;
-    max-width: 25%;
-    max-height: 15%;
+    max-width: 35%;
     margin-left: 35%;
-    position: relative;
-    align-self: end;
-    top: 3%;
 }
 
 @media (max-width: 600px){
@@ -119,14 +115,24 @@
     text-align: center;
     padding-top: 7%;
     background-color: #010101;
+    color: var(--title-yellow);
+}
+.stresstext{
+    padding: 0;
+    font-size: 80%;
+    border-width: 0;
+    color: var(--title-yellow);
+    background-color: #010101;
 }
 
-.stresstrauma input {
-    position: absolute;
-    opacity: 0;
+.check{
     cursor: pointer;
+}
+.check input {
+    position: absolute;
     height: 0;
     width: 0;
+    opacity: 0;
 }
 
 .container {
@@ -155,7 +161,7 @@
     left: 0;
     height: 1.5vh;
     width: 1.5vh;
-    background-color: var(--background-color);
+    background-color: black;
     border: 0.3vh solid var(--title-yellow);
 }
 
@@ -216,7 +222,7 @@
 }
 
 .health .physical {
-    background-color: rgb(255, 61, 61);
+    background-color: var(--hp-color);
     justify-content: center;
     align-content: center;
     contain: scale-down;

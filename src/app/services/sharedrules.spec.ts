@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Language } from './language';
+import { Sharedrules } from './sharedrules';
 
-describe('Language', () => {
-  let service: Language;
+describe('Sharedrules', () => {
+  let service: Sharedrules;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Language);
+    service = TestBed.inject(Sharedrules);
   });
 
   it('should be created', () => {

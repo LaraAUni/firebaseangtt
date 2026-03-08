@@ -9,12 +9,12 @@ form.addEventListener('submit', async (event) => {
   // Rest of the logic (collect data, send to server) will go here
 });
 </script>
-<div class="sheet">
-    <form for="charSheet" class="grid" name="form" id="charForm">
+    <form for="charSheet" class="sheet" name="form" id="charForm">
         <div class="intro">
+            <div class="iconside">
             <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor}">
             <button type="submit" class="submit" style="margin-left: 5%;">Save</button>
-            <button type="button" class="submit" (click)="getChara(Chara.charID)">Reset</button>
+            <button type="button" class="submit" (click)="getChara(Chara.charID)">Reset</button></div>
             <input type="text" class="agentname" name="charName" placeholder="{{Chara.fullName}}" autocomplete="off">
             <label for="role" style="max-height: 0; opacity: 0;">Carica</label>
             <label for="role2" style="max-height: 0; opacity: 0;">Dipartimento</label>
@@ -84,10 +84,11 @@ form.addEventListener('submit', async (event) => {
         </div>
         <label for="traumas"  style="max-height: 0; opacity: 0;">Trauma</label>
         <div class="stresstraumas">
-            <div class="stresstrauma">Stress: {{Chara.stress}}<span style="opacity: 0;">-</span><label class="container"
+            <div class="stresstrauma"><label for="stress">Stress :</label><input type="text" name="stress" id="stress" placeholder="{{Chara.stress}}" inputmode="numeric" maxlength="1" size="1" max="8" class="stresstext">
+                <span class="check"><label class="container"
                     title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor" name="armor">
                     <span class="checkmark"></span>
-                </label></div>
+                </label></span></div>
                 @for(i of [0,1,2]; track i){
                     @if(i==0||Chara.trauma[i-1]){
                     @if(i<2 || Chara.role[0]=="Captain"||traum3nabled){
@@ -291,7 +292,6 @@ form.addEventListener('submit', async (event) => {
         @if(lang=='en'){<div class="giftname" style="padding: 2%; padding-bottom: 27%;">No Gifts Acquired</div>}
         @else{<div class="giftname" style="padding: 2%; padding-bottom: 27%;">Nessun Dono Ottenuto</div>}
         }
-</div>
+        </div>
 </form>
-</div>
 <router-outlet />

@@ -1,6 +1,7 @@
 body{
-    color-scheme: light dark;
+    color-scheme: light;
     line-height: normal;
+    background-color: aliceblue;
 }
 
 @font-face {
@@ -66,16 +67,15 @@ body{
     right: 0;
     top: 0;
     z-index: 2;
-    width: calc(100vw / 3);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-    background-color: var(--background-color);
+    background-color: black;
     color: aliceblue;
     border-left: 0.4vh solid var(--border-color);
     text-align: center;
     text-justify: center;
     overflow-x: hidden;
     scrollbar-color: #010101 var(--border-color);
-    width: calc(100vw / 3);
+    width: 30vw;
     height: 100vh;
     contain: scale-down;
     gap: 0.7%;
@@ -106,9 +106,7 @@ select optgroup {
     font-style: normal;
 }
 :root{
-    --background-color: #010101;
     --lightbackg-color: #fff8d3;
-    --blacktext-color: #010101;
     --whitetext-color: aliceblue;
     --border-color: #EF944D;
     --title-yellow: #FAFF8E;
@@ -143,6 +141,7 @@ select optgroup {
     --atziluth-color: #C0C0C0;
 }
 
+
 .sheet .intro {
     grid-row: 1;
     display: grid;
@@ -157,12 +156,16 @@ select optgroup {
     margin-right: 3%;
 }
 
-.intro .icon {
-    grid-row: 1/4;
+.intro .iconside{
     grid-column: 1;
+    grid-row: 1/4;
+    display: grid;
+    grid-row: 3fr 1fr;
+}
+.intro .icon {
     border: 0.3vh solid var(--bonusdep-color);
     max-width: 95%; 
-    max-height: 85%;
+    max-height: 100%;
     contain: scale-down;
     margin-left: 5%;
     padding-top: 0;

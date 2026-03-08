@@ -16,7 +16,7 @@
 }
 
 .expansion{
-    background-color: var(--background-color);
+    background-color: black;
     font: initial;
     box-shadow: none !important;
 }
@@ -46,7 +46,7 @@
 }
 .closebtn {
     position: fixed;
-    right: calc(100vw  / 3);
+    right: 30vw;
     top: 0;
     background-color: #EF944D;
     max-height: 8vh;
@@ -132,7 +132,7 @@
 }
 
 .sidenav {
-    width: calc(100vw  / 3); /*non so perché si è rotto ed è più piccolo*/
+    width: 30vw; /*non so perché si è rotto ed è più piccolo*/
     height: 100vh;
     background-color: #010101;
     overflow-x: hidden;
@@ -166,6 +166,7 @@
     border-bottom: 0.4vh solid #EF944D;
     color: #EF944D;
     font-size: 2vh;
+    z-index: 1;
 }
 
 /* The switch - the box around the slider */
@@ -192,7 +193,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #fff8d3;
+  background-color: var(--lightbackg-color);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 68px;  
@@ -210,6 +211,7 @@
   transition: .4s;
   border-radius: 50%;
 }
+
 
 input:checked + .slider {
   background-color: #010101;
@@ -230,17 +232,17 @@ input:checked + .slider:before {
     position: absolute;
     font-size: 3vh;
     padding: 0.5vh;
-    color: #ED0506;
+    color: var(--third-trumpet);
     left: 45vw;
     font-family: 'Norwester';
 }
 
 .recap {
     position: fixed;
-    top: calc(4vh + 1000px);
+    top: 80vh;
     left: 0;
-    width: 100%;
-    height: calc(96vh - 1000px);
+    width: 100vw;
+    height: 20vh;
     background-color: aqua;
     scrollbar-color: aqua #010101;
 }

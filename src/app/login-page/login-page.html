@@ -1,3 +1,75 @@
+<script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js">
+    // Initialize the FirebaseUI Widget using Firebase.
+var ui = new firebaseui.auth.AuthUI({auth});
+ui.start('#firebaseui-auth-container', {
+  signInOptions: [
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+      requireDisplayName: false
+    }
+  ],
+  // Other config options...
+});
+if (ui.isPendingRedirect()) {
+  ui.start('#firebaseui-auth-container', uiConfig);
+}
+// Initialize the FirebaseUI Widget using Firebase.
+var ui = new firebaseui.auth.AuthUI({auth});
+var data = null;
+// Hold a reference to the anonymous current user.
+var anonymousUser = {auth}.currentUser;
+ui.start('#firebaseui-auth-container', {
+  // Whether to upgrade anonymous users should be explicitly provided.
+  // The user must already be signed in anonymously before FirebaseUI is
+  // rendered.
+  autoUpgradeAnonymousUsers: true,
+  signInSuccessUrl: '/app.css',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+  ],
+  callbacks: {
+    // signInFailure callback must be provided to handle merge conflicts which
+    // occur when an existing credential is linked to an anonymous user.
+    signInFailure: function(error) {
+      // For merge conflicts, the error.code will be
+      // 'firebaseui/anonymous-upgrade-merge-conflict'.
+      if (error.code != 'firebaseui/anonymous-upgrade-merge-conflict') {
+        return Promise.resolve();
+      }
+      // The credential the user tried to sign in with.
+      var cred = error.credential;
+      // Copy data from anonymous user to permanent user and delete anonymous
+      // user.
+      // ...
+      // Finish sign-in after data is copied.
+      return {auth}.signInWithCredential(cred);
+    }
+  }
+});
+</script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+<div class="cont"><img src="Charas/0000.png" class="profic" alt="Ic">
+<button type="button" class="butt" (click)="inpopen=!inpopen; subopen=false">Sign In</button>
+<button type="button" class="butt" (click)="subopen=!subopen; inpopen=false">Sign Up</button></div>
+<form for="login-page" name="form" id="signForm">
+ @if(inpopen){
+<div class="infobox">
+  <label for="email">Email </label>
+  <input type="text" inputmode="email" id="email">
+  <div><label for="password">Password </label>
+  <input type="text" id="password"></div>
+  <button type="submit" class="buttsign">Sign In</button>
+</div>
+}
+@if(subopen){
+<div class="infobox">
+  <label for="email">Email </label>
+  <input type="text" inputmode="email" id="email">
+  <div><label for="password">Password </label>
+  <input type="text" id="password"></div>
+  <button type="submit" class="buttsign">Sign Up</button>
+</div>}
+</form>
 
-<div id="app"></div>
-<script type="module" src="./loginsc.ts"></script>

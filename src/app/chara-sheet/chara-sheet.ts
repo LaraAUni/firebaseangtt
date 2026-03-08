@@ -5,6 +5,7 @@ import { FireInit } from '../fire-init';
 import { addDoc, getDoc, collection, setDoc, query, where, getFirestore, doc, DocumentSnapshot } from "firebase/firestore";
 import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
+import { Sharedrules } from '../services/sharedrules';
 
 @Component({
   selector: 'app-chara-sheet',
@@ -15,38 +16,30 @@ import { Character, CharaConverter } from './characlass';
 
 export class CharaSheet {
   fireInit = inject(FireInit);
-  app = this.fireInit.app;
+  rules = inject(Sharedrules);
   db = this.fireInit.db;
   Chara : Character;
   lang='en';
-  itapr="";
+  itapr="";//per prendere le abilità in italiano quando le aggiungo se non sono custom scelte da DM
   abilitylist=["---"]
-  controlAbs=["Manager, Shut It Down!", "Corrective Action", "Controlling Coordinator", "Cross-Departmental Efficiency", "The Will To Stand Up Straight"]
-  infoAbs=["Solo Research","Foresight","Respectful Distance","Don't Act Rashly","The Rationality to Maintain Discretion"]
-  safetyAbs=["Containment Protocols", "Dead Man Walking", "Bedside Manner", "Not On My Watch", "The Fearlessness to Keep On Living"]
-  trainAbs=["Shadow", "Sink or Swim", "Right Out of the Handbook", "Stick to the Plan!", "The Hope to Be a Better Person"]
-  discAbs=["Rabbit Protocol", "Big EGO", "Pain Bringer", "Vitality", "The Courage to Protect"]
-  agentAbs=["Unassuming","Temporary Lucidity", "Face the Fear", "Virtuous", "Skilled"]
-  traumas=["Cold","Haunted","Obsessed","Distrustful","Reckless","Soft","Volatile","Vicious"]
+  controlAbs=this.rules.controlAbs
+  infoAbs=this.rules.infoAbs;
+  safetyAbs=this.rules.safetyAbs;
+  trainAbs=this.rules.trainAbs;
+  discAbs=this.rules.discAbs;
+  agentAbs=this.rules.agentAbs;
+  traumas=this.rules.traumas;
   Fort={track:[1,1,1,1,1,1]};Prud={track:[1,1,1,1,1,1]};Temp={track:[1,1,1,1,1,1]};Just={track:[1,1,1,1,1,1]};
-  traum3nabled=false; //per il progetto che dà un'altro slot è completato (in gamerules/gamestate)
-  activeDeps=["Control", "Information", "Safety", "Training", "Disciplinary"]
-  oldSkill=true;
-  depColor="var(--bonusdep-color)";
-  depText="var(--blacktext-color)";
-
+  traum3nabled=this.rules.traum3nabled; //per il progetto che dà un'altro slot se completato (in gamerules/gamestate)
+  activeDeps=this.rules.depsList;
+  depColor="var(--bonusdep-color)";//default è colore di Angela perché non avrebbe senso fosse assegnabile
+  depText="#010101";
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
-  this.vexpUpdate(1);
-  this.vexpUpdate(2);
-  this.vexpUpdate(3);
-  this.vexpUpdate(4);
 }
 ngOnInit(){
-    //this.getChara(1);
-    this.depAbsUp();
-    this.depColorUp();
-    const form = document.getElementById('charForm') as HTMLFormElement;
+  this.getChara(1);
+  const form = document.getElementById('charForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
 
@@ -76,6 +69,11 @@ if(inp){inp=inp.toString();
 inp=formData.get('ability2');
 if(inp){inp=inp.toString();
   this.Chara.abilities[2]=(inp=='Empty'?"":inp)}
+inp=formData.get('stress');
+if(inp){inp=Number(inp);
+  if(this.Chara.role[0]=='Captain'){if(inp>=0&&inp<9)this.Chara.stress=inp;}
+  else{if(inp>=0&&inp<7)this.Chara.stress=inp;}
+}
 inp=formData.get('trauma0');
 if(inp){inp=inp.toString();
   this.Chara.trauma[0]=(inp=='Empty'?"":inp)}
@@ -128,12 +126,15 @@ this.addChara();
     const uChara: Character = snapshot1.data()!;
     if (uChara) {
     this.Chara = uChara;
-    }
-    console.log("thisChara: ", this.Chara);
     this.vexpUpdate(1);
     this.vexpUpdate(2);
     this.vexpUpdate(3);
     this.vexpUpdate(4);
+    this.depAbsUp();
+    this.depColorUp();
+    this.ref.markForCheck();
+    }
+    console.log("thisChara: ", this.Chara);
   }
 
   log(s:string){
@@ -163,31 +164,13 @@ this.addChara();
       case "Records": this.abilitylist=["---"];
       break;
       default: this.abilitylist=["---"];
-    } //se aggiungo Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--customdep1-color)
+    } //Con le Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--customdep1-color)
   }
   depColorUp(c: string=this.Chara.role[1]){
-    this.depText="var(--blacktext-color)";
-    switch(c){
-      case "Control": this.depColor="var(--control-color)";
-      break;
-      case "Information": this.depColor="var(--info-color)";
-      break;
-      case "Training": this.depColor="var(--training-color)";
-      break;
-      case "Safety": this.depColor="var(--safety-color)";
-      break;
-      case "Central-Command": this.depColor="var(--central-color)";
-      break;
-      case "Disciplinary": this.depColor="var(--disc-color)";
-      break;
-      case "Welfare": this.depColor="var(--welfare-color)";
-      break;
-      case "Extraction": this.depText="var(--whitetext-color)"; this.depColor="var(--extraction-color)";
-      break;
-      case "Records": this.depColor="var(--records-color)";
-      break;
-      default: this.depColor="var(--bonusdep-color)";
-    } //se aggiungo Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--customdep1-color)
+    this.depText="#010101";
+    let newC=this.rules.depColorUp(c);
+    if(newC[1])this.depText="aliceblue";
+    this.depColor=newC[0] as string;
   }
   onsubmit(formdata: FormData){
     formdata.getAll

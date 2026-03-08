@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-
+import { getAuth } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class FireInit {
-  public firebaseConfig;
-  public APP;
-  public DB;
+  private firebaseConfig;
+  private APP;
+  private DB;
+  private AUTH;
 constructor() { 
   this.firebaseConfig = {
   apiKey: "AIzaSyAl6MOHLbKkHSp2UTNmmkzRZphfthmEn3E",
@@ -22,6 +23,7 @@ constructor() {
   measurementId: "G-3RHTFBTNWY"};
   this.APP = initializeApp(this.firebaseConfig);
   this.DB = getFirestore(this.app);
+  this.AUTH=getAuth(this.app);
 }
 // Initialize Firebase
 
@@ -30,5 +32,8 @@ public get app(){
 }
 public get db() {
   return this.DB;
+}
+public get auth(){
+  return this.AUTH;
 }
 }

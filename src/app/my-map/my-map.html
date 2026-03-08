@@ -1,4 +1,40 @@
-<div class="map" style="background-image: url(Map.png);">
+<div class="map">
+    <button class="floors" (click)="(floordisp==map.floors?floordisp=0:floordisp+=1)">Floor:
+        {{(floordisp==map.floors?'ALL':(floordisp * -1))}}</button>
+    @for(i of departments; track i;){
+        @for(j of i.rooms; track j){
+            @if(j.floor==floordisp || floordisp==map.floors){
+            <div class="rooms" [ngStyle]="{'z-index': (2 - (j.floor*5)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3], 'background-color': i.background}">
+            </div>
+            }
+        @for(j of i.corridors; track j){
+            @if(j.floor==floordisp || floordisp==map.floors){
+            <div class="corridors" [ngStyle]="{'z-index': (3 - (j.floor*5)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3], 'background-color': i.background}">
+            </div>
+            }
+        }
+        @for(j of i.abnorooms; track j){
+            @if(j[2]==floordisp || floordisp==map.floors){<div class="abnoroom" [ngStyle]="{'z-index': (5 - (j[2]*5)), 'grid-column': j[0], 'grid-row': j[1]}"></div>}
+            }
+        }
+        @for(j of i.stairs; track j){@if(j[2]==floordisp || floordisp==map.floors){<img class="stairs"
+        [ngStyle]="{'z-index': (2 - (j[2]*5)),'grid-column': j[0], 'grid-row': j[1], 'background-color': i.background}" [src]="(j[3]?'StairsIco.png':'ElevIco.png')" alt="" />}
+            }
+    }
+    @for(i of departments; track i){
+        @for(j of i.rooms; track j){
+            @if(j.floor==floordisp || floordisp==map.floors){
+            <div class="shadow" [ngStyle]="{'z-index': (1 - (j.floor*5)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3]}">
+            </div>
+            }
+        @for(j of i.corridors; track j){
+            @if(j.floor==floordisp || floordisp==map.floors){
+            <div class="shadow" [ngStyle]="{'z-index': (1 - (j.floor*5)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3]}">
+            </div>
+            }
+        }
+        }
+    }
     <img class="pawn" src="Charas/111.png" alt="">
     <img class="pawn" src="Charas/112.png" alt="">
     <img class="pawn" src="Charas/123.png" alt="">

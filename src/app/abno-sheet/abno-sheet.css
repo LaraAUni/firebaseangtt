@@ -1,6 +1,6 @@
-.abnosh {
+.sheet {
     display: grid;
-    grid-template-rows: 20% 12% 8% 20% auto;
+    grid-template-rows: 27% 12% 12% 20% 20% 18%;
     gap: 1%;
 }
 
@@ -21,18 +21,16 @@
     padding: 2%;
 }
 .intro .damage{
-    grid-row: 3;
-    grid-column: 1;
+    grid-row: 2;
     border: 0.3vh solid var(--title-yellow);
     color: var(--title-yellow);
-    margin: 8%;
-    position: relative;
-    align-self: end;
-    font-size: 150%;
-    padding: 3%;
+    margin: 6%;
+    font-size: 180%;
+    padding: 2%;
+    align-content: center;
 }
 .intro .damicon{
-    max-height: 2.5vh;
+    max-height: 3.5vh;
     contain: scale-down;
 }
 .intro .danger {
@@ -42,7 +40,7 @@
     align-content: center;
     grid-column: 2;
     grid-row: 2;
-    color: var(--blacktext-color);
+    color: black;
     font-size: 140%;
     margin-left: 3%;
     font-family: 'Norwester';
@@ -68,13 +66,13 @@
 }
 .sheet .counter{
     grid-column: 1;
+    justify-content: center;
     margin-left: 5%;
     color: var(--title-yellow);
-    align-content: center;
-    padding: 10%;
+    padding-top: 20%;
     font-size: 400%;
     max-height: 128px;
-    max-width: 128px;
+    padding-left: 10%;
 }
 .sheet .escape{
     grid-row: 2;
@@ -169,5 +167,35 @@
 
 .resicon {
     max-height: 4vh;
+    contain: scale-down;
+}
+
+
+
+.sheet .hints {
+    grid-row: 4;
+    border: 0.3vh solid #EF944D;
+    height: 100%;
+    background-color: #EF944D;
+    color: #EF944D;
+    gap: 1%;
+    background-clip: padding-box;
+    margin: 2%;
+    margin-left: 10%;
+    margin-right: 10%;
+    overflow-y: scroll;
+}
+
+
+.hints .hinttext {
+    background-color: #010101;
+    max-height: min-content;
+    font-size: 170%;
+    padding: 0.5%;
+    margin: 0.2%;
+}
+
+.hints .hinticon {
+    max-height: 2.5vh;
     contain: scale-down;
 }

@@ -1,10 +1,11 @@
-<div class="sheet">
-<div id="myAbno" class="abnosh">
+<div class="sheet" id="myAbno">
     <img class="closebtn" onclick="closeAbno()" src="buttonclose.png" alt="Menu Button">
     <div class="intro">
-        <img class="icon" src="Charas/211.png" alt="" (click)="addChara()" style="cursor: pointer;">
+        <div class="iconside">
+        <img class="icon" src="Charas/211.png" alt="">
         <span class="damage"><img class="damicon" src="WhiteDamage.png" alt="">  -  3-2</span>
-        <div class="abnoname">Regina delle Nevi</div>
+        </div>
+        <div class="abnoname">The Snow Queen</div>
         <div class="danger">HE</div>
         <div class="equip">
                 <img class="equips" src="EGOs/EGOWeaponFrostShard.png" alt="Weapon">
@@ -39,7 +40,7 @@
         <div class="preferences">
             <div class="preference" style=" border-color: #008837;">
                     <div class="prefitem1"><img class="preficon" src="Insight.png" alt=""></div>
-                <span class="preftext">Preferred:</span>
+                <span class="preftext">Preferred: Death<div>destruction</div><div>die</div></span>
             </div>
             <div class="preference" style=" border-color: #D64D4D;">
                     <img class="preficon" src="Insight.png" alt="">
@@ -49,5 +50,46 @@
                 <span class="preftext">Disfavoured:</span>
             </div>
         </div>
-</div>
+        <div class="hints">
+            @for ( i of Chara.gifts ; track i;) {
+            @if(i!=null){<div class="hinttext">
+                <img class="hinticon" src='EGOs/{{i.imgUrl}}.png' alt="">
+                {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
+            </div>}
+            @if (Chara.gifts.length<8) { <div class="hinttext" style="padding: 2%; padding-bottom: 27%;">
+        </div>}
+        }
+        @empty{
+        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">No Gifts Acquired</div>}
+        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">Nessun Dono Ottenuto</div>}
+        }
+        </div>
+        <div class="hints" style="grid-row:5">
+            @for ( i of Chara.gifts ; track i;) {
+            @if(i!=null){<div class="hinttext">
+                <img class="hinticon" src='EGOs/{{i.imgUrl}}.png' alt="">
+                {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
+            </div>}
+            @if (Chara.gifts.length<8) { <div class="hinttext" style="padding: 2%; padding-bottom: 27%;">
+        </div>}
+        }
+        @empty{
+        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">No Gifts Acquired</div>}
+        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">Nessun Dono Ottenuto</div>}
+        }
+        </div>
+        <div class="hints" style="grid-row:6">
+            @for ( i of Chara.gifts ; track i;) {
+            @if(i!=null){<div class="hinttext">
+                <img class="hinticon" src='EGOs/{{i.imgUrl}}.png' alt="">
+                {{i.Name}}@if(i.Exp != 0) {: {{i.Exp}} Exp}
+            </div>}
+            @if (Chara.gifts.length<8) { <div class="hinttext" style="padding: 2%; padding-bottom: 27%;">
+        </div>}
+        }
+        @empty{
+        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">No Gifts Acquired</div>}
+        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">Nessun Dono Ottenuto</div>}
+        }
+        </div>
 </div>

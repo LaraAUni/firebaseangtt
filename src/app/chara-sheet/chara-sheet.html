@@ -1,20 +1,10 @@
-<script>   
-const form = document.getElementById('charForm');
- 
-// Add submit event listener
-form.addEventListener('submit', async (event) => {
-  // Prevent default form submission (page reload)
-  event.preventDefault();
-
-  // Rest of the logic (collect data, send to server) will go here
-});
-</script>
     <form for="charSheet" class="sheet" name="form" id="charForm">
         <div class="intro">
             <div class="iconside">
             <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor}">
-            <button type="submit" class="submit" style="margin-left: 5%;">Save</button>
-            <button type="button" class="submit" (click)="getChara(Chara.charID)">Reset</button></div>
+            <div class="submit"><button type="submit" class="subbutton">Save</button>
+            <button type="button" class="subbutton" (click)="getChara(Chara.charID)">Reset</button></div>
+            </div>
             <input type="text" class="agentname" name="charName" placeholder="{{Chara.fullName}}" autocomplete="off">
             <label for="role" style="max-height: 0; opacity: 0;">Carica</label>
             <label for="role2" style="max-height: 0; opacity: 0;">Dipartimento</label>
@@ -32,9 +22,9 @@ form.addEventListener('submit', async (event) => {
                 }
                 </select>
             </div>
-            <div class="equip"><img class="equips" src="EGOs/{{Chara.equip[0].imgUrl}}.png" alt="">
+            <div class="equip"><img class="equips" src="EGOs/EW{{Chara.equip[0].imgUrl}}.png" alt="">
                 <div class="equiptxt">{{Chara.equip[0].Name}}</div>
-                <img class="equips" src="EGOs/{{Chara.equip[1].imgUrl}}.png" alt="">
+                <img class="equips" src="EGOs/ES{{Chara.equip[1].imgUrl}}.png" alt="">
                 <div class="equiptxt">{{Chara.equip[1].Name}}</div>
             </div>
         </div>
@@ -132,7 +122,7 @@ form.addEventListener('submit', async (event) => {
         <div class="exp">
             <label for="exp">Exp :</label>
             <input type="text" id="exp" name="exp" maxlength="1" max="6" size="1" class="expinp" placeholder="{{Chara.exp[0]}}"> -
-            <span style="color: var(--reddam-color);">{{Chara.exp[1]}}</span> - <span style="color: var(--whitedam-color);">{{Chara.exp[2]}}</span> - <span style="color: var(--blackdam-color);">{{Chara.exp[3]}}</span> - <span style="color: var(--paledam-color);">{{Chara.exp[4]}}</span></div>
+            <input type="text" id="exp" name="exp1" maxlength="1" max="6" size="1" class="expinp" style="color: var(--reddam-color);" placeholder="{{Chara.exp[1]}}">- <input type="text" id="exp" name="exp2" maxlength="1" max="6" size="1" class="expinp" style="color: var(--whitedam-color);" placeholder="{{Chara.exp[2]}}"> - <input type="text" id="exp" name="exp3" maxlength="1" max="6" size="1" class="expinp" style="color: var(--blackdam-color);" placeholder="{{Chara.exp[3]}}"> - <input type="text" id="exp" name="exp4" maxlength="1" max="6" size="1" class="expinp" style="color: var(--paledam-color);" placeholder="{{Chara.exp[4]}}"></div>
         @if(lang=='en'){
         <div class="skills">
             <label class="skill" style="background-color: var(--reddam-color)" for="Excel">

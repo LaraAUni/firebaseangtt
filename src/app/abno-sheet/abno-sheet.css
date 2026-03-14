@@ -1,12 +1,11 @@
 .sheet {
     display: grid;
-    grid-template-rows: 27% 12% 12% 20% 20% 18%;
-    gap: 1%;
+    grid-template-rows: 25.5% 13.5% auto 10% 15% 17%;
 }
 
 .intro{
     grid-template-rows: 1.5fr 1.5fr 1fr;
-    font-size: 150%;
+    font-size: 1.8vh;
 }
 
 .intro .abnoname{
@@ -15,7 +14,7 @@
     background-color: #010101;
     color: aliceblue;
     align-content: center;
-    font-size: 140%;
+    font-size: 2.5vh;
     max-height: 110%;
     margin-right: 2%;
     padding: 2%;
@@ -25,26 +24,34 @@
     border: 0.3vh solid var(--title-yellow);
     color: var(--title-yellow);
     margin: 6%;
-    font-size: 180%;
+    font-size: 3vh;
     padding: 2%;
     align-content: center;
 }
-.intro .damicon{
-    max-height: 3.5vh;
+.damicon{
+    max-height: 3vh;
     contain: scale-down;
 }
-.intro .danger {
+.intro .codedange{
     grid-row: 2;
     grid-column: 2;
-    background-color: var(--he-color);
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+}
+.codedange .code{
+    grid-column: 1;
+    font-size: 3.3vh;
+    max-height: 110%;
+    margin-right: 2%;
+    padding: 2%;
+}
+.codedange .danger {
+    grid-column: 2;
     align-content: center;
-    grid-column: 2;
-    grid-row: 2;
     color: black;
-    font-size: 140%;
     margin-left: 3%;
     font-family: 'Norwester';
-    font-size: 200%;
+    font-size: 4vh;
 }
 .intro .equip{
     grid-row: 3;
@@ -55,6 +62,7 @@
     grid-template-rows: 1fr 0.1fr;
 }
 .equip .equips {
+    max-height: 10vh;
     contain: scale-down;
     grid-row: 1;
     align-self: center;
@@ -64,27 +72,97 @@
 .equip .equiptxt {
     grid-row: 2;
 }
-.sheet .counter{
-    grid-column: 1;
-    justify-content: center;
-    margin-left: 5%;
-    color: var(--title-yellow);
-    padding-top: 20%;
-    font-size: 400%;
-    max-height: 128px;
-    padding-left: 10%;
-}
 .sheet .escape{
     grid-row: 2;
     display: grid;
-    grid-template-columns: 0.4fr 2fr;
+    grid-template-columns: 1fr 2fr;
+}
+.counterdam{
+    grid-column: 1;
+    display: grid;
+    grid-template-rows: 1.25fr 0.4fr;
+}
+.counterdam .counter{
+    grid-row: 1;
+    align-content: center;
+    margin-left: 25%;
+    color: var(--title-yellow);
+    font-size: 4vh;
+    max-height: 10vh;
+    max-width: 8vw;
+    padding-right: 23%;
+    background:url(/QlipothBase.png);
+    background-repeat: no-repeat;
+    background-size: 5vw 9.5vh;
+}
+
+.escapedam{
+    grid-row: 2;
+    border: 0.3vh solid var(--title-yellow);
+    color: var(--title-yellow);
+    margin: 6%;
+    font-size: 3vh;
+    padding: 2%;
+    align-content: center;
+}
+
+.escape .resistances {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5%;
+    background-color: #010101;
+    max-height: 100%;
+    contain: scale-down;
+    background-clip: padding-box;
+    margin: 3%;
+}
+
+.resistances .resistance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 0.6vh solid;
+    max-height: 100%;
+    border: 1%;
+    contain: scale-down;
+    background-color: #010101;
+}
+
+.resistance .resitem1 {
+    grid-column: 1;
+    background-color: #010101;
+    align-content: center;
+    justify-content: space-around;
+    contain: scale-down;
+    max-height: 100%;
+    margin: 0.4vh;
+    margin-right: 0;
+}
+
+.resistance .resitem2 {
+    grid-column: 2;
+    background-color: #010101;
+    align-content: center;
+    justify-content: center;
+    contain: scale-down;
+    max-height: 100%;
+    margin: 0.4vh;
+    margin-left: 0;
+    font-size: 3vh;
+}
+
+.resicon {
+    max-height: 4vh;
+    max-width: 2vw;
+    contain: scale-down;
 }
 
 .preferences{
     grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    font-size: 150%;
+    font-size: 2vh;
+    margin-top: 1%;
 }
 
 .preference{
@@ -119,65 +197,29 @@
     margin-right: 0;
 }
 
-.sheet .resistances {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+.sheet .clocks{
+    grid-row: 4;
     gap: 4%;
     background-color: #010101;
     max-height: 100%;
+    max-width: 100%;
     contain: scale-down;
     background-clip: padding-box;
-    margin: 2%;
+    margin-left: 4%;
+    margin-right: 3%;
 }
-
-.resistances .resistance {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border: 0.6vh solid;
-    max-height: 110%;
-    border: 1%;
-    contain: scale-down;
-    background-color: #010101;
+.clock {
+    justify-self: center;
+    max-height: 9vh;
+    max-width: 3.8vw;
+    margin-left: 2%;
 }
-
-
-.resistance .resitem1 {
-    grid-column: 1;
-    background-color: #010101;
-    align-content: center;
-    justify-content: space-around;
-    contain: scale-down;
-    max-height: 100%;
-    margin: 0.4vh;
-    margin-right: 0;
-}
-
-.resistance .resitem2 {
-    grid-column: 2;
-    background-color: #010101;
-    align-content: center;
-    justify-content: center;
-    contain: scale-down;
-    max-height: 100%;
-    margin: 0.4vh;
-    margin-left: 0;
-    font-size: 3vh;
-}
-
-.resicon {
-    max-height: 4vh;
-    contain: scale-down;
-}
-
-
 
 .sheet .hints {
-    grid-row: 4;
-    border: 0.3vh solid #EF944D;
+    border: 0.3vh solid var(--border-color);
     height: 100%;
-    background-color: #EF944D;
-    color: #EF944D;
+    background-color: var(--border-color);
+    color: var(--border-color);
     gap: 1%;
     background-clip: padding-box;
     margin: 2%;
@@ -190,7 +232,7 @@
 .hints .hinttext {
     background-color: #010101;
     max-height: min-content;
-    font-size: 170%;
+    font-size: 2vh;
     padding: 0.5%;
     margin: 0.2%;
 }
@@ -198,4 +240,22 @@
 .hints .hinticon {
     max-height: 2.5vh;
     contain: scale-down;
+}
+
+@media (max-width: 600px) {
+    .escape{
+        grid-template-columns: 0.6fr 2fr;
+    }
+    .resicon{
+        max-height: 4vh;
+        max-width: 7vw;
+    }
+    .resistances{margin: 0;}
+    .escape .counter{
+        margin-top: 7%;
+        padding-left: 1%;
+        font-size: 5vh;
+        max-height: 10vh;
+        max-width: 15vw;
+        background-size: 15vw 9vh;}
 }

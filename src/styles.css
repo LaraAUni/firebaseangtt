@@ -1,7 +1,48 @@
 body{
     color-scheme: light;
-    line-height: normal;
+    line-height: normal !important;
     background-color: aliceblue;
+}
+
+html, body { height: 100%;
+    overflow-y: hidden;}
+body { margin: 0;}
+
+:root{
+    --lightbackg-color: #fff8d3;
+    --whitetext-color: aliceblue;
+    --border-color: #EF944D;
+    --title-yellow: #FAFF8E;
+    --summary-background: #83FFCE;
+    --zayin-color: #6FFF00;
+    --teth-color: #658FFF;
+    --he-color: #F6FF00;
+    --waw-color: #8100FF;
+    --aleph-color: #E4200C;
+    --hp-color: #E2433C;
+    --sp-color: #699CE4;
+    --healing-color:#74FF00;
+    --reddam-color: #CB2642;
+    --whitedam-color: #EFECC0;
+    --blackdam-color: #814A84;
+    --paledam-color: #3FCCBD;
+    --control-color: #D1DE22;
+    --info-color: #7B0BA4;
+    --training-color: #C88611;
+    --safety-color: #73AA2A;
+    --central-color: #EFCF00;
+    --disc-color: #E4200C;
+    --welfare-color: #6949FF;
+    --extraction-color: #2E2E2E;
+    --records-color: #606060;
+    --architecture-color: #FFFFFF;
+    --bonusdep-color: #9AC2FF;
+    --first-trumpet: #EEC700;
+    --second-trumpet: #E65B00;
+    --third-trumpet: #E4200C;
+    --asiya-color: #F7FF00;
+    --briah-color: #6DFF00;
+    --atziluth-color: #C0C0C0;
 }
 
 @font-face {
@@ -67,7 +108,7 @@ body{
     right: 0;
     top: 0;
     z-index: 2;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif !important;
     background-color: black;
     color: aliceblue;
     border-left: 0.4vh solid var(--border-color);
@@ -86,9 +127,17 @@ body{
     width: 100vw;
 }
 }
+.clock {
+    border-radius: 50%;
+    contain: scale-down;
+    max-height: 9vh;
+    max-width: 9vh;
+    border: var(--title-yellow) solid 0.4vh;
+    justify-self: center;
+}
 select{
     border-radius: 0%;
-    line-height: normal;
+    line-height: normal !important;
 }
 select,
 ::picker(select) {
@@ -105,42 +154,6 @@ select optgroup {
     font-size: 110%;
     font-style: normal;
 }
-:root{
-    --lightbackg-color: #fff8d3;
-    --whitetext-color: aliceblue;
-    --border-color: #EF944D;
-    --title-yellow: #FAFF8E;
-    --summary-background: #83FFCE;
-    --zayin-color: #6FFF00;
-    --teth-color: #658FFF;
-    --he-color: #F6FF00;
-    --waw-color: #8100FF;
-    --aleph-color: #E4200C;
-    --hp-color: #E2433C;
-    --sp-color: #699CE4;
-    --reddam-color: #CB2642;
-    --whitedam-color: #EFECC0;
-    --blackdam-color: #814A84;
-    --paledam-color: #3FCCBD;
-    --control-color: #D1DE22;
-    --info-color: #7B0BA4;
-    --training-color: #C88611;
-    --safety-color: #73AA2A;
-    --central-color: #EFCF00;
-    --disc-color: #E4200C;
-    --welfare-color: #6949FF;
-    --extraction-color: #2E2E2E;
-    --records-color: #606060;
-    --architecture-color: #FFFFFF;
-    --bonusdep-color: #9AC2FF;
-    --first-trumpet: #EEC700;
-    --second-trumpet: #E65B00;
-    --third-trumpet: #E4200C;
-    --asiya-color: #F7FF00;
-    --briah-color: #6DFF00;
-    --atziluth-color: #C0C0C0;
-}
-
 
 .sheet .intro {
     grid-row: 1;
@@ -192,7 +205,7 @@ input{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 0.1fr;
-    border: 0.3vh solid #E2E6AE;
+    border: 0.3vh solid var(--title-yellow);
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
@@ -206,7 +219,3 @@ input{
     contain: scale-down;
 }
 
-
-html, body { height: 100%;
-    overflow-y: hidden;}
-body { margin: 0;}

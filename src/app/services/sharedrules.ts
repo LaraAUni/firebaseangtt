@@ -7,6 +7,7 @@ export class Sharedrules {
   gameID:number = 0;
   //PlayerList? Id account? Meglio mettere gameID nell'account insieme alla lingua
   charaList:number[] = [];//id personaggi
+  abnoList:number[] = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
   depsList=["Control", "Information", "Safety", "Training", "Disciplinary"]
   controlAbs=["Manager, Shut It Down!", "Corrective Action", "Controlling Coordinator", "Cross-Departmental Efficiency", "The Will To Stand Up Straight"]
   infoAbs=["Solo Research","Foresight","Respectful Distance","Don't Act Rashly","The Rationality to Maintain Discretion"]
@@ -21,7 +22,7 @@ export class Sharedrules {
   traumas=["Cold","Haunted","Obsessed","Distrustful","Reckless","Soft","Volatile","Vicious"]
   traum3nabled=false;
   constructor() { }
-  //da salvare in una raccolta su Firebase e cabiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
+  //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
   
   depColorUp(c: string=''){
     switch(c){
@@ -36,5 +37,39 @@ export class Sharedrules {
       case "Records":  return ["var(--records-color)", false];
       default:  return ["var(--bonusdep-color)", false];
     } //Con le Regole Custom per ogni partita confrontare nomi extra dalle regole, exs case Rules.deps[9] : var(--customdep1-color)
+  }
+
+  clockFiller(filled: number=0,max: number=3, color: string='red', background: string='dimgray', midcolor: string='black'){
+    let slice=100/max;
+    return `conic-gradient(${color} 0 ${filled*slice}%, ${background} ${filled*slice}% 100%)`;
+  }
+
+  dangerColorUp(c: string=''){
+    switch(c){
+      case "ZAYIN": return "var(--zayin-color)";
+      case "TETH": return "var(--teth-color)";
+      case "HE": return "var(--he-color)";
+      case "WAW": return "var(--waw-color)";
+      case "ALEPH": return "var(--aleph-color)";
+      default: return "var(--bonusdep-color)";
+    }
+  }
+  damageIconUp(c: string=''){
+    switch(c){
+      case "Red": return "RedDamage.png";
+      case "White": return "WhiteDamage.png";
+      case "Black": return "BlackDamage.png";
+      case "Pale": return "PaleDamage.png";
+      default: return "RedDamage.png";
+    }
+}
+  workIconUp(c: string=''){
+    switch(c){
+      case "Instinct": return "Instinct.png";
+      case "Insight": return "Insight.png";
+      case "Attachment": return "Attachment.png";
+      case "Repression": return "Repression.png";
+      default: return "Instinct.png";
+    }
   }
 }

@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventType, RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { FireInit } from '../fire-init';
-import { addDoc, getDoc, collection, setDoc, query, where, getFirestore, doc, DocumentSnapshot } from "firebase/firestore";
+import { getDoc, setDoc, doc, DocumentSnapshot } from "firebase/firestore";
 import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules } from '../services/sharedrules';
@@ -34,11 +34,13 @@ export class CharaSheet {
   activeDeps=this.rules.depsList;
   depColor="var(--bonusdep-color)";//default è colore di Angela perché non avrebbe senso fosse assegnabile
   depText="#010101";
+
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
 }
+
 ngOnInit(){
-  this.getChara(1);
+  this.getChara(0);
   const form = document.getElementById('charForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -85,6 +87,18 @@ if(inp){inp=inp.toString();
   this.Chara.trauma[2]=(inp=='Empty'?"":inp)}
 inp=formData.get('exp');
 if(inp)this.Chara.exp[0]=Number(inp);
+inp=formData.get('exp1');
+if(inp){this.Chara.exp[1]=Number(inp);
+    this.vexpUpdate(1);}
+inp=formData.get('exp2');
+if(inp){this.Chara.exp[2]=Number(inp);
+    this.vexpUpdate(2);}
+inp=formData.get('exp3');
+if(inp){this.Chara.exp[3]=Number(inp);
+    this.vexpUpdate(3);}
+inp=formData.get('exp4');
+if(inp){this.Chara.exp[4]=Number(inp);
+    this.vexpUpdate(4);}
 inp=formData.get('Excel');
 if(inp){inp=Number(inp);
   if(inp>=0&&inp<5)this.Chara.skills[0]=inp;}
@@ -247,6 +261,7 @@ this.addChara();
     return (this.Chara.skills[a]?1:0) + (this.Chara.skills[b]?1:0) + (this.Chara.skills[c]?1:0) + (this.Chara.skills[d]?1:0);
   }
   async addChara() : Promise<void>{
+    if(this.Chara.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const charRef = doc(this.db, 'charas/'+this.Chara.charID).withConverter(new CharaConverter());
     await setDoc(charRef, this.Chara);
     const snapshot1 = await getDoc(charRef);

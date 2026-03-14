@@ -12,8 +12,8 @@ import { Sharedrules } from '../services/sharedrules';
 })
 export class MyMap {
 //oggetto con funzioni, stati di combattimento e coordinate delle stanze
-map=new Mapclass(2, [new Department('Control', [new Room(0, [14,18,6,10]), new Room(0, [10,15,4,10])], [new Corridor(0, [4,14,6,6],)], [[7,4,1]], [[5,5,1,true]]), new Department('Information', [new Room(1, [16,18,14,16])], []), new Department('Training', [new Room(1, [2,9,10,16])], [], [], [[9,13,0,false]]), new Department('Disciplinary', [new Room(1, [2,9,6,10])], [], [], [[5,5,0,true]]), new Department('Safety', [new Room(0, [7,13,14,18])], [], [],[[9,13,1,false]])]);
-floordisp: number = 0; //va tolto comunque Hide perché non si vedono i piani di sotto aaaahhh
+map=new Mapclass(2, [new Department('Control', [new Room(0, [20,26,4,10]), new Room(0, [25,30,6,10]) ], [new Corridor(0, [16,21,6,6],), new Corridor(0,[27,27,9,15]), new Corridor(0,[26,28,14,14])], [[18,7,0]], [[17,5,1,true]]), new Department('Information', [new Room(1, [16,21,14,16]), new Room(1, [20,26,12,16])], [new Corridor(1, [17,17,10,15],), new Corridor(1, [13,17,15,15]),  new Corridor(1, [15,18,10,10])], [], [[17,15,0,true]]), new Department('Training', [new Room(1, [2,9,10,16])], [new Corridor(0, [5,5,4,9],), new Corridor(1, [9,17,12,12],)], [], [[9,13,0,false],[5,9,0,true]]), new Department('Disciplinary', [new Room(1, [5,13,4,9])], [new Corridor(1, [10,19,6,6],),  new Corridor(1, [12,15,10,10]), new Corridor(1, [12,12,8,11])], [], [[17,5,0,true],[5,9,1,true]]), new Department('Safety', [new Room(0, [7,13,14,18])], [new Corridor(0, [12,17,15,15],), new Corridor(0, [16,16,7,16],)], [],[[9,13,1,false], [17,15,1,true]])]);
 rules = inject(Sharedrules);
 departments=this.map.departments;
+floordisp: number = this.map.floors;
 }

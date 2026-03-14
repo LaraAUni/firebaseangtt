@@ -1,4 +1,3 @@
-import { from } from "rxjs";
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
 
 export class Character{
@@ -26,7 +25,7 @@ export class Character{
         icoUrl = "0000",
         fullName = "Alpha",
         role: [string, string] = ["Clerk", ""],
-        equip: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}] = [{ imgUrl: "StandardW", Name: "Riot Stick" }, { imgUrl: "StandardS", Name: "Suit" }],
+        equip: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}] = [{ imgUrl: "Standard", Name: "Riot Stick" }, { imgUrl: "Standard", Name: "Suit" }], //da mettere link all'armeria quando è finita
         abilities = Array(3).fill(""),
         stress = 0,
         trauma = Array(3).fill(""),
@@ -48,7 +47,7 @@ export class Character{
         this.abilities = abilities,
         this.stress = stress,
         this.trauma = trauma,
-        this.armor =true,
+        this.armor =armor,
         this.physHealth = physHealth,
         this.mindHealth = mindHealth,
         this.exp = exp,

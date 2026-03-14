@@ -1,43 +1,45 @@
 import { Component, inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { addDoc, collection } from "firebase/firestore";
+import { Abnormality, AbnoData } from './abnoclass';
+import { Sharedrules } from '../services/sharedrules';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-abno-sheet',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './abno-sheet.html',
   styleUrl: './abno-sheet.css',
 })
 export class AbnoSheet {
   fireInit = inject(FireInit);
+  rules= inject(Sharedrules);
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
-    Chara;
+    AbnoSheet: Abnormality;
+    AbnoData :AbnoData;
+    depColor="var(--bonusdep-color)";
+    dangerColor="var(--bonusdep-color)";
+    HTclocks: string[]=[];
     constructor(){
-  this.Chara={ //da fare Abnosheet, si possono fare orologi con conic gradient in CSS e attr() per le percentuali
-  gameID : 0,
-  charID : 0,
-  playerID : { Owner: ["AlphaTT"], Borrower: [] },
-  ImgUrl: "0000",
-  fullName : { Name: "Alpha", Nickname: "", Surname: "" },
-  role : ["Clerk", "Control"],
-  equip : [{imgUrl: "StandardW", Name: "Riot Stick"}, {imgUrl: "StandardS", Name: "Suit"}],
-  abilities : ["", "", ""],
-  stress : 0,
-  trauma : ["", "", ""],
-  physHealth : [false, false, false, false, false, false, false, false, false],
-  mindHealth : [false, false, false, false, false, false, false, false, false],
-  exp : [0, 0, 0, 0, 0],
-  skills : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  gift : { imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 }, //gifts è un placeholder per Info e Storia
-  gifts : [{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 },{ imgUrl: "EGOGiftFrostShard", Name: "Words of Winter", Exp: 3 }],
-  mapCoord : [0, 0],
+  this.AbnoSheet=new Abnormality();
+  this.AbnoData=new AbnoData();
+  this.depColorUp(this.AbnoData.department);
+  this.dangerColor=this.rules.dangerColorUp(this.AbnoSheet.danger);
+  this.HTclocks[0]=this.rules.clockFiller(this.AbnoData.suppProg, this.AbnoSheet.suppClock);
+  for(let i=0; i<this.AbnoSheet.trials.length; i++){this.HTclocks[i+1]=this.rules.clockFiller(this.AbnoData.trialClock[i], this.AbnoSheet.trials[i].Clock,'dodgerblue');}
+}
+addData() {
+  const uData=this.AbnoData;
+    const docRef = addDoc(collection(this.db, "charas"), {uData});
+}
+
+  depColorUp(c: string=this.AbnoData.department){
+    let newC=this.rules.depColorUp(c);
+    this.depColor=newC[0] as string;
   }
-}
-addChara() {
-  const uChara=this.Chara;
-    const docRef = addDoc(collection(this.db, "charas"), {uChara
-  });
-}
+  clockFill(filled: number, max: number, color: string='red', background: string='dimgray'){
+    return this.rules.clockFiller(filled, max, color, background); //per adesso è grigio ma potrebbe seguire il colore di background
+  }
 }

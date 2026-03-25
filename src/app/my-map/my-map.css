@@ -28,7 +28,7 @@
 }
 .abnoroom{
     border:  0.4vh solid black;
-    background-color: var(--bonusdep-color);
+    background-color: var(--Bonus);
 }
 .pawn {
     max-width: 90%;
@@ -38,16 +38,12 @@
     cursor: crosshair;
     z-index: 4;
 }
-.icon{
-    max-height: 3.5vh;
-    contain: scale-down;
-}
 .floors{
   position: absolute;
   right: 4vh;
   top: 2vh;
-  color: var(--border-color);
-  border: 0.2vh solid var(--border-color);
+  color: var(--border);
+  border: 0.2vh solid var(--border);
   background-color: black;
   font-size: 150%;
   cursor: pointer;

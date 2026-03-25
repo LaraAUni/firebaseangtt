@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SidebarService } from './sidebar.service';
+import { IconsNames } from './icons-names';
 
-describe('SidebarService', () => {
-  let service: SidebarService;
+describe('IconsNames', () => {
+  let service: IconsNames;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SidebarService);
+    service = TestBed.inject(IconsNames);
   });
 
   it('should be created', () => {

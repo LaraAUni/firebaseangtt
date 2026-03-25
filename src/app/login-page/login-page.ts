@@ -22,7 +22,7 @@ import {
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class  LoginPage {
+export class LoginPage {
   fireInit = inject(FireInit);
   auth = getAuth(this.fireInit.app);
   email :string;
@@ -46,7 +46,6 @@ ngOnInit(){
   const form = document.getElementById('signForm') as HTMLFormElement; //non legge il form
   const options = document.getElementById('optionsForm') as HTMLFormElement;
 // Add submit event listener
-/*
   onAuthStateChanged(this.auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -89,7 +88,6 @@ if(inp){this.userName=inp.toString();
   this.updateName(this.userName);
 }
 });
-  */
 }
 
   signUp(auth=this.auth, email=this.email, password=this.password): void {

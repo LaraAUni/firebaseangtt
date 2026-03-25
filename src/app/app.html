@@ -18,11 +18,31 @@
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agents</mat-expansion-panel-header>
-          <img class="iconbtn" src="Charas/111.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle();">
+        @for(i of this.rules.depsList; track i; let ind = $index){
+          <mat-expansion-panel hideToggle class="expansion">
+            <mat-expansion-panel-header class="links" [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+              {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
+            </mat-expansion-panel-header>
+            <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
+            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            }
+          </span>
+          </mat-expansion-panel>
+        }
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
-          <img class="iconbtn" src="Charas/211.png" alt="" mat-list-item  (click)="showAbno=1; drawer.toggle();">
+          @for(i of this.rules.depsList; track i; let ind = $index){
+          <mat-expansion-panel hideToggle class="expansion">
+            <mat-expansion-panel-header class="links" [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+              {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
+            </mat-expansion-panel-header>
+            <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
+            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            }
+          </span>
+          </mat-expansion-panel>
+        }
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Armoury</mat-expansion-panel-header>

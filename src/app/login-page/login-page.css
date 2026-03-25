@@ -1,35 +1,36 @@
 .cont{
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr;
-  max-width: 10vw;
+  display: flex;
+  max-width: fit-content;
   margin: 0.2%;
   gap: 3%;
+  max-height: 4vh;
+  justify-content: space-around;
 }
 
 .icon{
-  height:2.8vh;
-  border: 0.2vh solid var(--border-color);
+  height: 3.3vh;
+  border: 0.2vh solid var(--border);
   border-radius: 50%;
 }
 
 .butt{
-  color: var(--border-color);
-  border: 0.2vh solid var(--border-color);
+  color: var(--border);
+  border: 0.2vh solid var(--border);
   background-color: black;
-  font-size: 90%;
+  font-size: 1.2vw;
   cursor: pointer;
-  max-height: 3vh;
-  width: max-content;
-  margin: 4%;
+  height: 3vh;
+  width: 7vw;
+  margin: 1%;
 }
 .butt:active{
     transform: translateY(2px);
 }
 .buttsign{
-  color: var(--border-color);
-  border: 0.2vh solid var(--border-color);
+  color: var(--border);
+  border: 0.2vh solid var(--border);
   background-color: aliceblue;
-  font-size: 100%;
+  font-size: 1.2vw;
   cursor: pointer;
 }
 .buttsign:active{
@@ -37,24 +38,38 @@
 }
 .infobox{
   height: 15vh;
-  width: 20vw;
+  width: 30vw;
   background-color: aliceblue;
   position: absolute;
   top: 4vh;
   z-index: 2;
   padding: 1%;
-  border: 0.4vh solid var(--border-color);
-}
-
-@media (max-width: 600px){
-.infobox{
-  height: 40vh;
-  width: 100vw;
-}
+  border: 0.4vh solid var(--border);
+  font-size: 1.1vw;
 }
 
 input{
-  width: 60%;
+  width: 80%;}
+
+@media (max-width: 600px){
+.cont{
+  gap: 1%;
+}
+.infobox{
+  height: 25vh;
+  width: 90vw;
+  font-size: 2.5vh;
+}
+.butt{
+  font-size: 2vh;
+  width: 16vw;
+}
+.buttsign{
+  font-size: 2.3vh;
+}
+input{
+  width: 70%;
   margin: 3%;
-  font-size: large;
+  font-size: 3vh;
+}
 }

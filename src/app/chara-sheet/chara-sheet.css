@@ -51,16 +51,11 @@
 }
 
 .intro .equip {
-    grid-column: 2;
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 0.1fr;
     border: 1% solid #EF944D;
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
-    margin: 1.5%;
+    margin-top: 1.5%;
     margin-bottom: 0;
     font-size: 2vh;
 }
@@ -222,7 +217,7 @@
 }
 
 .health .physical {
-    background-color: var(--hp-color);
+    background-color: var(--HP);
     justify-content: center;
     align-content: center;
     contain: scale-down;
@@ -250,7 +245,6 @@
 .sheet .expinp{
     background-color: #010101;
     padding: 0;
-    border-width: 0;
     color: #EF944D;
     font-size: 120%;
     width: 2.5vh;
@@ -290,6 +284,7 @@
     color: #EF944D;
     font-size: 2.8vh;
     padding: 0;
+    max-width: none;
 }
 
 .virtueshell {
@@ -457,4 +452,9 @@
 .gifts .gifticon {
     max-height: 2.5vh;
     contain: scale-down;
+}
+@media (max-width:600px) {
+.stresstext{
+    font-size: 2.5vh;
+}
 }

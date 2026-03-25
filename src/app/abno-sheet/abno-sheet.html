@@ -1,14 +1,28 @@
-<div class="sheet" id="myAbno">
-    <img class="closebtn" onclick="closeAbno()" src="buttonclose.png" alt="Menu Button">
+<form for="abnoSheet" class="sheet" name="form" id="abnoForm">
     <div class="intro">
         <div class="iconside">
         <img class="icon" src="Charas/{{AbnoSheet.icoUrl}}.png" alt="Abno Image" [ngStyle]="{'border-color': depColor}">
-        <span class="damage"><img class="damicon" src="{{AbnoSheet.wDam[0]}}Damage.png" alt="">  -  {{AbnoSheet.wDam[1]}}-{{AbnoSheet.wDam[2]}}</span>
+            <label for="wDamage" class="label">Work Damage</label>
+        <span class="damage">
+            <img src="{{AbnoSheet.wDam[0]}}Damage.png" alt="{{AbnoSheet.wDam[0]}}" class="damicon">
+            <select id="wDamage" name="wDamage" class="damselect">
+                @for(i of ["Red", "White", "Black", "Pale"]; track i){
+                    @if(i==AbnoSheet.wDam[0]){<option selected value="{{i}}" (click)="AbnoSheet.wDam[0]=i"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
+                    @else{<option value="{{i}}" (click)="AbnoSheet.wDam[0]=i"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
+                }
+                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[1]}}" name="wDam1"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[2]}}" name="wDam2"></span>
         </div>
-        <div class="abnoname">{{AbnoSheet.fullName.Name}}</div>
+        @if(showname){<input type=text placeholder="{{AbnoSheet.fullName.Name}}" class="abnoname" autocomplete="off" name="AbnoName">}
+        @else{<input type=text placeholder="{{AbnoSheet.fullName.Nickname}}" class="abnoname" autocomplete="off" name="AbnoNick">}
         <div class="codedange">
-        <div class="code">{{AbnoSheet.fullName.Code}}</div>
-        <div class="danger" [ngStyle]="{'background-color': dangerColor}">{{AbnoSheet.danger}}</div>
+        <input type=text placeholder="{{AbnoSheet.fullName.Code}}" class="code" autocomplete="off" name="AbnoCode">
+                <select class="danger" id="danger" name="danger" [ngStyle]="{'background-color': dangerColor}">
+                @for(i of [1, 2, 3, 4, 5]; track i){
+                    @if(i==AbnoSheet.danger){<option selected>{{dang[i]}}</option>}
+                    @else{<option>{{dang[i]}}</option>}
+                }
+                </select>
+        <label for="danger" class="label">Danger Level</label>
         </div>
         <div class="equip">
                 <img class="equips" src="EGOs/EW{{AbnoSheet.equip[0].imgUrl}}.png" alt="Weapon">
@@ -20,53 +34,82 @@
         </div>
     </div>
     <div class="escape">
-        <div class="counterdam"><span class="counter">{{AbnoData.qClock}}</span>
-            <div class="escapedam"><img class="damicon" src="{{AbnoSheet.eDam[0]}}Damage.png" alt="">  -  {{AbnoSheet.eDam[1]}}-{{AbnoSheet.eDam[2]}}</div>
+        <div class="counterdam"><span class="counter"><input type="text" style="background:none" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoData.qClock}}" name="currQlip"></span>
+                <label for="eDamage" class="label">Escape Damage</label>
+            <div class="escapedam">
+            <img src="{{AbnoSheet.eDam[0]}}Damage.png" alt="{{AbnoSheet.eDam[0]}}" class="damicon">
+                <select id="eDamage" name="eDamage" class="damselect">
+                @for(i of ["Red", "White", "Black", "Pale"]; track i){
+                    @if(i==AbnoSheet.eDam[0]){<option selected value="{{i}}" (click)="AbnoSheet.eDam[0] = i;"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
+                    @else{<option value="{{i}}" (click)="AbnoSheet.eDam[0] = i;"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
+                }
+                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[1]}}" name="eDam1"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[2]}}" name="eDam2"></div>
         </div>
     <div class="resistances">
             <div class="resistance" style="border-color: #CB2642; color:#CB2642;">
                     <div class="resitem1"><img class="resicon" src="RedDamage.png" alt=""></div>
-                    <div class="resitem2">x {{AbnoSheet.resistances[0]}}@if(AbnoSheet.resistances[0]%1==0){.0}</div>
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[0]%1==0?AbnoSheet.resistances[0]+'.0':AbnoSheet.resistances[0])}}" name="res1">
+            </div>
             </div>
             <div class="resistance" style="border-color: #EFECC0; color:#EFECC0;">
                     <div class="resitem1"><img class="resicon" src="WhiteDamage.png" alt=""></div>
-                    <div class="resitem2">x {{AbnoSheet.resistances[1]}}@if(AbnoSheet.resistances[1]%1==0){.0}</div>
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[1]%1==0?AbnoSheet.resistances[1]+'.0':AbnoSheet.resistances[1])}}" name="res1">
+            </div>
             </div>
             <div class="resistance" style="border-color: #814A84; color:#814A84;">
                     <div class="resitem1"><img class="resicon" src="BlackDamage.png" alt=""></div>
-                    <div class="resitem2">x {{AbnoSheet.resistances[2]}}@if(AbnoSheet.resistances[2]%1==0){.0}</div>
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[2]%1==0?AbnoSheet.resistances[2]+'.0':AbnoSheet.resistances[2])}}" name="res1">
+            </div>
             </div>  
             <div class="resistance" style="border-color: #3FCCBD; color:#3FCCBD;">
                     <div class="resitem1"><img class="resicon" src="PaleDamage.png" alt=""></div>
-                    <div class="resitem2">x {{AbnoSheet.resistances[3]}}@if(AbnoSheet.resistances[3]%1==0){.0}</div>
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[3]%1==0?AbnoSheet.resistances[3]+'.0':AbnoSheet.resistances[3])}}" name="res1">
+            </div>
             </div>
         </div>
     </div>
         <div class="preferences">
-            <div class="preference" style=" border-color: #008837;">
-                @for(i of AbnoSheet.preferences[0].type; track i){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt=""></div>}
-                <span class="preftext">Preferred: {{AbnoSheet.preferences[0].desc}}</span>
+            <div class="preference" style=" border-color: #008837;"><label for="prefType" class="label">Preferred Work Type</label>
+                @for(i of AbnoSheet.preferences[0].type; track i; let ind=$index){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt="">
+                <select id="prefType" name="prefType{{ind}}" class="prefselect">
+                @for(j of ["Instinct", "Insight", "Attachment", "Repression"]; track j){
+                    @if(j==i){<option selected value="{{j}}" (click)="AbnoSheet.preferences[0].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
+                    @else{<option value="{{j}}" (click)="AbnoSheet.preferences[0].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
+                }
+                </select></div>}
+                <span class="preftext">Preferred: 
+                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[0].desc}}" name="pref1" class="preftext">{{AbnoSheet.preferences[0].desc}}</textarea>
+                </span>
             </div>
-            <div class="preference" style=" border-color: #D64D4D;">
-                @for(i of AbnoSheet.preferences[1].type; track i){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt=""></div>}
-                <span class="preftext">Disfavoured: {{AbnoSheet.preferences[1].desc}}</span>
+            <div class="preference" style=" border-color: #D64D4D;"><label for="prefType2" class="label">Disfavoured Work Type</label>
+                @for(i of AbnoSheet.preferences[1].type; track i; let ind=$index){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt="">
+                <select id="prefType2" name="prefType2{{ind}}" class="prefselect">
+                @for(j of ["Instinct", "Insight", "Attachment", "Repression"]; track j){
+                    @if(j==i){<option selected value="{{j}}" (click)="AbnoSheet.preferences[1].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
+                    @else{<option value="{{j}}" (click)="AbnoSheet.preferences[1].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
+                }
+                </select></div>}
+                <span class="preftext">Disfavoured: 
+                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[1].desc}}" name="pref2" class="preftext">{{AbnoSheet.preferences[1].desc}}</textarea></span>
             </div>
         </div>
     <div class="clocks">
-        <img class="clock" src="{{AbnoSheet.suppClock}}Clock.png" style="max-width: 4.5vw; max-height: 11vh; margin-right:4%;" alt="" [ngStyle]="{'background':HTclocks[0]}">
+        <img class="bigclock" src="Clocks/{{AbnoSheet.suppClock}}Clock.png" alt="" [ngStyle]="{'background':HTclocks[0]}">
         @for(i of AbnoSheet.trials; track i; let ind=$index){
-            <img class="clock" src="{{i.Clock}}Clock.png" alt="" [ngStyle]="{'background':HTclocks[ind+1]}">
+            <img class="clock" src="Clocks/{{i.Clock}}Clock.png" alt="" [ngStyle]="{'background':HTclocks[ind+1]}">
         }
     </div>
         <div class="hints" style="grid-row:5">
+            <div class="hinttext" style="font-weight: bold;">Abilities:</div>
             @for(i of AbnoSheet.abilities; track i; let ind=$index){
-            @if(i!=null){<div class="hinttext">Abilities: {{i}}</div>}
-            }
+            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="ability{{ind}}">{{i}}</textarea></div>}
+            @else{<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="---" name="ability1">---</textarea></div>}}
+            <div class="hinttext" style="font-weight: bold;">Trials:</div>
             @for ( i of AbnoSheet.trials ; track i; let ind=$index) {
             @if(i!=null){<div class="hinttext">
-                {{i.Name}} - {{AbnoData.trialClock[ind]}} / {{i.Clock}}
-                <div>{{i.Effect}}</div>
-                <div>{{i.Desc}}</div>
+                <input style="max-width: 15vw;" type="text" maxlength="32" size="{{i.Name.length > 10 ? i.Name.length : 10}}" placeholder="{{i.Name}}"> - <input type="text" size="2" placeholder="{{AbnoData.trialClock[ind]}}"> / <input type="text" size="2" placeholder="{{i.Clock}}">
+                <input class="hintinput" type="text" maxlength="45" size="35" placeholder="{{i.Effect}}">
+                <textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i.Desc}}" name="TrialDesc{{ind}}">{{i.Desc}}</textarea>
             </div>}
             @if (AbnoSheet.trials.length<2) { <div class="hinttext" style="padding: 2%; padding-bottom: 15%;">
         </div>}
@@ -77,16 +120,14 @@
         }
         </div>
         <div class="hints" style="grid-row:6">
-            @for ( i of AbnoSheet.management ; track i;) {
-            @if(i!=null){<div class="hinttext">
-                {{i}}
-            </div>}
+            @for ( i of AbnoSheet.management ; track i; let ind=$index) {
+            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="manage{{ind}}">{{i}}</textarea></div>}
             @if (AbnoSheet.management.length<2) { <div class="hinttext" style="padding: 2%; padding-bottom: 27%;">
         </div>}
         }
         @empty{
-        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">No Management Tips</div>}
-        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;">Nessun Suggerimento per Management</div>}
+        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="No Management Tips" name="manage1">No Management Tips</textarea></div>}
+        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="Nessun Suggerimento per il Management" name="manage1">Nessun Suggerimento per il Management</textarea></div>}
         }
         </div>
-</div>
+</form>

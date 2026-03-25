@@ -6,7 +6,7 @@ export class Character{
     playerID : { Owner: string[], Borrower: string[] };
     icoUrl: string;
     fullName: string;
-    role: [string, string];
+    role: [string, number];
     equip:  [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}];
     abilities: string[];
     stress: number;
@@ -17,14 +17,14 @@ export class Character{
     exp : number[]; //[Generale, Fort, Prud, Temp, Just]
     skills : number[];
     gifts: { imgUrl: string, Name: string, Exp: number }[];
-    mapCoord : number[];
+    mapCoord : [number, number, number]; //x,y,floor
     constructor(
         gameID=0,
         charID=0,
         playerID: { Owner: string[], Borrower: string[] } = { Owner: ["AlphaTT"], Borrower: [] },
         icoUrl = "0000",
         fullName = "Alpha",
-        role: [string, string] = ["Clerk", ""],
+        role: [string, number] = ["Clerk", 0],
         equip: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}] = [{ imgUrl: "Standard", Name: "Riot Stick" }, { imgUrl: "Standard", Name: "Suit" }], //da mettere link all'armeria quando è finita
         abilities = Array(3).fill(""),
         stress = 0,
@@ -35,7 +35,7 @@ export class Character{
         exp = Array(5).fill(0),
         skills = Array(10).fill(0),
         gifts:{ imgUrl: string, Name: string, Exp: number }[] = [],
-        mapCoord = [0, 0]
+        mapCoord:[number, number, number] = [0, 0, 0],
     ) {
         this.gameID=gameID,
         this.charID=charID;
@@ -63,7 +63,7 @@ interface CharaFS{
     plr: { Owner: string[], Borrower: string[] };
     icoU: string;
     fName: string;
-    rl: [string, string];
+    rl: [string, number];
     eqp: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}];
     abs: string[];
     str: number;
@@ -74,7 +74,7 @@ interface CharaFS{
     xp: number[];
     sks: number[];
     gfs: { imgUrl: string, Name: string, Exp: number }[];
-    mapC: number[];
+    mapC: [number, number, number];
 }
 export class CharaConverter implements FirestoreDataConverter<Character, CharaFS> {
     toFirestore(chara: WithFieldValue<Character>): WithFieldValue<CharaFS> {

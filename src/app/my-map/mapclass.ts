@@ -14,14 +14,14 @@ export class Department {
   injectedRules = inject(Sharedrules);
   rooms: Room[] = [];
   corridors: Corridor[] = [];
-  department: string = '';
+  department: number = 0;
   background: string = '--bonusdep-color';
   abnorooms: [number, number, number][] = [];
   stairs: [number, number, number, boolean][] = []; //x,y, floor, stair/elevator
-  depColor(c:string){
+  depColor(c:number){
     return this.injectedRules.depColorUp(c)[0] as string;
   }
-  constructor(department: string, rooms: Room[], corridors: Corridor[], abnorooms: [number, number, number][] = [], stairs: [number, number, number, boolean][] = []) {
+  constructor(department: number, rooms: Room[], corridors: Corridor[], abnorooms: [number, number, number][] = [], stairs: [number, number, number, boolean][] = []) {
     this.department = department;
     this.rooms = rooms;
     this.corridors = corridors;

@@ -1,7 +1,8 @@
 .sheet {
     display: grid;
-    grid-template-rows: 25.5% 13.5% auto 10% 15% 17%;
+    grid-template-rows: 25.5% 13.5% 15% 8.5% 15% 17%;
 }
+
 
 .intro{
     grid-template-rows: 1.5fr 1.5fr 1fr;
@@ -14,10 +15,10 @@
     background-color: #010101;
     color: aliceblue;
     align-content: center;
-    font-size: 2.5vh;
+    font-size: 2.3vh;
     max-height: 110%;
-    margin-right: 2%;
     padding: 2%;
+    margin-left: 2%;
 }
 .intro .damage{
     grid-row: 2;
@@ -28,9 +29,19 @@
     padding: 2%;
     align-content: center;
 }
+.damselect{
+    max-height: 4vh;
+    max-width: 8vw;
+    z-index: 1;
+    position: absolute;
+    left: 5%;
+    border: none;
+}
 .damicon{
     max-height: 3vh;
     contain: scale-down;
+    z-index:0;
+    position: absolute; left: 5%;
 }
 .intro .codedange{
     grid-row: 2;
@@ -42,20 +53,23 @@
     grid-column: 1;
     font-size: 3.3vh;
     max-height: 110%;
-    margin-right: 2%;
+    margin-left: 10%;
     padding: 2%;
+    color: aliceblue;
+    background-color: #010101;
+    max-width: 9vw;
+    font-weight: bold;
 }
 .codedange .danger {
     grid-column: 2;
-    align-content: center;
+    justify-content: center;
     color: black;
-    margin-left: 3%;
     font-family: 'Norwester';
     font-size: 4vh;
+    padding: 1%;
+    font-weight: bold;
 }
 .intro .equip{
-    grid-row: 3;
-    grid-column: 2;
     max-height: 90%;
     align-self: flex-end;
     grid-template-columns: 1fr 1fr 1fr;
@@ -80,7 +94,7 @@
 .counterdam{
     grid-column: 1;
     display: grid;
-    grid-template-rows: 1.25fr 0.4fr;
+    grid-template-rows: 1.25fr 0.8fr;
 }
 .counterdam .counter{
     grid-row: 1;
@@ -103,7 +117,6 @@
     margin: 6%;
     font-size: 3vh;
     padding: 2%;
-    align-content: center;
 }
 
 .escape .resistances {
@@ -120,7 +133,7 @@
 
 .resistances .resistance {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.7fr 1fr;
     border: 0.6vh solid;
     max-height: 100%;
     border: 1%;
@@ -135,20 +148,16 @@
     justify-content: space-around;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
-    margin-right: 0;
 }
 
 .resistance .resitem2 {
     grid-column: 2;
     background-color: #010101;
     align-content: center;
-    justify-content: center;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
-    margin-left: 0;
     font-size: 3vh;
+    font-weight: bold;
 }
 
 .resicon {
@@ -172,15 +181,21 @@
     background-color: #010101;
     margin: 3%;
     display: grid;
-    grid-template-rows: 1fr 0.3fr;
+    grid-template-rows: 0.5fr 1fr;
+}
+.prefselect{
+    height: 4.5vh;
+    width: 2vw;
+    z-index: 1;
+    border: none;
 }
 
 .preference .preficon{
-    grid-row: 1;
     max-height: 4.5vh;
+    max-width: 2vw;
     contain: scale-down;
-    position: relative;
-    padding: 4%;
+    position: absolute;
+    z-index: 0;
 }
 .preference .preftext{
     grid-row: 2;
@@ -188,13 +203,10 @@
 }
 
 .resistance .prefitem1 {
+    grid-row: 1;
     background-color: #010101;
-    align-content: center;
-    justify-content: space-around;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
-    margin-right: 0;
 }
 
 .sheet .clocks{
@@ -208,18 +220,25 @@
     margin-left: 4%;
     margin-right: 3%;
 }
-.clock {
+.clock{
     justify-self: center;
     max-height: 9vh;
     max-width: 3.8vw;
     margin-left: 2%;
 }
-
+.bigclock{
+    justify-self: center;
+    max-width: 4.5vw;
+    max-height: 11vh;
+    margin-right:4%;
+    border-radius: 50%;
+    border: 0.4vh solid var(--title-yellow);
+}
 .sheet .hints {
-    border: 0.3vh solid var(--border-color);
+    border: 0.3vh solid var(--border);
     height: 100%;
-    background-color: var(--border-color);
-    color: var(--border-color);
+    background-color: var(--border);
+    color: var(--border);
     gap: 1%;
     background-clip: padding-box;
     margin: 2%;
@@ -236,19 +255,33 @@
     padding: 0.5%;
     margin: 0.2%;
 }
-
+.hints .hintinput{
+    max-width: 20vw;
+}
 .hints .hinticon {
     max-height: 2.5vh;
     contain: scale-down;
 }
 
 @media (max-width: 600px) {
+    .codedange .code{
+        margin-left:2%;
+        max-width: 40vw;
+    }
     .escape{
         grid-template-columns: 0.6fr 2fr;
     }
+    .prefselect{
+        height: 5vh;
+        width: 5vw;
+    }
+    .preficon{
+        max-height: 8vh;
+        max-width: 8vw;
+    }
     .resicon{
-        max-height: 4vh;
-        max-width: 7vw;
+        max-height: 8vh;
+        max-width: 8vw;
     }
     .resistances{margin: 0;}
     .escape .counter{
@@ -258,4 +291,15 @@
         max-height: 10vh;
         max-width: 15vw;
         background-size: 15vw 9vh;}
+        .bigclock{
+            max-height: 20vh;
+            max-width: 15vw;
+        }
+    .clock{
+        max-height: 15vh;
+        max-width: 12vw;
+    }
+    .hints .hintinput{
+        max-width: max-content;
+    }
 }

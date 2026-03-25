@@ -12,7 +12,7 @@
     font-size: large;
     min-width: 100vw;
     min-height: 100vh;
-    scrollbar-color: #010101 #EF944D;
+    scrollbar-color: #010101 #EF944D !important;
 }
 
 .expansion{
@@ -22,11 +22,12 @@
 }
 
 .iconbtn{
-    border: 0.3vh solid var(--bonusdep-color);
-    max-width: 4.5vh;
+    border-style: solid;
+    border-width: 0.3vh;
+    max-width: 5vh;
 }
 .weapbtn{
-    border: 0.3vh solid  var(--bonusdep-color);
+    border: 0.3vh solid  var(--Bonus);
     max-height: 5vh;
 }
 
@@ -34,7 +35,7 @@
     padding: 3%;
     text-decoration: none;
     font-size: 3vh;
-    color: var(--border-color);
+    color: var(--border);
     display: block;
     transition: 0.3s;
     left: 4vh;
@@ -53,11 +54,6 @@
     max-width: 4vh;
     cursor: pointer;
     z-index: 3;
-}
-@media (max-width: 600px) {
-    .closebtn{
-        left: 0;
-    }
 }
 .openbtn {
     position: fixed;
@@ -132,7 +128,7 @@
 }
 
 .sidenav {
-    width: 30vw; /*non so perché si è rotto ed è più piccolo*/
+    width: 30vw !important; /*non so perché si è rotto ed è più piccolo*/
     height: 100vh;
     background-color: #010101;
     overflow-x: hidden;
@@ -193,7 +189,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--lightbackg-color);
+  background-color: var(--lightbackg);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 68px;  
@@ -232,7 +228,7 @@ input:checked + .slider:before {
     position: absolute;
     font-size: 3vh;
     padding: 0.5vh;
-    color: var(--third-trumpet);
+    color: var(--Third-Trumpet);
     left: 45vw;
     font-family: 'Norwester';
 }
@@ -245,4 +241,13 @@ input:checked + .slider:before {
     height: 20vh;
     background-color: aqua;
     scrollbar-color: aqua #010101;
+}
+
+@media (max-width: 600px) {
+    .sidenav{
+        width: 100vw !important;
+    }
+    .closebtn{
+        left: 0;
+    }
 }

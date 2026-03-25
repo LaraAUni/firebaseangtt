@@ -1,8 +1,8 @@
-import { Abnoclass, AbnoData } from './abnoclass';
+import { Abnormality, AbnoData } from './abnoclass';
 
-describe('Abnoclass', () => {
+describe('Abnormality', () => {
   it('should create an instance', () => {
-    expect(new Abnoclass()).toBeTruthy();
+    expect(new Abnormality()).toBeTruthy();
   });
 });
 

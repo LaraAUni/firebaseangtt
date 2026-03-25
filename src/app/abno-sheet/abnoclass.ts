@@ -7,7 +7,7 @@ export class Abnormality {
   dmID: string[];
   icoUrl: string;
   fullName: { Name: string, Nickname: string, Code: string };
-  danger: string;
+  danger: number;
   equip: [{ imgUrl: string, Name: string }, { imgUrl: string, Name: string }, { imgUrl: string, Name: string }];
   wDam: [string, number, number];
   preferences: [{ type: string[], desc: string },{ type: string[], desc: string }];
@@ -24,10 +24,10 @@ constructor(
   dmID=['AlphaTT'],
   icoUrl="000",
   fullName={ Name: "Standard Training Dummy Rabbit", Nickname: "", Code: "0-00-00"},
-  danger='TETH',
+  danger=2,
   equip:[{ imgUrl: string, Name: string }, { imgUrl: string, Name: string }, { imgUrl: string, Name: string }]=[{imgUrl: "TrainingStandardEGO", Name: "Standard Training E.G.O"},{imgUrl: "TrainingStandardEGO", Name: "Standard Training E.G.O"},{imgUrl: "TrainingStandardEGO", Name: "Standard Training E.G.O"}],
   wDam:[string, number, number]= ['Red', 1, 2],
-  preferences:[{ type: string[], desc: string },{ type: string[], desc: string }]=[{type:['Attachment'], desc:"Petting, Talking, Anything works it's very friendly"},{type:['Repression'], desc:'Indifference'}],
+  preferences:[{ type: string[], desc: string },{ type: string[], desc: string }]=[{type:['Attachment', 'Insight'], desc:"Petting, Talking, Anything works it's very friendly"},{type:['Repression'], desc:'Indifference'}],
   qlipoth=1,
   eDam:[string,number,number]=['Red',1,2],
   resistances:[number, number, number, number]=[0.5,1.5,1,1],
@@ -62,7 +62,7 @@ interface AbnoFS{
     dm: string[];
     ico: string;
     fName: { Name: string, Nickname: string, Code: string };
-    dang: string;
+    dang: number;
     eqp: [{ imgUrl: string, Name: string }, { imgUrl: string, Name: string }, { imgUrl: string, Name: string }];
     wDam: [string, number, number];
     pref: [{ type: string[], desc: string },{ type: string[], desc: string }];
@@ -109,28 +109,30 @@ export class AbnoData{
   gameID: number;
   dmID: string[];
   abnoID: number;
-  department: string;
+  department: number;
   qClock: number;
   suppProg: number;
   trialClock: number[];
-  trueName: boolean;
+  trueNameRev: boolean;
   clock1: [number, number];
   clock2: [number, number];
   clock3: [number, number];
   clock4: [number, number];
+  mapCoord : [number, number, number]; //x,y,floor
   constructor(
     gameID=0,
     dmID=['AlphaTT'],
     abnoID=0,
-    department='Control',
+    department=0,
     qClock=1,
     suppProg=0,
     trialClock=[0],
-    trueName=false,
-    clock1 :[number, number]=[3,3],
-    clock2 :[number, number]=[3,3],
-    clock3 :[number, number]=[6,6],
-    clock4 :[number, number]=[6,6]){
+    trueNameRev=false,
+    clock1 :[number, number]=[0,3], //orologi di ricerca e custom rules su cosa rivelano incluso true/false per confermare di poterle rivelare perché potrebbero inserirlo per sbaglio
+    clock2 :[number, number]=[0,3],
+    clock3 :[number, number]=[0,6],
+    clock4 :[number, number]=[0,6],
+    mapCoord:[number, number, number]=[0, 0, 0],){
       this.gameID=gameID;
       this.dmID=dmID;
       this.abnoID=abnoID;
@@ -138,11 +140,12 @@ export class AbnoData{
       this.qClock=qClock;
       this.suppProg=suppProg;
       this.trialClock=trialClock;
-      this.trueName=trueName;
+      this.trueNameRev=trueNameRev;
       this.clock1=clock1;
       this.clock2=clock2;
       this.clock3=clock3;
       this.clock4=clock4;
+      this.mapCoord=mapCoord;
   }
 }
 
@@ -150,7 +153,7 @@ interface DataFS{
     game: number;
     dm: string[];
     abno: number;
-    dep: string;
+    dep: number;
     qC: number;
     supP: number;
     trlC: number[];
@@ -159,6 +162,7 @@ interface DataFS{
     c2: [number, number];
     c3: [number, number];
     c4: [number, number];
+    mapC: [number, number, number];
 }
 
 export class DataConverter implements FirestoreDataConverter<AbnoData, DataFS> {
@@ -172,17 +176,18 @@ toFirestore(data: WithFieldValue<AbnoData>): WithFieldValue<DataFS> {
         qC: data.qClock,
         supP: data.suppProg,
         trlC: data.trialClock,
-        tN: data.trueName,
+        tN: data.trueNameRev,
         c1: data.clock1,
         c2: data.clock2,
         c3: data.clock3,
-        c4: data.clock4
+        c4: data.clock4,
+        mapC: data.mapCoord
     };
 }
 
 fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): AbnoData {
     const data = snapshot.data(options) as DataFS;
-    return new AbnoData(data.game, data.dm, data.abno, data.dep, data.qC, data.supP, data.trlC, data.tN, data.c1, data.c2, data.c3, data.c4);
+    return new AbnoData(data.game, data.dm, data.abno, data.dep, data.qC, data.supP, data.trlC, data.tN, data.c1, data.c2, data.c3, data.c4, data.mapC);
 }
 }
 

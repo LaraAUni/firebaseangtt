@@ -33,7 +33,7 @@ export class LoginPage {
   inpopen=false;
   subopen=false;
   optionsOp=false;
-  userName:string | null = null;
+  userName:string | null = 'Guest';
   
   constructor(private ref: ChangeDetectorRef){
     this.email='';
@@ -62,19 +62,18 @@ ngOnInit(){
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
     });
-  form.addEventListener('submit', async (event) => {
+form.addEventListener('submit', async (event) => {
 
   // Prevent default form submission (page reload)
   event.preventDefault();
 
   // Rest of the logic (collect data, updatewiew)
-  const formData = new FormData(form);
+const formData = new FormData(form);
 let inp;
 inp=formData.get('email'); //funzionava ma ora no?? qualcosa con option
 if(inp)this.email=inp.toString();
 inp=formData.get('password');
 if(inp)this.password=inp.toString();
-console.log('Form submitted with email:', this.email, 'and password:', this.password, 'and newName:', this.userName);
 if(this.inpopen)this.signIn();
 else if(this.subopen)this.signUp();
 });
@@ -93,8 +92,10 @@ if(inp){this.userName=inp.toString();
   signUp(auth=this.auth, email=this.email, password=this.password): void {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up 
+        // Signed up
+        this.subopen=false;
         const user = userCredential.user;
+        this.ref.markForCheck();
         // ...
       })
       .catch((error) => {
@@ -108,8 +109,10 @@ if(inp){this.userName=inp.toString();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
+        this.inpopen=false;
         const user = userCredential.user;
         // ...
+        this.ref.markForCheck(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -117,11 +120,15 @@ if(inp){this.userName=inp.toString();
       });
   }
   signOut(auth=this.auth): void {
-    auth.signOut().then(() => {}).catch((error) => {
+    auth.signOut().then(() => {
+      this.optionsOp=false;
+      this.ref.markForCheck();
+    }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
     });
   }
+  
   checkAuthState(auth=this.auth): void {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -166,7 +173,6 @@ if(inp){this.userName=inp.toString();
     const auth = this.auth;
     const user = auth.currentUser;
     if (user) {
-      console.log('updateName chiamata con nome:', name,'username:',user.displayName);
       updateProfile(user, {
         displayName: name
       }).then(() => {

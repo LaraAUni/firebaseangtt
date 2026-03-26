@@ -7,7 +7,7 @@ export class Sharedrules {
   gameID:number = 0;
   //Invece di PlayerList meglio mettere gameID nell'account insieme alla lingua
   charaList:number[] = [1,2,3];//id personaggi
-  abnoList:number[] = [0,1,2];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
+  abnoList:number[] = [1,2];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
   depsList:Departments[] = [Departments.Control, Departments.Information, Departments.Safety, Departments.Training, Departments.Disciplinary, Departments.Central, Departments.Custom1]; //ENUM
   bonusDeps:string[]=['Experimental'];
   bonusColors:[string,boolean][]=[['#6EFDD2', false]];//da usare per bonusDeps e customDeps, se si aggiungono altri bonusDeps o customDeps basta aggiungerli qui, bool è per testo bianco o nero

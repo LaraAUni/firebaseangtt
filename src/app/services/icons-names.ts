@@ -16,7 +16,7 @@ export class IconsNames {
   fireInit = inject(FireInit);
   rules = inject(Sharedrules);
   
-  ordCharaList: CharObj[][] = []; //[[1,2,3],[1,2,3],[],[],[]]
+  ordCharaList: CharObj[][] = [];
   ordAbnoList: CharObj[][] = [];
   constructor() {
     this.ordCharaList=Array(this.rules.depsList.length).fill([]);
@@ -27,7 +27,6 @@ export class IconsNames {
         if(res){
         for(let j=0; j<this.rules.depsList.length; j++){
           if(res.dep==this.rules.depsList[j]){
-            console.log("Dep:",this.rules.depsList[j]);
             if(!this.ordCharaList[j])this.ordCharaList[j]=[res];
              else this.ordCharaList[j]=[...this.ordCharaList[j], res];
           }
@@ -35,7 +34,6 @@ export class IconsNames {
         }
       }).catch((err)=>{console.log(err)});
     }
-    console.log("CharaList: ", this.ordCharaList);
     this.ordAbnoList=Array(this.rules.depsList.length).fill([]);
     for(let i=0; i<this.rules.charaList.length; i++){
       let chara=this.getIcon(this.rules.charaList[i], 2)
@@ -44,7 +42,6 @@ export class IconsNames {
         if(res){
         for(let j=0; j<this.rules.depsList.length; j++){
           if(res.dep==this.rules.depsList[j]){
-            console.log("Dep:",this.rules.depsList[j]);
             if(!this.ordAbnoList[j])this.ordAbnoList[j]=[res];
              else this.ordAbnoList[j]=[...this.ordAbnoList[j], res];
           }

@@ -14,13 +14,15 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class AbnoSheet {
   fireInit = inject(FireInit);
-  rules= inject(Sharedrules);
+  shRules= inject(Sharedrules);
+  rules=this.shRules.rules;
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
     isDM=false;
     AbnoSheet : Abnormality;
     AbnoData : AbnoData;
+    abnoID=0;
     depColor:string;
     dangerColor:string;
     HTclocks: string[]=[];
@@ -34,7 +36,7 @@ export class AbnoSheet {
   }
 
 ngOnInit(){
-  this.getAbno(this.rules.lookFor);
+  if(!this.getAbno(this.shRules.lookFor)) this.abnoID=this.shRules.lookFor;
   console.log("AbnoData: ", this.AbnoData);
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
@@ -59,19 +61,20 @@ this.addAbno();
 
 
   async getAbno(id:number): Promise<void> {
-    const charRef = doc(this.db, 'abnos/'+id).withConverter(new AbnoConverter());
-    const snapshot1: DocumentSnapshot<Abnormality> = await getDoc(charRef);
+    const abnoRef = doc(this.db, 'abnos/'+id).withConverter(new AbnoConverter());
+    const snapshot1: DocumentSnapshot<Abnormality> = await getDoc(abnoRef);
     const uChara: Abnormality = snapshot1.data()!;
     if (uChara) {
     this.AbnoSheet = uChara;
+    this.abnoID=id;
     this.dangerColorUp();
     this.getData();
     }
     console.log("thisAbnoSheet: ", this.AbnoSheet);
   }
-  async getData(game:number=this.rules.gameID, id:number=this.rules.lookFor): Promise<void> {
-    const charRef = doc(this.db, 'gameabnos/'+game+'-'+id).withConverter(new DataConverter());
-    const snapshot1: DocumentSnapshot<AbnoData> = await getDoc(charRef);
+  async getData(game:number=this.rules.gameID, id:number=this.shRules.lookFor): Promise<void> {
+    const abnoRef = doc(this.db, 'gameabnos/'+game+'-'+id).withConverter(new DataConverter());
+    const snapshot1: DocumentSnapshot<AbnoData> = await getDoc(abnoRef);
     const uChara: AbnoData = snapshot1.data()!;
     if (uChara) {
     this.AbnoData = uChara;
@@ -83,28 +86,28 @@ this.addAbno();
     console.log("thisAbnoData: ", this.AbnoData);
   }
   async addAbno(){
-    if(this.AbnoSheet.abnoID==0) return;//ricordati di toglierlo per nuovi default
-      const charRef = doc(this.db, 'abnos/'+this.AbnoSheet.abnoID).withConverter(new AbnoConverter());
-      await setDoc(charRef, this.AbnoSheet);
-      const snapshot1 = await getDoc(charRef);
+    if(this.abnoID==0) return;//ricordati di toglierlo per nuovi default
+      const abnoRef = doc(this.db, 'abnos/'+this.abnoID).withConverter(new AbnoConverter());
+      await setDoc(abnoRef, this.AbnoSheet);
+      const snapshot1 = await getDoc(abnoRef);
       console.log("Abnormality saved: ", snapshot1.data());} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
 
   async addData() {
     //if(this.AbnoData.gameID==0) return; //ricordati di toglierlo per nuovi default
-      const charRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.AbnoSheet.abnoID).withConverter(new DataConverter());
-      await setDoc(charRef, this.AbnoData);
-      const snapshot1 = await getDoc(charRef);
+      const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
+      await setDoc(abnoRef, this.AbnoData);
+      const snapshot1 = await getDoc(abnoRef);
       console.log("Data saved: ", snapshot1.data()); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
 }
   depColorUp(c: number=this.AbnoData.department){
-    let newC=this.rules.depColorUp(c);
+    let newC=this.shRules.depColorUp(c);
     this.depColor=newC[0] as string;
   }
   dangerColorUp(){
-    this.dangerColor=this.rules.dangerColorUp(this.AbnoSheet.danger);
+    this.dangerColor=this.shRules.dangerColorUp(this.AbnoSheet.danger);
   }
   clockFill(){
-    this.HTclocks[0]=this.rules.clockFiller(this.AbnoData.suppProg, this.AbnoSheet.suppClock);
-    for(let i=0; i<this.AbnoSheet.trials.length; i++){this.HTclocks[i+1]=this.rules.clockFiller(this.AbnoData.trialClock[i], this.AbnoSheet.trials[i].Clock,'dodgerblue');}
+    this.HTclocks[0]=this.shRules.clockFiller(this.AbnoData.suppProg, this.AbnoSheet.suppClock);
+    for(let i=0; i<this.AbnoSheet.trials.length; i++){this.HTclocks[i+1]=this.shRules.clockFiller(this.AbnoData.trialClock[i], this.AbnoSheet.trials[i].Clock,'dodgerblue');}
   }
 }

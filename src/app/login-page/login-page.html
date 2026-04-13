@@ -58,7 +58,15 @@ ui.start('#firebaseui-auth-container', {
     <span>{{userName}}</span>
     <img class="icon" src="cogIco.png" alt="Options" (click)="optionsOp=!optionsOp">
     }
-  <img class="icon" src="MapIco.png" alt="Change Game">
+  <img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">
+  @if(mapOp){
+    <div class="infobox">
+      @for(i of user.games; track i; let ind=$index){
+        <button type="button" class="butt" (click)="this.rules.gameID=i">{{this.user.gamenames[ind]}}</button>
+      }
+      <button class="newbutt">+</button>
+    </div>
+   }
 </div>
       <form for="Options" name="optionsForm" id="optionsForm">
     @if(optionsOp){

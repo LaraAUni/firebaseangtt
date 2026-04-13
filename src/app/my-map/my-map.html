@@ -4,7 +4,7 @@
     @for(i of departments; track i;){
         @for(j of i.rooms; track j){
             @if(j.floor==floordisp || floordisp==map.floors){
-            <div class="rooms" [ngStyle]="{'z-index': (2 - (j.floor*4)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3], 'background-color': i.background}">
+            <div class="rooms" [ngStyle]="{'z-index': (3 - (j.floor*4)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3], 'background-color': i.background}">
             </div>
             }
         @for(j of i.corridors; track j){
@@ -14,7 +14,14 @@
             }
         }
         @for(j of i.abnorooms; track j){
-            @if(j[2]==floordisp || floordisp==map.floors){<div class="abnoroom" [ngStyle]="{'z-index': (4 - (j[2]*4)), 'grid-column': j[0], 'grid-row': j[1], 'background-color': i.background}"></div>}
+            @if(j[2]==floordisp || floordisp==map.floors){<div class="abnoroom" [ngStyle]="{'z-index': (4 - (j[2]*4)), 'grid-column': j[0], 'grid-row': j[1], 'background-color': i.background}">
+            </div>}
+            }
+        }
+        @for(j of i.connectors; track j){
+            @if(j.floor==floordisp || floordisp==map.floors){
+            <div class="corridors" [ngStyle]="{'z-index': (2 - (j.floor*4)), 'grid-column': j.placement[0]+'/'+j.placement[1], 'grid-row': j.placement[2]+'/'+j.placement[3], 'background-color': i.background}">
+            </div>
             }
         }
         @for(j of i.stairs; track j){@if(j[2]==floordisp || floordisp==map.floors){<img class="stairs"

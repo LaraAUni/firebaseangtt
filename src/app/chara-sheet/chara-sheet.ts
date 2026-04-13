@@ -17,10 +17,12 @@ import { Sharedrules , Departments} from '../services/sharedrules';
 
 export class CharaSheet {
   fireInit = inject(FireInit);
-  rules = inject(Sharedrules);
+  shRules = inject(Sharedrules);
+  rules=this.shRules.rules;
   deps=Departments;
   db = this.fireInit.db;
   Chara : Character;
+  charID=0;
   lang='en';
   itapr="";//per prendere le abilità in italiano quando le aggiungo se non sono custom scelte da DM
   captAbs=["---"]
@@ -32,7 +34,7 @@ constructor(private ref: ChangeDetectorRef){
 }
 
 ngOnInit(){
-  if(!this.getChara(this.rules.lookFor)) this.Chara.charID=this.rules.lookFor;
+  if(!this.getChara(this.shRules.lookFor)) this.charID=this.shRules.lookFor;
   const form = document.getElementById('charForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -126,11 +128,12 @@ this.addChara();
 });
 }
   async getChara(id:number): Promise<void> {
-    const charRef = doc(this.db, 'charas/'+id).withConverter(new CharaConverter());
+    const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + id).withConverter(new CharaConverter());
     const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
     const uChara: Character = snapshot1.data()!;
     if (uChara) {
     this.Chara = uChara;
+    this.charID=id;
     this.vexpUpdate(1);
     this.vexpUpdate(2);
     this.vexpUpdate(3);
@@ -142,8 +145,8 @@ this.addChara();
     console.log("thisChara: ", this.Chara);
   }
   async addChara() : Promise<void>{
-    if(this.Chara.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
-    const charRef = doc(this.db, 'charas/' + this.Chara.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
+    if(this.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
+    const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + this.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(charRef, this.Chara);
     const snapshot1 = await getDoc(charRef);
     console.log("Chara saved: ", snapshot1.data());
@@ -182,7 +185,7 @@ this.addChara();
   }
   depColorUp(c: number=this.Chara.role[1]){
     this.depText="#010101";
-    let newC=this.rules.depColorUp(c);
+    let newC=this.shRules.depColorUp(c);
     if(newC[1])this.depText="aliceblue";
     this.depColor=newC[0] as string;
   }

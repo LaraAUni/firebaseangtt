@@ -1,9 +1,6 @@
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
-import { AbnoSheet } from "./abno-sheet";
-import { from } from "rxjs";
 
 export class Abnormality {
-  abnoID: number;
   dmID: string[];
   icoUrl: string;
   fullName: { Name: string, Nickname: string, Code: string };
@@ -20,7 +17,6 @@ export class Abnormality {
   management: string[];
   story: string[];
 constructor(
-  abnoID=0,
   dmID=['AlphaTT'],
   icoUrl="000",
   fullName={ Name: "Standard Training Dummy Rabbit", Nickname: "", Code: "0-00-00"},
@@ -38,7 +34,6 @@ constructor(
   story=["An Abnormality in the shape of a training dummy used to train up-and-coming managers.", "Rumor has it this Abnormality was chosen to be used for training as it is the most docile and tame of any that we have extracted. It’s called a training dummy “rabbit”, but it doesn’t seem to enjoy carrots. It likes people. If it escapes, it is merely following the employee as they leave its Containment Unit."],
 )
   {
-    this.abnoID=abnoID;
     this.dmID=dmID;
     this.icoUrl=icoUrl;
     this.fullName=fullName;
@@ -58,7 +53,6 @@ constructor(
 }
 
 interface AbnoFS{
-    abno: number;
     dm: string[];
     ico: string;
     fName: { Name: string, Nickname: string, Code: string };
@@ -80,7 +74,6 @@ interface AbnoFS{
 export class AbnoConverter implements FirestoreDataConverter<Abnormality, AbnoFS> {
     toFirestore(abno: WithFieldValue<Abnormality>): WithFieldValue<AbnoFS> {
         return {
-            abno: abno.abnoID,
             dm: abno.dmID,
             ico: abno.icoUrl,
             fName: abno.fullName,
@@ -102,13 +95,11 @@ export class AbnoConverter implements FirestoreDataConverter<Abnormality, AbnoFS
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Abnormality {
         const data = snapshot.data(options) as AbnoFS;
-        return new Abnormality(data.abno, data.dm, data.ico, data.fName, data.dang, data.eqp, data.wDam, data.pref, data.qlip, data.eDam, data.res, data.supC, data.abs, data.trls, data.mgnt, data.stry);
+        return new Abnormality(data.dm, data.ico, data.fName, data.dang, data.eqp, data.wDam, data.pref, data.qlip, data.eDam, data.res, data.supC, data.abs, data.trls, data.mgnt, data.stry);
     }
 }
 export class AbnoData{
-  gameID: number;
   dmID: string[];
-  abnoID: number;
   department: number;
   qClock: number;
   suppProg: number;
@@ -120,9 +111,7 @@ export class AbnoData{
   clock4: [number, number];
   mapCoord : [number, number, number]; //x,y,floor
   constructor(
-    gameID=0,
     dmID=['AlphaTT'],
-    abnoID=0,
     department=0,
     qClock=1,
     suppProg=0,
@@ -133,9 +122,7 @@ export class AbnoData{
     clock3 :[number, number]=[0,6],
     clock4 :[number, number]=[0,6],
     mapCoord:[number, number, number]=[0, 0, 0],){
-      this.gameID=gameID;
       this.dmID=dmID;
-      this.abnoID=abnoID;
       this.department=department;
       this.qClock=qClock;
       this.suppProg=suppProg;
@@ -150,9 +137,7 @@ export class AbnoData{
 }
 
 interface DataFS{
-    game: number;
     dm: string[];
-    abno: number;
     dep: number;
     qC: number;
     supP: number;
@@ -169,9 +154,7 @@ export class DataConverter implements FirestoreDataConverter<AbnoData, DataFS> {
 
 toFirestore(data: WithFieldValue<AbnoData>): WithFieldValue<DataFS> {
     return {
-        game: data.gameID,
         dm: data.dmID,
-        abno: data.abnoID,
         dep: data.department,
         qC: data.qClock,
         supP: data.suppProg,
@@ -187,7 +170,7 @@ toFirestore(data: WithFieldValue<AbnoData>): WithFieldValue<DataFS> {
 
 fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): AbnoData {
     const data = snapshot.data(options) as DataFS;
-    return new AbnoData(data.game, data.dm, data.abno, data.dep, data.qC, data.supP, data.trlC, data.tN, data.c1, data.c2, data.c3, data.c4, data.mapC);
+    return new AbnoData(data.dm, data.dep, data.qC, data.supP, data.trlC, data.tN, data.c1, data.c2, data.c3, data.c4, data.mapC);
 }
 }
 

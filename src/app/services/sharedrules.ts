@@ -1,37 +1,55 @@
 import { Injectable } from '@angular/core';
+import { DocumentSnapshot, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {Rules, RulesConverter} from './rules';
+import { inject } from '@angular/core';
+import { FireInit } from '../fire-init';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Sharedrules {
-  gameID:number = 0;
-  //Invece di PlayerList meglio mettere gameID nell'account insieme alla lingua
-  charaList:number[] = [1,2,3];//id personaggi
-  abnoList:number[] = [1,2];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
-  depsList:Departments[] = [Departments.Control, Departments.Information, Departments.Safety, Departments.Training, Departments.Disciplinary, Departments.Central, Departments.Custom1]; //ENUM
-  bonusDeps:string[]=['Experimental'];
-  bonusColors:[string,boolean][]=[['#6EFDD2', false]];//da usare per bonusDeps e customDeps, se si aggiungono altri bonusDeps o customDeps basta aggiungerli qui, bool è per testo bianco o nero
-  capPassive=["Manager, Shut It Down!", "Solo Research", "Containment Protocols", "Shadow", "Rabbit Protocol"]
-  controlAbs=["Corrective Action", "Controlling Coordinator", "Cross-Departmental Efficiency", "The Will To Stand Up Straight"]
-  infoAbs=["Foresight","Respectful Distance","Don't Act Rashly","The Rationality to Maintain Discretion"]
-  safetyAbs=["Dead Man Walking", "Bedside Manner", "Not On My Watch", "The Fearlessness to Keep On Living"]
-  trainAbs=["Sink or Swim", "Right Out of the Handbook", "Stick to the Plan!", "The Hope to Be a Better Person"]
-  discAbs=["Big EGO", "Pain Bringer", "Vitality", "The Courage to Protect"]
-  centralAbs=["---"];
-  welfareAbs=["---"];//serve almeno Welfare come reskin di Safety in futuro
-  recordsAbs=["---"];
-  extractAbs=["---"];
-  architAbs=["---"];
-  agentAbs=["Unassuming","Temporary Lucidity", "Face the Fear", "Virtuous", "Skilled"]
-  traumas=["Cold","Haunted","Obsessed","Distrustful","Reckless","Soft","Volatile","Vicious"]
-  traum3nabled=false; //per il progetto che dà un'altro slot se completato
+  rules=new Rules();
   lookFor=0;
-  constructor() { }
+  isDM=false;
+  init=inject(FireInit);
+  constructor() {}
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
 
+  async getRules(id:number): Promise<void> {
+    const rulesRef = doc(this.init.db, 'rules/' + this.rules.gameID).withConverter(new RulesConverter());
+    const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
+    const uRules: Rules = snapshot1.data()!;
+    if (uRules) {
+    this.rules = uRules;
+    }
+    console.log("Rules obtained: ", this.rules);
+  }
+  async addRules() : Promise<void>{
+    if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
+    const rulesRef = doc(this.init.db, 'rules/' + this.rules.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
+    await setDoc(rulesRef, this.rules);
+    const snapshot1 = await getDoc(rulesRef);
+    console.log("Rules saved: ", snapshot1.data());
+  }
+
+  async newGame(n:string){
+    this.rules=new Rules();
+    let i=1;
+    const gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+    const snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
+    while(snapshot1.data()){
+      i++;
+      const gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+      const snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
+    }
+    this.rules.gameID=i;
+    this.rules.gameName=n;
+    this.addRules();
+  }
+
   depColorUp(c: Departments){
-    if(c<=10+this.bonusDeps.length){
-    if(c>10) return [this.bonusColors[c-11][0], this.bonusColors[c-11][1]];
+    if(c<=10+this.rules.bonusDeps.length){
+    if(c>10) return [this.rules.bonusColors[c-11][0], this.rules.bonusColors[c-11][1]];
     else if(c>0) if(c==8) return ["var(--Extraction)", true];
     return ["var(--"+Departments[c]+")", false];
   }
@@ -47,6 +65,7 @@ export class Sharedrules {
     if(c>0 && c<6) return "var(--"+Danger[c]+")";
     return "var(--Bonus)";
   }
+
 }
 
 export enum Departments {

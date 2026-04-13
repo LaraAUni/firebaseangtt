@@ -22,8 +22,9 @@ import { NgStyle } from '@angular/common';
 
 export class App {
   protected title = 'ThirdTrumpet';
-  rules = inject(Sharedrules);
+  shRules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
+  rules=this.shRules.rules;
   deps=Departments;
   charaList=this.iconsNames.ordCharaList;
   abnoList=this.iconsNames.ordAbnoList;

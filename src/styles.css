@@ -3,6 +3,7 @@ body{
     line-height: normal !important;
     background: aliceblue;
     scrollbar-color: #010101 #EF944D !important;
+    font-size: 2vh;
 }
 
 html, body { height: 100%;
@@ -51,15 +52,15 @@ body { margin: 0;}
 
 @font-face {
   font-family: 'Mikodacs';
-  src: url('/public/Mikodacs.otf');
+  src: url('/public/Mikodacs.otf')!;
 }
 @font-face {
   font-family: 'Norwester';
   src: url('/public/Norwester.otf');
 }
 @font-face{
-    font-family: 'Gill Sans';
-    src: url('/public/Gill Sans.otf')
+  font-family: 'Gill Sans';
+  src: url('/public/Gill Sans.otf')
 }
 
 
@@ -126,11 +127,6 @@ body { margin: 0;}
     gap: 0.7%;
 }
 
-@media (max-width: 600px){
-.sheet{
-    width: 100vw;
-}
-}
 .clock {
     border-radius: 50%;
     contain: scale-down;
@@ -229,7 +225,26 @@ input{
     color: inherit;
 }
 
-.intro .equip {
+.newbutt{
+    cursor: pointer;
+    background-color: var(--border);
+    padding: 1%;
+    contain: scale-down;
+    max-height: 100%;
+    font-size: 150%;
+    color: aliceblue;
+    max-width: 2vw;
+    max-height: 2vw;
+    text-align: center;
+    padding-top: 0;
+    border-style: ridge;
+    border: var(--Second-Trumpet) solid 0.3vh;
+}
+
+.newbutt:active{
+    transform: translateY(2px);
+}
+.equip {
     grid-column: 2;
     grid-row: 3;
     display: grid;
@@ -248,3 +263,13 @@ input{
     contain: scale-down;
 }
 
+
+@media (max-width: 600px){
+.sheet{
+    width: 100vw;
+}
+.newbutt{
+    max-width: 10vw;
+    max-height: 7vw;
+}
+}

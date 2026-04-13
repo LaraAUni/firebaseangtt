@@ -24,11 +24,25 @@
               {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
             </mat-expansion-panel-header>
             <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
-            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
             }
           </span>
           </mat-expansion-panel>
         }
+      <mat-expansion-panel hideToggle class="expansion">
+            <mat-expansion-panel-header class="links">Reserves</mat-expansion-panel-header>
+            <span style="color: var(--Bonus)" >
+            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+            }
+          </span>
+          </mat-expansion-panel>
+      <mat-expansion-panel hideToggle class="expansion">
+            <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
+            <span style="color: grey;" >
+            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+            }
+          </span>
+          </mat-expansion-panel>
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
@@ -38,15 +52,14 @@
               {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
             </mat-expansion-panel-header>
             <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
-            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.shRules.lookFor=j.id;">
             }
           </span>
           </mat-expansion-panel>
         }
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
-        <mat-expansion-panel-header class="links">Armoury</mat-expansion-panel-header>
-          <img class="weapbtn" src="EGOs/EWFrostShard.png" alt="" mat-list-item (click)="showArmo=1; drawer.toggle();">
+        <mat-expansion-panel-header class="links" (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
       </mat-expansion-panel>
     </mat-list>
     <label class="switch" for="lightmode-toggle">

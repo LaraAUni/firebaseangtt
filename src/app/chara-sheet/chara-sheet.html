@@ -3,7 +3,7 @@
             <div class="iconside">
             <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor}">
             <div class="submit"><button type="submit" class="subbutton">Save</button>
-            <button type="button" class="subbutton" (click)="getChara(Chara.charID)">Reset</button></div>
+            <button type="button" class="subbutton" (click)="getChara(this.charID)">Reset</button></div>
             </div>
             <input type="text" class="agentname" name="charName" placeholder="{{Chara.fullName}}" autocomplete="off">
             <label for="role" class="label">Carica</label>

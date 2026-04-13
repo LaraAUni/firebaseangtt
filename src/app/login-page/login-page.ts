@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { Sharedrules } from '../services/sharedrules';
 import {
   EmailAuthCredential,
   getAuth,
@@ -13,8 +14,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile
 } from "firebase/auth";
-
-
+import { UserData, UserConverter } from '../services/userdata';
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-login-page',
@@ -24,17 +25,22 @@ import {
 })
 export class LoginPage {
   fireInit = inject(FireInit);
+  shRules= inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
+  info=inject(UserData);
+  rules=this.shRules.rules;
+  id:string='';
   email :string;
   password :string;
-  info=false;
   provider = new GoogleAuthProvider();
   signedIn=false;
   inpopen=false;
   subopen=false;
   optionsOp=false;
   userName:string | null = 'Guest';
-  
+  mapOp=false;
+  user= new UserData([0,1], ['W-08','T-09']);
+
   constructor(private ref: ChangeDetectorRef){
     this.email='';
     this.password=''
@@ -53,6 +59,11 @@ ngOnInit(){
         const uid = user.uid;
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
+        this.id = user.uid;
+        this.rules.DMIds=[user.uid];
+        if(this.rules.DMIds.includes(user.uid)){
+          this.shRules.isDM=true;
+        }
         // ...
       }else {
         // User is signed out
@@ -185,4 +196,5 @@ if(inp){this.userName=inp.toString();
       });
     }
   }
+
 }

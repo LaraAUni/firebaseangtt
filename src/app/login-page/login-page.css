@@ -42,6 +42,7 @@
   background-color: aliceblue;
   position: absolute;
   top: 4vh;
+  left: 0;
   z-index: 2;
   padding: 1%;
   border: 0.4vh solid var(--border);

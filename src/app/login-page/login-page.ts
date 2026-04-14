@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { inject } from '@angular/core';
+import { Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { Sharedrules } from '../services/sharedrules';
@@ -24,10 +24,10 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
   styleUrl: './login-page.css',
 })
 export class LoginPage {
-  fireInit = inject(FireInit);
-  shRules= inject(Sharedrules);
+  fireInit = Inject(FireInit);
+  shRules= Inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
-  info=inject(UserData);
+  info=Inject(UserData);
   rules=this.shRules.rules;
   id:string='';
   email :string;

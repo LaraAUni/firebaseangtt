@@ -1,4 +1,4 @@
-import { Component, inject, InjectionToken} from '@angular/core';
+import { Component, inject} from '@angular/core';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatExpansionModule} from '@angular/material/expansion';
 import { CharaSheet } from './chara-sheet/chara-sheet';

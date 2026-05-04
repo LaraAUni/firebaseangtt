@@ -4,6 +4,7 @@ export class UserData {
     games: number[];
     gamenames:string[];
     language: string;
+    //light mode?
     constructor(games: number[]= [], gamenames: string[]= [], language: string = 'en') {
         this.games=games;
         this.gamenames=gamenames;

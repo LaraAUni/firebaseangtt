@@ -13,71 +13,78 @@
       <span>Recap</span>
     </div>
   </mat-drawer-content>
-  <mat-drawer  position="end" mode="side" role="directory" #drawer class="sidenav">
+  <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
     <mat-list>
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agents</mat-expansion-panel-header>
         @for(i of this.rules.depsList; track i; let ind = $index){
-          <mat-expansion-panel hideToggle class="expansion">
-            <mat-expansion-panel-header class="links" [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
-              {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
-            </mat-expansion-panel-header>
-            <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
-            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+        <mat-expansion-panel hideToggle class="expansion">
+          <mat-expansion-panel-header class="links"
+            [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+            {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
+          </mat-expansion-panel-header>
+          <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt=""
+              mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
             }
           </span>
-          </mat-expansion-panel>
+        </mat-expansion-panel>
         }
-      <mat-expansion-panel hideToggle class="expansion">
-            <mat-expansion-panel-header class="links">Reserves</mat-expansion-panel-header>
-            <span style="color: var(--Bonus)" >
-            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+        <mat-expansion-panel hideToggle class="expansion">
+          <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
+          <span style="color: var(--Bonus)">
+            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
             }
           </span>
-          </mat-expansion-panel>
-      <mat-expansion-panel hideToggle class="expansion">
-            <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
-            <span style="color: grey;" >
-            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+        </mat-expansion-panel>
+        <mat-expansion-panel hideToggle class="expansion">
+          <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
+          <span style="color: grey;">
+            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;" style="filter: grayscale(80%);">
             }
           </span>
-          </mat-expansion-panel>
+        </mat-expansion-panel>
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
-          @for(i of this.rules.depsList; track i; let ind = $index){
-          <mat-expansion-panel hideToggle class="expansion">
-            <mat-expansion-panel-header class="links" [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
-              {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
-            </mat-expansion-panel-header>
-            <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" >
-            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+        @for(i of this.rules.depsList; track i; let ind = $index){
+        <mat-expansion-panel hideToggle class="expansion">
+          <mat-expansion-panel-header class="links"
+            [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+            {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
+          </mat-expansion-panel-header>
+          <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
+            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
+              (click)="showAbno=1; drawer.toggle(); this.shRules.lookFor=j.id;">
             }
           </span>
-          </mat-expansion-panel>
+        </mat-expansion-panel>
         }
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
-        <mat-expansion-panel-header class="links" (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
+        <mat-expansion-panel-header class="links"
+          (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
       </mat-expansion-panel>
     </mat-list>
     <label class="switch" for="lightmode-toggle">
-  <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">
-  <span class="slider"></span>
-</label>
+      <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">
+      <span class="slider"></span>
+    </label>
   </mat-drawer>
 </mat-drawer-container>
 
 @if(showChara>0){
-    <img class="closebtn" (click)="drawer.toggle(); showChara=0" src="buttonclose.png" alt="">
-    <app-chara-sheet></app-chara-sheet>
-    }
+<img class="closebtn" (click)="drawer.toggle(); showChara=0" src="buttonclose.png" alt="">
+<app-chara-sheet></app-chara-sheet>
+}
 @if(showAbno>0){
-    <img class="closebtn" (click)="drawer.toggle(); showAbno=0" src="buttonclose.png" alt="">
-    <app-abno-sheet></app-abno-sheet>
-  }
+<img class="closebtn" (click)="drawer.toggle(); showAbno=0" src="buttonclose.png" alt="">
+<app-abno-sheet></app-abno-sheet>
+}
 @if(showArmo>0){
-    <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
-    <app-armoury></app-armoury>
-    }    
+<img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
+<app-armoury></app-armoury>
+}

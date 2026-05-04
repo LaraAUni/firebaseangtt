@@ -85,14 +85,14 @@ this.addAbno();
     }
     console.log("thisAbnoData: ", this.AbnoData);
   }
-  async addAbno(){
+  async addAbno() : Promise<void>{
     if(this.abnoID==0) return;//ricordati di toglierlo per nuovi default
       const abnoRef = doc(this.db, 'abnos/'+this.abnoID).withConverter(new AbnoConverter());
       await setDoc(abnoRef, this.AbnoSheet);
       const snapshot1 = await getDoc(abnoRef);
       console.log("Abnormality saved: ", snapshot1.data());} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
 
-  async addData() {
+  async addData() : Promise<void>{
     //if(this.AbnoData.gameID==0) return; //ricordati di toglierlo per nuovi default
       const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
       await setDoc(abnoRef, this.AbnoData);

@@ -1,7 +1,7 @@
-    <form for="charSheet" class="sheet" name="form" id="charForm">
+    <form for="charSheet" class="sheet" name="form" id="charForm" [ngStyle]="{'filter' : ( this.isdead ? 'grayscale(50%)' : 'none')}">
         <div class="intro">
             <div class="iconside">
-            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor}">
+            <img class="icon" src="Charas/{{Chara.icoUrl}}.png" alt="Character Icon" [ngStyle]="{'border-color': depColor, 'filter' : ( this.isdead ? 'grayscale(70%)' : 'none')}">
             <div class="submit"><button type="submit" class="subbutton">Save</button>
             <button type="button" class="subbutton" (click)="getChara(this.charID)">Reset</button></div>
             </div>

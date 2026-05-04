@@ -24,10 +24,11 @@ export class CharaSheet {
   Chara : Character;
   charID=0;
   lang='en';
+  isdead=false;
   itapr="";//per prendere le abilità in italiano quando le aggiungo se non sono custom scelte da DM
   captAbs=["---"]
   Fort={track:[1,1,1,1,1,1]};Prud={track:[1,1,1,1,1,1]};Temp={track:[1,1,1,1,1,1]};Just={track:[1,1,1,1,1,1]};
-  depColor="var(--Bonus)";//default è colore di Angela perché non avrebbe senso fosse assegnabile
+  depColor="var(--Bonus)";//deve essere una variabile cambiata dalla funzione perché mettendo la funzione direttamente nell'html Angular la ricalcola tre volte
   depText="#010101";
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
@@ -140,6 +141,7 @@ this.addChara();
     this.vexpUpdate(4);
     this.depAbsUp();
     this.depColorUp();
+    this.isdead = this.rules.deadCh.includes(this.charID);
     this.ref.markForCheck();
     }
     console.log("thisChara: ", this.Chara);

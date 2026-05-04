@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentSnapshot, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
-import {Rules, RulesConverter} from './rules';
+import {Rules, RulesConverter} from '../rules';
 import { inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 
@@ -8,21 +8,26 @@ import { FireInit } from '../fire-init';
   providedIn: 'root',
 })
 export class Sharedrules {
-  rules=new Rules();
+  rules=new Rules(); //da spostare Rules!!!! Non va avendolo tolto da Services
   lookFor=0;
   isDM=false;
   init=inject(FireInit);
-  constructor() {}
+  constructor() {
+    this.rules.charaList=[1,2,3];
+    this.rules.abnoList=[1,2];
+    this.rules.deadCh=[3];
+    this.rules.backupCh=[2];
+  }
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
 
-  async getRules(id:number): Promise<void> {
-    const rulesRef = doc(this.init.db, 'rules/' + this.rules.gameID).withConverter(new RulesConverter());
+  async getRules(id:number=this.rules.gameID): Promise<void> {
+    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
     const uRules: Rules = snapshot1.data()!;
     if (uRules) {
     this.rules = uRules;
-    }
     console.log("Rules obtained: ", this.rules);
+    }
   }
   async addRules() : Promise<void>{
     if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
@@ -32,15 +37,15 @@ export class Sharedrules {
     console.log("Rules saved: ", snapshot1.data());
   }
 
-  async newGame(n:string){
+  async newGame(n:string) : Promise<void>{
     this.rules=new Rules();
     let i=1;
-    const gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
-    const snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
+    let gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+    let snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
     while(snapshot1.data()){
-      i++;
-      const gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
-      const snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
+      i++; //cerco un id libero perché uno potrebbe essersi liberato cancellando un partita vecchia, mi aspetto poco traffico quindi meno di 50 partite alla volta ed è un' operazione rarissima
+      gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+      snapshot1 = await getDoc(gameRef);
     }
     this.rules.gameID=i;
     this.rules.gameName=n;
@@ -57,7 +62,7 @@ export class Sharedrules {
   } //Con le Regole Custom per ogni partita confrontare nomi extra dalle regole, exs case Rules.deps[9] : var(--customdep1)
 
   clockFiller(filled: number=0, max: number=3, color: string='red', background: string='dimgray'){
-    let slice=100/max;
+    let slice=100/max; //calcolo quanto dall'orologio è riempito e per i quadranti uso uno sprite che li divide
     return `conic-gradient(${color} 0 ${filled*slice}%, ${background} ${filled*slice}% 100%)`;
   }
 

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { Sharedrules } from '../services/sharedrules';
+import { Sharedrules } from '../services/sharedrules'
 import {
   EmailAuthCredential,
   getAuth,
@@ -15,7 +15,7 @@ import {
   updateProfile
 } from "firebase/auth";
 import { UserData, UserConverter } from '../services/userdata';
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
 
 @Component({
   selector: 'app-login-page',
@@ -25,34 +25,37 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 })
 export class LoginPage {
   fireInit = Inject(FireInit);
-  shRules= Inject(Sharedrules);
+  shRules = Inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
-  info=Inject(UserData);
-  rules=this.shRules.rules;
-  id:string='';
-  email :string;
-  password :string;
+  info = Inject(UserData);
+  rules = this.shRules.rules;
+  id: string = '';
+  email: string;
+  password: string;
   provider = new GoogleAuthProvider();
-  signedIn=false;
-  inpopen=false;
-  subopen=false;
-  optionsOp=false;
-  userName:string | null = 'Guest';
-  mapOp=false;
-  user= new UserData([0,1], ['W-08','T-09']);
+  signedIn = false;
+  inpopen = false;
+  subopen = false;
+  optionsOp = false;
+  userName: string | null = 'Guest';
+  mapOp = false;
+  newGame= false;
+  uid = '';
+  user = new UserData([0, 1], ['W-08', 'T-09']);
 
-  constructor(private ref: ChangeDetectorRef){
-    this.email='';
-    this.password=''
-}
-  
-ngOnInit(){
+  constructor(private ref: ChangeDetectorRef) {
+    this.email = '';
+    this.password = ''
+  }
 
-  this.checkAuthState();
-  const form = document.getElementById('signForm') as HTMLFormElement; //non legge il form
-  const options = document.getElementById('optionsForm') as HTMLFormElement;
-// Add submit event listener
-  onAuthStateChanged(this.auth, (user) => {
+  ngOnInit() {
+
+    this.checkAuthState();
+    const form = document.getElementById('signForm') as HTMLFormElement; //non legge il form
+    const options = document.getElementById('optionsForm') as HTMLFormElement;
+    const map = document.getElementById('MapOp') as HTMLFormElement;
+    // Add submit event listener
+    onAuthStateChanged(this.auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
@@ -60,12 +63,11 @@ ngOnInit(){
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         this.id = user.uid;
-        this.rules.DMIds=[user.uid];
-        if(this.rules.DMIds.includes(user.uid)){
-          this.shRules.isDM=true;
-        }
+        /*if (this.rules.DMIds.includes(user.uid)) {
+          this.shRules.isDM = true;
+        }*/
         // ...
-      }else {
+      } else {
         // User is signed out
         this.signedIn = false;
         this.userName = 'Guest';
@@ -73,38 +75,53 @@ ngOnInit(){
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
     });
-form.addEventListener('submit', async (event) => {
+    
+    form.addEventListener('submit', async (event) => {
 
-  // Prevent default form submission (page reload)
-  event.preventDefault();
+      // Prevent default form submission (page reload)
+      event.preventDefault();
 
-  // Rest of the logic (collect data, updatewiew)
-const formData = new FormData(form);
-let inp;
-inp=formData.get('email'); //funzionava ma ora no?? qualcosa con option
-if(inp)this.email=inp.toString();
-inp=formData.get('password');
-if(inp)this.password=inp.toString();
-if(this.inpopen)this.signIn();
-else if(this.subopen)this.signUp();
-});
+      // Rest of the logic (collect data, updatewiew)
+      const formData = new FormData(form);
+      let inp;
+      inp = formData.get('email'); //funzionava ma ora no?? qualcosa con option
+      if (inp) this.email = inp.toString();
+      inp = formData.get('password');
+      if (inp) this.password = inp.toString();
+      if (this.inpopen) this.signIn();
+      else if (this.subopen) this.signUp();
+    });
 
-options.addEventListener('submit', async (event) => {
-  event.preventDefault();
-const optionData = new FormData(options);
-let inp;
-inp=optionData.get('newName');
-if(inp){this.userName=inp.toString();
-  this.updateName(this.userName);
-}
-});
-}
+    options.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const optionData = new FormData(options);
+      let inp;
+      inp = optionData.get('newName');
+      if (inp) {
+        this.userName = inp.toString();
+        this.updateName(this.userName);
+      }
+    });
+    map.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const nameData = new FormData(map);
+      let inp;
+      inp = nameData.get('newGameName');  
+      if(inp){
+        this.newGame=false;
+        await this.shRules.newGame(inp.toString());
+        this.user.games.push(this.shRules.rules.gameID);
+        this.user.gamenames.push(inp.toString());
+        this.addData(this.uid);
+      }
+    })
+  }
 
-  signUp(auth=this.auth, email=this.email, password=this.password): void {
+  signUp(auth = this.auth, email = this.email, password = this.password): void {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed up
-        this.subopen=false;
+        this.subopen = false;
         const user = userCredential.user;
         this.ref.markForCheck();
         // ...
@@ -115,12 +132,12 @@ if(inp){this.userName=inp.toString();
         // ..
       });
   }
-  
-  signIn(auth=this.auth, email=this.email, password=this.password): void {
+
+  signIn(auth = this.auth, email = this.email, password = this.password): void {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
-        this.inpopen=false;
+        this.inpopen = false;
         const user = userCredential.user;
         // ...
         this.ref.markForCheck(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -130,17 +147,17 @@ if(inp){this.userName=inp.toString();
         const errorMessage = error.message;
       });
   }
-  signOut(auth=this.auth): void {
+  signOut(auth = this.auth): void {
     auth.signOut().then(() => {
-      this.optionsOp=false;
+      this.optionsOp = false;
       this.ref.markForCheck();
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
     });
   }
-  
-  checkAuthState(auth=this.auth): void {
+
+  checkAuthState(auth = this.auth): void {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -149,7 +166,7 @@ if(inp){this.userName=inp.toString();
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         // ...
-      }else {
+      } else {
         // User is signed out
         this.signedIn = false;
         this.userName = 'Guest';
@@ -161,26 +178,26 @@ if(inp){this.userName=inp.toString();
 
   getUser(): any {
     const auth = this.auth;
-  onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user
-    const uid = user.uid;
-    this.signedIn = true;
-    this.userName = user.displayName || user.email || 'Username';
-    // ...
-    return user;
-  } else {
-    // User is signed out
-    // ...
-    this.signedIn = false;
-    this.userName = 'Guest';
-    return null;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        this.uid = user.uid;
+        this.signedIn = true;
+        this.userName = user.displayName || user.email || 'Username';
+        // ...
+        return user;
+      } else {
+        // User is signed out
+        // ...
+        this.signedIn = false;
+        this.userName = 'Guest';
+        return null;
+      }
+    });
   }
-  });
-  }
-  
-  updateName(name:string): void {
+
+  updateName(name: string): void {
     const auth = this.auth;
     const user = auth.currentUser;
     if (user) {
@@ -195,6 +212,23 @@ if(inp){this.userName=inp.toString();
         const errorMessage = error.message;
       });
     }
+  }
+
+
+  async getData(id: string): Promise<void> {
+    const dataRef = doc(this.fireInit.db, 'userData/' + this.uid).withConverter(new UserConverter());
+    const snapshot1: DocumentSnapshot<UserData> = await getDoc(dataRef);
+    const uData: UserData = snapshot1.data()!;
+    if (uData) {
+      this.user = uData;
+      console.log("User obtained: ", this.user);
+    }
+  }
+  async addData(id: string): Promise<void> {
+    const dataRef = doc(this.fireInit.db, 'userData/' + this.uid).withConverter(new UserConverter()); //(this.gameID*200) ?? ma non vaaaa
+    await setDoc(dataRef, this.user);
+    const snapshot1 = await getDoc(dataRef);
+    console.log("User saved: ", snapshot1.data());
   }
 
 }

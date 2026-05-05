@@ -17,24 +17,16 @@ export class IconsNames {
   fireInit = inject(FireInit);
   shRules = inject(Sharedrules);
   rules=this.shRules.rules;
-  ordCharaList: {id: number, name: string, icon: string}[][] = [];
-  ordAbnoList: {id: number, name: string, icon: string}[][] = [];
+  ordCharaList: iconList = new iconList();
+  ordAbnoList: iconList = new iconList();
   constructor() {
-    if(this.ordCharaList.length==0){
       this.makeList(false);
-      this.addList(false);
-    }
-    if(this.ordAbnoList.length==0){
       this.makeList(true);
-      this.addList(true);
-    }
   }
 
   async addList(bool: boolean) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());//(this.gameID*200) ?? ma non vaaaa
-        let list=(new iconList((bool? this.ordAbnoList : this.ordCharaList)));
-        console.log("List to save: ", list);
-        await setDoc(listRef, list);
+        await setDoc(listRef, (bool?this.ordAbnoList:this.ordCharaList));
   }
   
   async getList(bool: boolean) : Promise<void>{
@@ -44,25 +36,11 @@ export class IconsNames {
         if (list) {
           console.log("List obtained: ", list);
           if(bool) {
-            if(list.dep1) this.ordAbnoList=[list.dep1];
-            if(list.dep2) this.ordAbnoList=[...this.ordAbnoList, list.dep2];
-            if(list.dep3) this.ordAbnoList=[...this.ordAbnoList, list.dep3];
-            if(list.dep4) this.ordAbnoList=[...this.ordAbnoList, list.dep4];
-            if(list.dep5) this.ordAbnoList=[...this.ordAbnoList, list.dep5];
-            if(list.dep6) this.ordAbnoList=[...this.ordAbnoList, list.dep6];
-            if(list.dep7) this.ordAbnoList=[...this.ordAbnoList, list.dep7];
-            if(list.dep8) this.ordAbnoList=[...this.ordAbnoList, list.dep8];
+
         console.log("Finished List: ", this.ordAbnoList);
           }
           else {
-            if(list.dep1) this.ordCharaList=[list.dep1];
-            if(list.dep2) this.ordCharaList=[...this.ordCharaList, list.dep2];
-            if(list.dep3) this.ordCharaList=[...this.ordCharaList, list.dep3];
-            if(list.dep4) this.ordCharaList=[...this.ordCharaList, list.dep4];
-            if(list.dep5) this.ordCharaList=[...this.ordCharaList, list.dep5];
-            if(list.dep6) this.ordCharaList=[...this.ordCharaList, list.dep6];
-            if(list.dep7) this.ordCharaList=[...this.ordCharaList, list.dep7];
-            if(list.dep8) this.ordCharaList=[...this.ordCharaList, list.dep8];
+
         console.log("Finished List: ", this.ordCharaList);
           }
         }
@@ -71,17 +49,32 @@ export class IconsNames {
   makeList(type:boolean){
     let l= this.rules.depsList.length;
     if(type){
-      this.ordAbnoList=Array(l).fill([]);
       for(let i=0; i<this.rules.abnoList.length; i++){
-        let chara=this.getIcon(this.rules.abnoList[i], true)
-        if(!chara)continue;
-        chara.then((res)=>{
+        let ret=this.getIcon(this.rules.abnoList[i], true)
+        if(!ret)continue;
+        ret.then((res)=>{
           if(res){
-            let [ico, dep] = res;
+            let [chara, dep] = res;
           for(let j=0; j<l; j++){
             if(dep==this.rules.depsList[j]){
-              if(!this.ordAbnoList[j])this.ordAbnoList[j]=[ico];
-              else this.ordAbnoList[j]=[...this.ordAbnoList[j], ico];
+            switch(j){
+              case 0: if(this.ordAbnoList.dep1)this.ordAbnoList.dep1=[...this.ordAbnoList.dep1, chara]; break;
+              case 1: if(this.ordAbnoList.dep2)this.ordAbnoList.dep2=[...this.ordAbnoList.dep2, chara]; break;
+              case 2: if(this.ordAbnoList.dep3)this.ordAbnoList.dep3=[...this.ordAbnoList.dep3, chara]; break;
+              case 3: if(this.ordAbnoList.dep4)this.ordAbnoList.dep4=[...this.ordAbnoList.dep4, chara]; break;
+              case 4: if(this.ordAbnoList.dep5)this.ordAbnoList.dep5=[...this.ordAbnoList.dep5, chara]; break;
+              case 5: if(this.ordAbnoList.dep6)this.ordAbnoList.dep6=[...this.ordAbnoList.dep6, chara]; break;
+              default: break;
+            }
+            switch(j){
+              case 0: if(!this.ordAbnoList.dep1)this.ordAbnoList.dep1=[chara]; break;
+              case 1: if(!this.ordAbnoList.dep2)this.ordAbnoList.dep2=[chara]; break;
+              case 2: if(!this.ordAbnoList.dep3)this.ordAbnoList.dep3=[chara]; break;
+              case 3: if(!this.ordAbnoList.dep4)this.ordAbnoList.dep4=[chara]; break;
+              case 4: if(!this.ordAbnoList.dep5)this.ordAbnoList.dep5=[chara]; break;
+              case 5: if(!this.ordAbnoList.dep6)this.ordAbnoList.dep6=[chara]; break;
+              default: break;
+            }
             }
           }
         }
@@ -89,7 +82,6 @@ export class IconsNames {
       }
     return;
     }
-    this.ordCharaList=Array(l+2).fill([]);
     for(let i=0; i<this.rules.charaList.length; i++){
       let ret=this.getIcon(this.rules.charaList[i], false)
       if(!ret)continue;
@@ -98,23 +90,46 @@ export class IconsNames {
           let [chara, dep] = res;
         for(let j=0; j<l; j++){
           if(dep==this.rules.depsList[j]){
-            if(!this.ordCharaList[j])this.ordCharaList[j]=[chara];
-             else this.ordCharaList[j]=[...this.ordCharaList[j], chara];
+            switch(j){
+              case 0: if(this.ordCharaList.dep1)this.ordCharaList.dep1=[...this.ordCharaList.dep1, chara]; break;
+              case 1: if(this.ordCharaList.dep2)this.ordCharaList.dep2=[...this.ordCharaList.dep2, chara]; break;
+              case 2: if(this.ordCharaList.dep3)this.ordCharaList.dep3=[...this.ordCharaList.dep3, chara]; break;
+              case 3: if(this.ordCharaList.dep4)this.ordCharaList.dep4=[...this.ordCharaList.dep4, chara]; break;
+              case 4: if(this.ordCharaList.dep5)this.ordCharaList.dep5=[...this.ordCharaList.dep5, chara]; break;
+              case 5: if(this.ordCharaList.dep6)this.ordCharaList.dep6=[...this.ordCharaList.dep6, chara]; break;
+              default: break;
+            }
+            switch(j){
+              case 0: if(!this.ordCharaList.dep1)this.ordCharaList.dep1=[chara]; break;
+              case 1: if(!this.ordCharaList.dep2)this.ordCharaList.dep2=[chara]; break;
+              case 2: if(!this.ordCharaList.dep3)this.ordCharaList.dep3=[chara]; break;
+              case 3: if(!this.ordCharaList.dep4)this.ordCharaList.dep4=[chara]; break;
+              case 4: if(!this.ordCharaList.dep5)this.ordCharaList.dep5=[chara]; break;
+              case 5: if(!this.ordCharaList.dep6)this.ordCharaList.dep6=[chara]; break;
+              default: break;
+            }
+          }
+          else if(dep==0){
+            if(!this.ordCharaList.dep7)this.ordCharaList.dep7=[chara];
+            else this.ordCharaList.dep7=[...this.ordCharaList.dep7, chara];
           }
         }
         }
       }).catch((err)=>{console.log(err)});
     }
-      l+=1;
     for(let i=0; i<this.rules.deadCh.length; i++){
         let ret=this.getIcon(this.rules.deadCh[i], false)
         if(!ret)continue;
         ret.then((res)=>{
           if(res){
+            let len=0;
+            for(var prop in this.ordCharaList){
+              if(this.ordCharaList[prop as keyof iconList]==undefined) continue;
+              len++;
+            }
             let [chara, dep] = res;
-              if(!this.ordCharaList[l])this.ordCharaList[l]=[chara];
-              else this.ordCharaList[l]=[...this.ordCharaList[l], chara];
-          }
+              if(!this.ordCharaList.dep8)this.ordCharaList.dep8=[chara];
+              else this.ordCharaList.dep8=[...this.ordCharaList.dep8, chara];}
         }).catch((err)=>{console.log(err)});
     }
   }
@@ -151,25 +166,17 @@ export class iconList{ //???? Non va???
     dep6?: {id: number, name: string, icon: string}[];
     dep7?: {id: number, name: string, icon: string}[]; //massimo 6 dipartmenti ma serve per riserve e morti
     dep8?: {id: number, name: string, icon: string}[];
-    constructor(list:{id: number, name: string, icon: string}[][]=[]) {
-      let len=list.length;
-      console.log("List to create: ", list);
-      let newList: {id: number, name: string, icon: string}[][] = [];
-      newList=list.slice();
-      console.log("First item: ", list[0]);
-      console.log("List length: ", len);
-      console.log("New List: ", newList);
-      switch(len){
-        case 8: this.dep8=list[7];
-        case 7: this.dep7=list[6];
-        case 6: this.dep6=list[5];
-        case 5: this.dep5=list[4];
-        case 4: this.dep4=list[3];
-        case 3: this.dep3=list[2];
-        case 2: this.dep2=list[1];
-        case 1: this.dep1=list[0];
-        default: break;
-      }
+    constructor() {
+    }
+    [Symbol.iterator]() {
+      let i=0;
+      return {
+        next: () => {
+        i++;
+        if(i==6)return { done: true, value: this['dep'+i as keyof iconList] };
+        return { done: false, value: this['dep'+i as keyof iconList] ?? {id: 0, name: '', icon: ''} };
+        }
+      };
     }
 }
 
@@ -194,32 +201,23 @@ export class listConverter implements FirestoreDataConverter<iconList, iListFS> 
       if(icon[prop as keyof iconList]==undefined) continue;
       len++;
     }
+    console.log("Icon to convert: ", icon);
     console.log("Lenght toFirestore: ", len);
-    switch(len){
-      case 8: (icon.dep8 ? res.dep8=icon.dep8 : res.dep8=[]);
-      case 7: (icon.dep7 ? res.dep7=icon.dep7 : res.dep7=[]);
-      case 6: (icon.dep6 ? res.dep6=icon.dep6 : res.dep6=[]);
-      case 5: (icon.dep5 ? res.dep5=icon.dep5 : res.dep5=[]);
-      case 4: (icon.dep4 ? res.dep4=icon.dep4 : res.dep4=[]);
-      case 3: (icon.dep3 ? res.dep3=icon.dep3 : res.dep3=[]);
-      case 2: (icon.dep2 ? res.dep2=icon.dep2 : res.dep2=[]);
-      case 1: (icon.dep1 ? res.dep1=icon.dep1 : res.dep1=[]);
-      default: break;
-    }
+    console.log("Dep1", icon.dep1);
+    if(icon.dep1==undefined) return res;
+    else res.dep1=icon.dep1;
+    if(icon.dep2!==undefined) res.dep2=icon.dep2;
+    if(icon.dep3!==undefined) res.dep3=icon.dep3;
+    if(icon.dep4!==undefined) res.dep4=icon.dep4;
+    if(icon.dep5!==undefined) res.dep5=icon.dep5;
+    if(icon.dep6!==undefined) res.dep6=icon.dep6;
+    if(icon.dep7!==undefined) res.dep7=icon.dep7;
+    if(icon.dep8!==undefined) res.dep8=icon.dep8;
     return res;
   }
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): iconList {
       const data = snapshot.data(options) as iListFS;
-      let res = [ data.dep1 ?? [], data.dep2 ?? [], data.dep3 ?? [], data.dep4 ?? [], data.dep5 ?? [], data.dep6 ?? [], data.dep7 ?? [], data.dep8 ?? [] ];
-      let l= this.rules.rules.depsList.length;
-      if(res[6] || res[7])  {let newRes=[]
-        for(let i=0; i<l; i++){
-          newRes.push(res[i]);
-        }
-        newRes.push(res[6]);
-        newRes.push(res[7]);
-        res=newRes;
-      }
-      return new iconList(res);
+      let res= new iconList()
+      return res;
   }
 }

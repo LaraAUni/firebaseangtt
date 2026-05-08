@@ -6,7 +6,7 @@
     </header>
     <div>
       <img class="buttonanim" src="buttonanim.png" alt="B">
-      <img class="openbtn" mat-button (click)="drawer.toggle()" src="button.png" alt="B">
+      <img class="openbtn" mat-button (click)="drawer.toggle(); this.iconsNames.makeList(true); this.iconsNames.makeList(false);" src="button.png" alt="B">
     </div>
     <app-my-map></app-my-map>
     <div class="recap">
@@ -25,26 +25,29 @@
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
-            @for(j of this.charaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt=""
-              mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
+            <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">@for(j of this.iconsNames.ordCharaList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt=""
+              mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;" style="grid-row: 1;">
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
             }
+          <div class="newbutt" (click)="this.rules.newDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</div></span>
           </span>
         </mat-expansion-panel>
         }
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
-          <span style="color: var(--Bonus)">
-            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
-              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;">
-            }
+          <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
+            @for(j of this.iconsNames.ordCharaList[this.iconsNames.ordCharaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
           </span>
+          <div class="newbutt" (click)="this.rules.newDep=0; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
-          <span style="color: grey;">
-            @for(j of this.charaList[this.charaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
-              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.shRules.lookFor=j.id;" style="filter: grayscale(80%);">
-            }
+          <span style="color: grey; display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
+            @for(j of this.iconsNames.ordCharaList[this.iconsNames.ordCharaList.length-1]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+              alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;" style="filter: grayscale(80%);">
+            <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
           </span>
         </mat-expansion-panel>
       </mat-expansion-panel>
@@ -56,10 +59,11 @@
             [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
-          <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
-            @for(j of this.abnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
-              (click)="showAbno=1; drawer.toggle(); this.shRules.lookFor=j.id;">
-            }
+          <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
+            @for(j of this.iconsNames.ordAbnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
+              (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
+          <div class="newbutt" (click)="this.rules.newDep=i; showAbno=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
           </span>
         </mat-expansion-panel>
         }

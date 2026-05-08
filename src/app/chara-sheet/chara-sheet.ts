@@ -6,6 +6,7 @@ import { getDoc, setDoc, doc, DocumentSnapshot } from "firebase/firestore";
 import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules , Departments} from '../services/sharedrules';
+import { IconsNames } from '../services/icons-names';
 
 @Component({
   selector: 'app-chara-sheet',
@@ -17,8 +18,8 @@ import { Sharedrules , Departments} from '../services/sharedrules';
 
 export class CharaSheet {
   fireInit = inject(FireInit);
-  shRules = inject(Sharedrules);
-  rules=this.shRules.rules;
+  rules = inject(Sharedrules);
+  iconsNames = inject(IconsNames);
   deps=Departments;
   db = this.fireInit.db;
   Chara : Character;
@@ -30,12 +31,21 @@ export class CharaSheet {
   Fort={track:[1,1,1,1,1,1]};Prud={track:[1,1,1,1,1,1]};Temp={track:[1,1,1,1,1,1]};Just={track:[1,1,1,1,1,1]};
   depColor="var(--Bonus)";//deve essere una variabile cambiata dalla funzione perché mettendo la funzione direttamente nell'html Angular la ricalcola tre volte
   depText="#010101";
+  depChange=false;
+  oldDep=0;
+  new=false;
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
 }
 
 ngOnInit(){
-  if(!this.getChara(this.shRules.lookFor)) this.charID=this.shRules.lookFor;
+  if(this.rules.lookFor){ this.charID=this.rules.lookFor; this.getChara(this.charID);}
+  else{this.Chara.role[1]=this.rules.newDep; this.depColorUp();
+    this.charID=(this.rules.charaList.length+1);
+    this.new=true;
+    this.rules.lookFor=this.charID;
+  }
+  this.oldDep=this.Chara.role[1];
   const form = document.getElementById('charForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -124,8 +134,27 @@ if(inp){inp=Number(inp);
 inp=formData.get('Skirmish');
 if(inp){inp=Number(inp);
   if(inp>=0&&inp<5)this.Chara.skills[9]=inp;}
-this.ref.markForCheck();
+  if(this.new){this.rules.charaList=[...this.rules.charaList, this.charID];
+    let ind=this.rules.depsList.indexOf(this.oldDep);
+    if(this.iconsNames.ordCharaList[ind]) {
+      this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+    }else{this.iconsNames.ordCharaList[ind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+    }
+    this.new=false;
+    this.rules.addRules();
+  }
+  if(this.depChange){
+    let ind=this.rules.depsList.indexOf(this.oldDep);
+    let newind=this.rules.depsList.indexOf(this.Chara.role[1]);
+    if(this.iconsNames.ordCharaList[newind]) { this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+    }else{this.iconsNames.ordCharaList[newind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
+    this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
+    this.oldDep=this.Chara.role[1];
+    this.depChange=false;
+    console.log("New charalist: ", this.iconsNames.ordCharaList);
+  }
 this.addChara();
+this.ref.markForCheck();
 });
 }
   async getChara(id:number): Promise<void> {
@@ -187,7 +216,7 @@ this.addChara();
   }
   depColorUp(c: number=this.Chara.role[1]){
     this.depText="#010101";
-    let newC=this.shRules.depColorUp(c);
+    let newC=this.rules.depColorUp(c);
     if(newC[1])this.depText="aliceblue";
     this.depColor=newC[0] as string;
   }

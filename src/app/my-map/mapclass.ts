@@ -2,7 +2,6 @@ import { inject } from "@angular/core";
 import { Sharedrules } from "../services/sharedrules";
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
 
-
 export class Mapclass {
   floors: number = 1;
   departments: Department[] = [];
@@ -13,6 +12,7 @@ export class Mapclass {
 }
 export class Department {
   rules = inject(Sharedrules);
+
   rooms: Room[] = [];
   corridors: Corridor[] = [];
   department: number = 0;
@@ -32,7 +32,10 @@ export class Department {
     this.background = this.depColor(department);
     this.connectors = connectors;
   }
+
 }
+
+
 export class Corridor {
   placement: [number, number, number, number] = [0, 0, 0, 0]; //x1,x2,y1,y2
   floor: number = 0;
@@ -58,8 +61,7 @@ interface MapFS{
     connectors: Corridor[][];
 }
 export class MapConverter implements FirestoreDataConverter<Mapclass, MapFS> {
-      shRules= inject(Sharedrules);
-      rules=this.shRules.rules;
+      rules= inject(Sharedrules);
       depNum=this.rules.depsList.length;
     toFirestore(map: WithFieldValue<Mapclass>): WithFieldValue<MapFS> {
       const departments = map.departments as Department[];

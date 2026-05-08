@@ -15,7 +15,7 @@
                     @else{<option>{{i}}</option>}
                 }
                 </select>
-                <select id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                <select id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" (change)="this.depChange=true; this.oldDep=this.Chara.role[1];">
                 @for(i of this.rules.depsList; track i){
                     @if(i==Chara.role[1]){<option selected>{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
                     @else{<option>{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}

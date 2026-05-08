@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { collection, query, where } from "firebase/firestore";
+import { collection, query, waitForPendingWrites, where } from "firebase/firestore";
 import { doc, getDoc, DocumentSnapshot, setDoc } from 'firebase/firestore';
 import { FireInit } from '../fire-init';
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from '../abno-sheet/abnoclass';
@@ -15,23 +15,15 @@ import { WithFieldValue, QueryDocumentSnapshot, SnapshotOptions, FirestoreDataCo
 
 export class IconsNames {
   fireInit = inject(FireInit);
-  shRules = inject(Sharedrules);
-  rules=this.shRules.rules;
+  rules = inject(Sharedrules);
   ordCharaList: {id: number, name: string, icon: string}[][] = [];
   ordAbnoList: {id: number, name: string, icon: string}[][] = [];
   constructor() {
-    if(this.ordCharaList.length==0){
-      this.makeList(false);
-      this.addList(false);
-    }
-    if(this.ordAbnoList.length==0){
-      this.makeList(true);
-      this.addList(true);
-    }
   }
+  
 
   async addList(bool: boolean) : Promise<void>{
-        const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());//(this.gameID*200) ?? ma non vaaaa
+        const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
         let list=(new iconList((bool? this.ordAbnoList : this.ordCharaList)));
         console.log("List to save: ", list);
         await setDoc(listRef, list);
@@ -68,7 +60,10 @@ export class IconsNames {
         }
   }
 
-  makeList(type:boolean){
+  async makeList(type:boolean){
+    if(type && this.rules.abnoList.length==0) return; //CharaList funziona, quindi???
+    if(!type && this.rules.charaList.length==0)return;
+    console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     let l= this.rules.depsList.length;
     if(type){
       this.ordAbnoList=Array(l).fill([]);
@@ -85,6 +80,7 @@ export class IconsNames {
             }
           }
         }
+        console.log("Abno: ", this.ordAbnoList);
         }).catch((err)=>{console.log(err)});
       }
     return;
@@ -134,7 +130,7 @@ export class IconsNames {
           const charRef2 = doc(this.fireInit.db, 'gameabnos/'+this.rules.gameID + '-' + id).withConverter(new DataConverter());
           const snapshot2: DocumentSnapshot<AbnoData> = await getDoc(charRef2);
           const uData: AbnoData = snapshot2.data()!;
-          let res = { id: id, name: uChara.fullName.Name, icon: uChara.icoUrl };
+          let res = { id: id, name: (uData.clock1[0] == uData.clock1[1] ? (uChara.fullName.Nickname ? (uData.trueNameRev ? uChara.fullName.Name : uChara.fullName.Nickname) : uChara.fullName.Name) : "???" ), icon: uChara.icoUrl };
           return [res,uData.department];
     }
     return null;
@@ -211,7 +207,7 @@ export class listConverter implements FirestoreDataConverter<iconList, iListFS> 
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): iconList {
       const data = snapshot.data(options) as iListFS;
       let res = [ data.dep1 ?? [], data.dep2 ?? [], data.dep3 ?? [], data.dep4 ?? [], data.dep5 ?? [], data.dep6 ?? [], data.dep7 ?? [], data.dep8 ?? [] ];
-      let l= this.rules.rules.depsList.length;
+      let l= this.rules.depsList.length;
       if(res[6] || res[7])  {let newRes=[]
         for(let i=0; i<l; i++){
           newRes.push(res[i]);

@@ -22,9 +22,8 @@ import { NgStyle } from '@angular/common';
 
 export class App {
   protected title = 'ThirdTrumpet';
-  shRules = inject(Sharedrules);
+  rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
-  rules=this.shRules.rules;
   deps=Departments;
   charaList=this.iconsNames.ordCharaList;
   abnoList=this.iconsNames.ordAbnoList;
@@ -36,6 +35,7 @@ export class App {
   
   charaPress(id:number){
     this.showChara=1;
+    console.log(this.abnoList);
     //poi vai al numero aaaa
   }
 }

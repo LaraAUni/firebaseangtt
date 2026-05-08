@@ -89,7 +89,6 @@ export class AbnoConverter implements FirestoreDataConverter<Abnormality, AbnoFS
             trls: abno.trials,
             mgnt: abno.management,
             stry: abno.story
-
         };
     }
     

@@ -25,6 +25,7 @@
     border-style: solid;
     border-width: 0.3vh;
     max-width: 5vh;
+    margin: 0.5vh;
 }
 .weapbtn{
     border: 0.3vh solid  var(--Bonus);
@@ -241,6 +242,14 @@ input:checked + .slider:before {
     height: 20vh;
     background-color: aqua;
     scrollbar-color: aqua #010101;
+}
+
+.newbutt{
+    font-size: 3vh;
+    margin: 1vh;
+    padding: 0.5vh;
+    width: 2vh;
+    height: 2vh;
 }
 
 @media (max-width: 600px) {

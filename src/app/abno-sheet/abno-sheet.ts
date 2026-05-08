@@ -14,8 +14,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class AbnoSheet {
   fireInit = inject(FireInit);
-  shRules= inject(Sharedrules);
-  rules=this.shRules.rules;
+  rules= inject(Sharedrules);
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
@@ -36,7 +35,12 @@ export class AbnoSheet {
   }
 
 ngOnInit(){
-  if(!this.getAbno(this.shRules.lookFor)) this.abnoID=this.shRules.lookFor;
+  if(!this.getAbno(this.rules.lookFor)) this.abnoID=this.rules.lookFor;
+  else{this.AbnoData.department=this.rules.newDep; this.depColorUp();
+    this.abnoID=(this.rules.abnoList.length+1);
+    this.addAbno();
+    this.addData();
+  }
   console.log("AbnoData: ", this.AbnoData);
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
@@ -59,7 +63,6 @@ this.addAbno();
 });
 }
 
-
   async getAbno(id:number): Promise<void> {
     const abnoRef = doc(this.db, 'abnos/'+id).withConverter(new AbnoConverter());
     const snapshot1: DocumentSnapshot<Abnormality> = await getDoc(abnoRef);
@@ -72,13 +75,14 @@ this.addAbno();
     }
     console.log("thisAbnoSheet: ", this.AbnoSheet);
   }
-  async getData(game:number=this.rules.gameID, id:number=this.shRules.lookFor): Promise<void> {
+
+  async getData(game:number=this.rules.gameID, id:number=this.rules.lookFor): Promise<void> {
     const abnoRef = doc(this.db, 'gameabnos/'+game+'-'+id).withConverter(new DataConverter());
     const snapshot1: DocumentSnapshot<AbnoData> = await getDoc(abnoRef);
     const uChara: AbnoData = snapshot1.data()!;
     if (uChara) {
     this.AbnoData = uChara;
-    this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true);
+    this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true); // se non ha un secondo nome è sempre vero, altrimenti la flag è truenamerevealed
     this.depColorUp();
     this.clockFill();
     this.ref.markForCheck();
@@ -100,14 +104,14 @@ this.addAbno();
       console.log("Data saved: ", snapshot1.data()); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
 }
   depColorUp(c: number=this.AbnoData.department){
-    let newC=this.shRules.depColorUp(c);
+    let newC=this.rules.depColorUp(c);
     this.depColor=newC[0] as string;
   }
   dangerColorUp(){
-    this.dangerColor=this.shRules.dangerColorUp(this.AbnoSheet.danger);
+    this.dangerColor=this.rules.dangerColorUp(this.AbnoSheet.danger);
   }
   clockFill(){
-    this.HTclocks[0]=this.shRules.clockFiller(this.AbnoData.suppProg, this.AbnoSheet.suppClock);
-    for(let i=0; i<this.AbnoSheet.trials.length; i++){this.HTclocks[i+1]=this.shRules.clockFiller(this.AbnoData.trialClock[i], this.AbnoSheet.trials[i].Clock,'dodgerblue');}
+    this.HTclocks[0]=this.rules.clockFiller(this.AbnoData.suppProg, this.AbnoSheet.suppClock);
+    for(let i=0; i<this.AbnoSheet.trials.length; i++){this.HTclocks[i+1]=this.rules.clockFiller(this.AbnoData.trialClock[i], this.AbnoSheet.trials[i].Clock,'dodgerblue');}
   }
 }

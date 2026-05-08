@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { Inject } from '@angular/core';
+import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { Sharedrules } from '../services/sharedrules'
@@ -24,11 +24,9 @@ import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "fir
   styleUrl: './login-page.css',
 })
 export class LoginPage {
-  fireInit = Inject(FireInit);
-  shRules = Inject(Sharedrules);
+  fireInit = inject(FireInit);
+  rules = inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
-  info = Inject(UserData);
-  rules = this.shRules.rules;
   id: string = '';
   email: string;
   password: string;
@@ -41,7 +39,7 @@ export class LoginPage {
   mapOp = false;
   newGame= false;
   uid = '';
-  user = new UserData([0, 1], ['W-08', 'T-09']);
+  user = new UserData();
 
   constructor(private ref: ChangeDetectorRef) {
     this.email = '';
@@ -49,20 +47,20 @@ export class LoginPage {
   }
 
   ngOnInit() {
-
     this.checkAuthState();
     const form = document.getElementById('signForm') as HTMLFormElement; //non legge il form
     const options = document.getElementById('optionsForm') as HTMLFormElement;
     const map = document.getElementById('MapOp') as HTMLFormElement;
     // Add submit event listener
-    onAuthStateChanged(this.auth, (user) => {
+    onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+        this.uid = user.uid;
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         this.id = user.uid;
+        await this.getData();
         /*if (this.rules.DMIds.includes(user.uid)) {
           this.shRules.isDM = true;
         }*/
@@ -75,7 +73,7 @@ export class LoginPage {
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
     });
-    
+
     form.addEventListener('submit', async (event) => {
 
       // Prevent default form submission (page reload)
@@ -109,8 +107,8 @@ export class LoginPage {
       inp = nameData.get('newGameName');  
       if(inp){
         this.newGame=false;
-        await this.shRules.newGame(inp.toString());
-        this.user.games.push(this.shRules.rules.gameID);
+        await this.rules.newGame(inp.toString());
+        this.user.games.push(this.rules.gameID);
         this.user.gamenames.push(inp.toString());
         this.addData(this.uid);
       }
@@ -162,7 +160,7 @@ export class LoginPage {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
+        this.uid = user.uid;
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         // ...
@@ -215,20 +213,17 @@ export class LoginPage {
   }
 
 
-  async getData(id: string): Promise<void> {
-    const dataRef = doc(this.fireInit.db, 'userData/' + this.uid).withConverter(new UserConverter());
+  async getData(id: string=this.uid): Promise<void> {
+    const dataRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());
     const snapshot1: DocumentSnapshot<UserData> = await getDoc(dataRef);
     const uData: UserData = snapshot1.data()!;
     if (uData) {
       this.user = uData;
-      console.log("User obtained: ", this.user);
     }
   }
-  async addData(id: string): Promise<void> {
-    const dataRef = doc(this.fireInit.db, 'userData/' + this.uid).withConverter(new UserConverter()); //(this.gameID*200) ?? ma non vaaaa
-    await setDoc(dataRef, this.user);
-    const snapshot1 = await getDoc(dataRef);
-    console.log("User saved: ", snapshot1.data());
+  async addData(id: string=this.uid): Promise<void> {
+    const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter()); //(this.gameID*200) ?? ma non vaaaa
+    await setDoc(userRef, this.user);
   }
 
 }

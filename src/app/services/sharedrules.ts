@@ -140,6 +140,7 @@ export class Sharedrules {
   }
 
   depColorUp(c: Departments) {
+    console.log("Dep(ColoR): ", c);
     if (c <= 10 + this.bonusDeps.length) {
       if (c > 10) return [this.bonusColors[c - 11][0], this.bonusColors[c - 11][1]];
       else if (c > 0) if (c == 8) return ["var(--Extraction)", true];

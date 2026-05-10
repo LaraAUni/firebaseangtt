@@ -62,7 +62,8 @@ if(inp)this.Chara.fullName=inp.toString();
 inp=formData.get('role1');
 if(inp)this.Chara.role[0]=inp.toString();
 inp=formData.get('role2');
-if(inp)this.Chara.role[1];
+if(inp)this.Chara.role[1]=Number(inp);
+console.log("Dep: ", inp);
 this.depAbsUp();
 this.depColorUp();
 inp=formData.get('armor');
@@ -144,15 +145,35 @@ if(inp){inp=Number(inp);
     this.rules.addRules();
   }
   if(this.depChange){
+    if(this.oldDep!=this.Chara.role[1]){ //se non è cambiato il dipartimento non fare nulla
     let ind=this.rules.depsList.indexOf(this.oldDep);
+    if(this.Chara.role[1]==0){ //se deve andare in riserva va nella lista di riserve che non è in depslist
+      if(this.iconsNames.ordCharaList[6]) {
+      this.iconsNames.ordCharaList[6]=[...this.iconsNames.ordCharaList[6], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
+      else{this.iconsNames.ordCharaList[6]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
+      if(this.rules.backupCh)this.rules.backupCh=[...this.rules.backupCh, this.charID];
+      else this.rules.backupCh=[...this.rules.backupCh, this.charID];
+    }
+    else{
     let newind=this.rules.depsList.indexOf(this.Chara.role[1]);
-    if(this.iconsNames.ordCharaList[newind]) { this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+    if(newind!==-1) { this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
     }else{this.iconsNames.ordCharaList[newind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
-    this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
+    }
+    if(this.oldDep!=0){this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);}
+    else{this.iconsNames.ordCharaList[6]=this.iconsNames.ordCharaList[6].filter(c=>c.id!=this.charID);
+      this.rules.backupCh=this.rules.backupCh.filter(c=>c!=this.charID);} //se era in riserva si deve togliere dalla lista di riserva
     this.oldDep=this.Chara.role[1];
     this.depChange=false;
     console.log("New charalist: ", this.iconsNames.ordCharaList);
+    console.log("New backup charalist: ", this.rules.backupCh);
+    this.rules.addRules();
   }
+}
+else{let ind=this.rules.depsList.indexOf(this.Chara.role[1]);
+  if(ind == -1) ind=6
+    let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID);
+    this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName
+} //da cambiare il nome nella lista
 this.addChara();
 this.ref.markForCheck();
 });

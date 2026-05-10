@@ -6,10 +6,10 @@
             <button type="button" class="subbutton" (click)="getChara(this.charID)">Reset</button></div>
             </div>
             <input type="text" class="agentname" name="charName" placeholder="{{Chara.fullName}}" autocomplete="off">
-            <label for="role" class="label">Carica</label>
+            <label for="role1" class="label">Carica</label>
             <label for="role2" class="label">Dipartimento</label>
             <div class="role" alt="incarico">
-                <select id="role" name="role1" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
+                <select id="role1" name="role1" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}">
                 @for(i of ["Captain", "Agent", "Clerk"]; track i){
                     @if(i==Chara.role[0]){<option selected>{{i}}</option>}
                     @else{<option>{{i}}</option>}
@@ -17,9 +17,11 @@
                 </select>
                 <select id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" (change)="this.depChange=true; this.oldDep=this.Chara.role[1];">
                 @for(i of this.rules.depsList; track i){
-                    @if(i==Chara.role[1]){<option selected>{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
-                    @else{<option>{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
-                }
+                    @if(i==Chara.role[1]){<option selected value="{{i}}">{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
+                    @else{<option value="{{i}}">{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>
+                    }
+                }@if(Chara.role[1]==0){<option selected value="0"></option>}
+                @else{<option value="0"></option>}
                 </select>
             </div>
             <div class="equip"><img class="equips" src="EGOs/EW{{Chara.equip[0].imgUrl}}.png" alt="">

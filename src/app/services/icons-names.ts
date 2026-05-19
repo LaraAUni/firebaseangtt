@@ -24,9 +24,14 @@ export class IconsNames {
 
   async addList(bool: boolean) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        let list=(new iconList((bool? this.ordAbnoList : this.ordCharaList)));
+        /*
+        let use=[];
+        if(bool)use= this.ordAbnoList.filter(c=>c);
+        else use= this.ordCharaList.filter(c=>c);
+        console.log("use:", use)
+        let list=(new iconList(use));
         console.log("List to save: ", list);
-        await setDoc(listRef, list);
+        await setDoc(listRef, list);*/
   }
   
   async getList(bool: boolean) : Promise<void>{
@@ -64,55 +69,56 @@ export class IconsNames {
     if(type && this.rules.abnoList.length==0) return; //CharaList funziona, quindi???
     if(!type && this.rules.charaList.length==0)return;
     console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
-    let l= this.rules.depsList.length;
     if(type){
-      this.ordAbnoList=Array(l).fill([]);
+      this.ordAbnoList=Array(6).fill([]);
       for(let i=0; i<this.rules.abnoList.length; i++){
         let chara=this.getIcon(this.rules.abnoList[i], true)
         if(!chara)continue;
         chara.then((res)=>{
           if(res){
             let [ico, dep] = res;
-          for(let j=0; j<l; j++){
+          for(let j=0; j<this.rules.depsList.length; j++){
             if(dep==this.rules.depsList[j]){
               if(!this.ordAbnoList[j])this.ordAbnoList[j]=[ico];
               else this.ordAbnoList[j]=[...this.ordAbnoList[j], ico];
             }
           }
         }
-        console.log("Abno: ", this.ordAbnoList);
         }).catch((err)=>{console.log(err)});
       }
     return;
     }
-    this.ordCharaList=Array(l+2).fill([]);
+    this.ordCharaList=Array(8).fill([]);
     for(let i=0; i<this.rules.charaList.length; i++){
       let ret=this.getIcon(this.rules.charaList[i], false)
       if(!ret)continue;
       ret.then((res)=>{
         if(res){
           let [chara, dep] = res;
-        for(let j=0; j<l; j++){
+          if(dep==0){
+          if(!this.ordCharaList[6])this.ordCharaList[6]=[chara];
+             else this.ordCharaList[6]=[...this.ordCharaList[6], chara];}
+          else for(let j=0; j<this.rules.depsList.length; j++){
           if(dep==this.rules.depsList[j]){
             if(!this.ordCharaList[j])this.ordCharaList[j]=[chara];
              else this.ordCharaList[j]=[...this.ordCharaList[j], chara];
+            }
           }
-        }
         }
       }).catch((err)=>{console.log(err)});
     }
-      l+=1;
     for(let i=0; i<this.rules.deadCh.length; i++){
         let ret=this.getIcon(this.rules.deadCh[i], false)
         if(!ret)continue;
         ret.then((res)=>{
           if(res){
             let [chara, dep] = res;
-              if(!this.ordCharaList[l])this.ordCharaList[l]=[chara];
-              else this.ordCharaList[l]=[...this.ordCharaList[l], chara];
+              if(!this.ordCharaList[7])this.ordCharaList[7]=[chara];
+              else this.ordCharaList[7]=[...this.ordCharaList[7], chara];
           }
         }).catch((err)=>{console.log(err)});
     }
+    this.addList(type);
   }
 
  async getIcon(id: number, type: boolean) : Promise<[{id: number, name: string, icon: string}, number]|null>{

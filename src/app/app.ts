@@ -1,4 +1,4 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, ViewChild, ChangeDetectorRef } from '@angular/core';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatExpansionModule} from '@angular/material/expansion';
 import { CharaSheet } from './chara-sheet/chara-sheet';
@@ -13,9 +13,9 @@ import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [ MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, LoginPage, NgStyle],
+  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, LoginPage, NgStyle],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 
 // Utilizza più componenti, non serve RouterOutlet
@@ -25,17 +25,23 @@ export class App {
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
   deps=Departments;
-  charaList=this.iconsNames.ordCharaList;
-  abnoList=this.iconsNames.ordAbnoList;
   showChara = 0;
   showAbno = 0;
   showArmo = 0;
+  deleting=false;
+  readonly cdr = inject(ChangeDetectorRef)
   constructor(){
   }
   
+  @ViewChild(CharaSheet) chara!: CharaSheet;
+
+  async deleteChara(id:number, dep: number){
+    this.chara.deleteChara(id, dep);
+    this.cdr.detectChanges;
+  }
+
   charaPress(id:number){
     this.showChara=1;
-    console.log(this.abnoList);
     //poi vai al numero aaaa
   }
 }

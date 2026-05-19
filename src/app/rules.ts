@@ -6,7 +6,6 @@ export class Rules {
       gameName:string = '';
       DMIds: string[] = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
       charaList:number[] = [];//id personaggi
-      backupCh:number[] = [];
       deadCh:number[] = [];
       abnoList:number[] = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
       depsList:Departments[] = []; //ENUM
@@ -37,7 +36,6 @@ export class Rules {
       gameName: string = '',
       DMIds: string[] = [],
       charaList: number[] = [],
-      backupCh: number[] = [],
       deadCh: number[] = [],
       abnoList: number[] = [],//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
       depsList: Departments[] = [Departments.Control, Departments.Information, Departments.Safety, Departments.Training, Departments.Disciplinary], //ENUM
@@ -67,7 +65,6 @@ export class Rules {
             this.gameName=gameName;
             this.DMIds=DMIds;
             this.charaList=charaList;
-            this.backupCh=backupCh;
             this.deadCh=deadCh;
             this.abnoList=abnoList;
             this.depsList=depsList;
@@ -101,7 +98,6 @@ interface rulesFS{
       gameName:string;
       DMIds: string[];
       charaList:number[];
-      backupCh:number[];
       deadCh:number[];
       abnoList:number[];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
       depsList:number[]; //ENUM
@@ -136,7 +132,6 @@ export class RulesConverter implements FirestoreDataConverter<Rules, rulesFS> {
             gameName: user.gameName,
             DMIds: user.DMIds,
             charaList: user.charaList,
-            backupCh: user.backupCh,
             deadCh: user.deadCh,
             abnoList: user.abnoList,
             depsList: user.depsList,
@@ -167,6 +162,6 @@ export class RulesConverter implements FirestoreDataConverter<Rules, rulesFS> {
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Rules {
         const data = snapshot.data(options) as rulesFS;
-        return new Rules(data.gameID, data.gameName, data.DMIds, data.charaList, data.backupCh, data.deadCh, data.abnoList, data.depsList, data.bonusDeps, data.bonusColors, data.capPassive, data.controlAbs, data.infoAbs, data.safetyAbs, data.trainAbs, data.discAbs, data.centralAbs, data.welfareAbs, data.recordsAbs, data.extractAbs, data.architAbs, data.bonus1Abs, data.bonus2Abs, data.bonus3Abs, data.bonus4Abs, data.bonus5Abs, data.bonus6Abs, data.agentAbs, data.traumas, data.traum3nabled);
+        return new Rules(data.gameID, data.gameName, data.DMIds, data.charaList, data.deadCh, data.abnoList, data.depsList, data.bonusDeps, data.bonusColors, data.capPassive, data.controlAbs, data.infoAbs, data.safetyAbs, data.trainAbs, data.discAbs, data.centralAbs, data.welfareAbs, data.recordsAbs, data.extractAbs, data.architAbs, data.bonus1Abs, data.bonus2Abs, data.bonus3Abs, data.bonus4Abs, data.bonus5Abs, data.bonus6Abs, data.agentAbs, data.traumas, data.traum3nabled);
     }
 }

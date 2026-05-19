@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject,} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FireInit } from '../fire-init';
-import { getDoc, setDoc, doc, DocumentSnapshot } from "firebase/firestore";
+import { getDoc, setDoc, doc, DocumentSnapshot, deleteDoc } from "firebase/firestore";
 import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules , Departments} from '../services/sharedrules';
@@ -39,8 +39,9 @@ constructor(private ref: ChangeDetectorRef){
 }
 
 ngOnInit(){
-  if(this.rules.lookFor){ this.charID=this.rules.lookFor; this.getChara(this.charID);}
-  else{this.Chara.role[1]=this.rules.newDep; this.depColorUp();
+  if(this.rules.lookFor){ this.charID=this.rules.lookFor; this.getChara(this.charID);
+  }
+  else{this.Chara.role[1]=this.rules.lookDep; this.depColorUp();
     this.charID=(this.rules.charaList.length+1);
     this.new=true;
     this.rules.lookFor=this.charID;
@@ -135,8 +136,11 @@ if(inp){inp=Number(inp);
 inp=formData.get('Skirmish');
 if(inp){inp=Number(inp);
   if(inp>=0&&inp<5)this.Chara.skills[9]=inp;}
-  if(this.new){this.rules.charaList=[...this.rules.charaList, this.charID];
+
+  if(this.new){
+    this.rules.charaList=[...this.rules.charaList, this.charID];
     let ind=this.rules.depsList.indexOf(this.oldDep);
+    if(ind == -1) ind=6
     if(this.iconsNames.ordCharaList[ind]) {
       this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
     }else{this.iconsNames.ordCharaList[ind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
@@ -144,15 +148,15 @@ if(inp){inp=Number(inp);
     this.new=false;
     this.rules.addRules();
   }
+
   if(this.depChange){
-    if(this.oldDep!=this.Chara.role[1]){ //se non è cambiato il dipartimento non fare nulla
+    if(this.oldDep!=this.Chara.role[1]){ //se Select viene selezionato ma rimesso uguale saltare
     let ind=this.rules.depsList.indexOf(this.oldDep);
+    if(this.rules.deadCh.indexOf(this.charID)==-1){
     if(this.Chara.role[1]==0){ //se deve andare in riserva va nella lista di riserve che non è in depslist
       if(this.iconsNames.ordCharaList[6]) {
       this.iconsNames.ordCharaList[6]=[...this.iconsNames.ordCharaList[6], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
       else{this.iconsNames.ordCharaList[6]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
-      if(this.rules.backupCh)this.rules.backupCh=[...this.rules.backupCh, this.charID];
-      else this.rules.backupCh=[...this.rules.backupCh, this.charID];
     }
     else{
     let newind=this.rules.depsList.indexOf(this.Chara.role[1]);
@@ -160,20 +164,41 @@ if(inp){inp=Number(inp);
     }else{this.iconsNames.ordCharaList[newind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];}
     }
     if(this.oldDep!=0){this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);}
-    else{this.iconsNames.ordCharaList[6]=this.iconsNames.ordCharaList[6].filter(c=>c.id!=this.charID);
-      this.rules.backupCh=this.rules.backupCh.filter(c=>c!=this.charID);} //se era in riserva si deve togliere dalla lista di riserva
+    else{this.iconsNames.ordCharaList[6]=this.iconsNames.ordCharaList[6].filter(c=>c.id!=this.charID);} //se era in riserva si deve togliere dalla lista di riserva
     this.oldDep=this.Chara.role[1];
     this.depChange=false;
     console.log("New charalist: ", this.iconsNames.ordCharaList);
-    console.log("New backup charalist: ", this.rules.backupCh);
     this.rules.addRules();
-  }
+  
 }
-else{let ind=this.rules.depsList.indexOf(this.Chara.role[1]);
-  if(ind == -1) ind=6
+}else{let ind=this.rules.depsList.indexOf(this.Chara.role[1]);
+  if(this.Chara.role[1]==0) ind=6
+  console.log("Ind:", ind)
     let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID);
+    console.log("Icon:",this.iconsNames.ordCharaList[ind])
     this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName
 } //da cambiare il nome nella lista
+}
+    if(this.Chara.physHealth[5]||this.Chara.physHealth[6]||this.Chara.physHealth[7]||this.Chara.physHealth[8]||this.Chara.physHealth[9]){
+      if(this.rules.deadCh.indexOf(this.charID)==-1){
+      this.rules.charaList=this.rules.charaList.filter(c=>c!=this.charID);
+        if(this.rules.deadCh) this.rules.deadCh=[...this.rules.deadCh,this.charID]
+        else this.rules.deadCh=[this.charID]
+        let ind=this.rules.depsList.indexOf(this.Chara.role[1]);
+        this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
+        if(this.iconsNames.ordCharaList[7]) this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[7], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+        else this.iconsNames.ordCharaList[7]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+      this.isdead=true}
+      this.rules.addRules();
+    }
+    else if(this.rules.deadCh.indexOf(this.charID)!=-1){
+      this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
+      this.rules.charaList=[...this.rules.charaList, this.charID]
+        let ind=this.rules.depsList.indexOf(this.Chara.role[1]);
+        this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=this.charID);
+        if(this.iconsNames.ordCharaList[ind]) this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+        else this.iconsNames.ordCharaList[ind]=[{id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+      this.isdead=false}
 this.addChara();
 this.ref.markForCheck();
 });
@@ -203,7 +228,23 @@ this.ref.markForCheck();
     const snapshot1 = await getDoc(charRef);
     console.log("Chara saved: ", snapshot1.data());
   }
-
+  async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep){
+    if(n==0) return;
+    const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + n).withConverter(new CharaConverter());
+    console.log("CharaGot: ", this.Chara, "ID:", this.charID);
+    let ind=this.rules.depsList.indexOf(d);
+    console.log(ind)
+    if(this.rules.deadCh.indexOf(this.charID)!=-1){
+      this.rules.deadCh=this.rules.deadCh.filter(c=>c!=n);
+      this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=n);
+    }
+    else {let ind=this.rules.depsList.indexOf(d);
+      if(d==0) ind=6
+      this.rules.charaList=this.rules.charaList.filter(c=>c!=n);
+      this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
+    await deleteDoc(charRef);}
+    this.rules.addRules();
+  }
   log(s:string){
     console.log(s)
   }

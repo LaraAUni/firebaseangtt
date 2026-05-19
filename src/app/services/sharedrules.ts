@@ -13,7 +13,6 @@ export class Sharedrules {
   gameName: string = '';
   DMIds: string[] = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
   charaList: number[] = [];//id personaggi
-  backupCh: number[] = [];
   deadCh: number[] = [];
   abnoList: number[] = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
   depsList: Departments[] = []; //ENUM
@@ -40,7 +39,7 @@ export class Sharedrules {
   traumas: string[] = [];
   traum3nabled = false; //per il progetto che dà un'altro slot se completato
   lookFor = 0;
-  newDep = 0;
+  lookDep = 0;
   isDM = false;
   init = inject(FireInit);
 
@@ -59,7 +58,6 @@ export class Sharedrules {
       this.gameName = uRules.gameName;
       this.DMIds = uRules.DMIds;
       this.charaList = uRules.charaList;
-      this.backupCh = uRules.backupCh;
       this.deadCh = uRules.deadCh;
       this.abnoList = uRules.abnoList;
       this.depsList = uRules.depsList;
@@ -91,7 +89,7 @@ export class Sharedrules {
   async addRules(): Promise<void> {
     //if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
-    await setDoc(rulesRef, new Rules(this.gameID, this.gameName, this.DMIds, this.charaList, this.backupCh, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
+    await setDoc(rulesRef, new Rules(this.gameID, this.gameName, this.DMIds, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
     const snapshot1 = await getDoc(rulesRef);
     console.log("Rules saved: ", snapshot1.data());
   }
@@ -107,10 +105,8 @@ export class Sharedrules {
     }
     this.gameID = i;
     this.gameName = n;
-    
       this.DMIds = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
       this.charaList = [];//id personaggi
-      this.backupCh = [];
       this.deadCh = [];
       this.abnoList = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
       this.depsList = []; //ENUM
@@ -141,7 +137,7 @@ export class Sharedrules {
 
   depColorUp(c: Departments) {
     console.log("Dep(ColoR): ", c);
-    if (c <= 10 + this.bonusDeps.length) {
+    if (c <= 10 + this.bonusDeps.length && c>0) {
       if (c > 10) return [this.bonusColors[c - 11][0], this.bonusColors[c - 11][1]];
       else if (c > 0) if (c == 8) return ["var(--Extraction)", true];
       return ["var(--" + Departments[c] + ")", false];
@@ -162,6 +158,7 @@ export class Sharedrules {
 }
 
 export enum Departments {
+  None=0,
   Control = 1,
   Information = 2,
   Safety = 3,
@@ -177,8 +174,7 @@ export enum Departments {
   Custom3 = 13,
   Custom4 = 14,
   Custom5 = 15,
-  Custom6 = 16,
-  '' = 0
+  Custom6 = 16
 }
 export enum Danger {
   ZAYIN = 1,

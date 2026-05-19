@@ -36,7 +36,7 @@ export class AbnoSheet {
 
 ngOnInit(){
   if(!this.getAbno(this.rules.lookFor)) this.abnoID=this.rules.lookFor;
-  else{this.AbnoData.department=this.rules.newDep; this.depColorUp();
+  else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
     this.abnoID=(this.rules.abnoList.length+1);
     this.addAbno();
     this.addData();

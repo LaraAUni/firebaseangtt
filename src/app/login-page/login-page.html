@@ -63,7 +63,7 @@ ui.start('#firebaseui-auth-container', {
     @if(mapOp){
     <div class="infobox">
       @for(i of user.games; track i; let ind=$index){
-        <button type="button" class="butt" (click)="this.rules.gameID=i; this.rules.getRules();">{{this.user.gamenames[ind]}}</button>
+        <button type="button" class="butt" (click)="this.getGame(i);">{{this.user.gamenames[ind]}}</button>
       }
       
       @if(this.newGame){

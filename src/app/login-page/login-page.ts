@@ -16,6 +16,7 @@ import {
 } from "firebase/auth";
 import { UserData, UserConverter } from '../services/userdata';
 import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
+import { IconsNames } from '../services/icons-names';
 
 @Component({
   selector: 'app-login-page',
@@ -27,6 +28,7 @@ export class LoginPage {
   fireInit = inject(FireInit);
   rules = inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
+  iconsNames=inject(IconsNames);
   id: string = '';
   email: string;
   password: string;
@@ -61,9 +63,10 @@ export class LoginPage {
         this.userName = user.displayName || user.email || 'Username';
         this.id = user.uid;
         await this.getData();
-        /*if (this.rules.DMIds.includes(user.uid)) {
-          this.shRules.isDM = true;
-        }*/
+        if (this.rules.DMIds.includes(user.uid)) {
+          this.rules.isDM = true;
+        }
+       
         // ...
       } else {
         // User is signed out
@@ -71,6 +74,7 @@ export class LoginPage {
         this.userName = 'Guest';
         // ...
       }
+      this.getGame();
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
     });
 
@@ -212,6 +216,12 @@ export class LoginPage {
     }
   }
 
+  async getGame(id: number=this.rules.gameID){
+    this.rules.getRules(id).then((e)=>{
+      this.iconsNames.makeList(true);
+      this.iconsNames.makeList(false);
+    })
+  }
 
   async getData(id: string=this.uid): Promise<void> {
     const dataRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());

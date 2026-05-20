@@ -22,16 +22,16 @@
 }
 
 @keyframes spin{
-    0% {transform: rotate(36deg);}
-    10% {transform: rotate(64deg);}
-    20% {transform: rotate(108deg);}
-    30% {transform: rotate(144deg);}
-    40% {transform: rotate(180deg);}
-    50% {transform: rotate(216deg);}
-    60% {transform: rotate(242deg);}
-    70% {transform: rotate(278deg);}
-    80% {transform: rotate(314deg);}
-    90% {transform: rotate(350deg);}
+    0% {transform: rotate(36deg); opacity: 1;}
+    10% {transform: rotate(108deg); opacity: 1;}
+    20% {transform: rotate(180deg); opacity: 0.8;}
+    30% {transform: rotate(242deg); opacity: 0.8;}
+    40% {transform: rotate(314deg); opacity: 0.6;}
+    50% {transform: rotate(36deg); opacity: 0.6;}
+    60% {transform: rotate(108deg); opacity: 0.4;}
+    70% {transform: rotate(180deg); opacity: 0.4;}
+    80% {transform: rotate(242deg); opacity: 0.2;}
+    90% {transform: rotate(314deg); opacity: 0.2;}
 }
 
 .page {
@@ -62,13 +62,13 @@
 }
 .iconshake:hover{
   /* Start the shake animation and make the animation last for 0.5 seconds */
-  animation: shake 0.5s;
+  animation: shake 0.4s;
 
   /* When the animation is finished, start again */
   animation-iteration-count: infinite;
 }
 .iconshake:active{
-    animation: fade 0.5s;
+    animation: spin 0.3s forwards;
 }
 .weapbtn{
     border: 0.3vh solid  var(--Bonus);
@@ -293,6 +293,8 @@ input:checked + .slider:before {
     padding: 0.5vh;
     width: 2vh;
     height: 2vh;
+    grid-row: 1;
+    background-color: #010101;
 }
 
 @media (max-width: 600px) {

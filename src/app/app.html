@@ -6,14 +6,14 @@
     </header>
     <div>
       <img class="buttonanim" src="buttonanim.png" alt="B">
-      <img class="openbtn" mat-button (click)="drawer.toggle(); this.iconsNames.makeList(true); this.iconsNames.makeList(false);" src="button.png" alt="B">
+      <img class="openbtn" mat-button (click)="drawer.toggle();" src="button.png" alt="B">
     </div>
     <app-my-map></app-my-map>
     <div class="recap">
       <span>Recap</span>
     </div>
   </mat-drawer-content>
-  <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav" (click)="deleting=false">
+  <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
     <mat-list>
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
@@ -26,16 +26,19 @@
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">@for(j of this.iconsNames.ordCharaList[ind]; track j.id){
-            @if(this.deleting===false){
+            @if(deleting){
+              <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.deleteChara(j.id, i)" style="grid-row: 1;">
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
+            @else{
               <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i" style="grid-row: 1;">
               <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
             }
-            @else{
-              <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.deleteChara(j.id, i)" style="grid-row: 1;">
-              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             }
-          <div class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
-        <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;" (click)="deleting=true;"></span>
+          <span class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</span>
+          @if(deleting){
+        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+          @else{
+        <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}</span>
           </span>
         </mat-expansion-panel>
         }

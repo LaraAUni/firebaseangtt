@@ -3,7 +3,6 @@ import { DocumentSnapshot, doc, getDoc, getDocs, setDoc } from 'firebase/firesto
 import { Rules, RulesConverter } from '../rules';
 import { inject } from '@angular/core';
 import { FireInit } from '../fire-init';
-import { IconsNames } from './icons-names';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +42,8 @@ export class Sharedrules {
   isDM = false;
   init = inject(FireInit);
 
+
   constructor() {
-    this.getRules();
   }
 
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
@@ -86,6 +85,7 @@ export class Sharedrules {
       console.log("Rules obtained: ", this.gameID);
     }
   }
+  
   async addRules(): Promise<void> {
     //if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
@@ -136,7 +136,6 @@ export class Sharedrules {
   }
 
   depColorUp(c: Departments) {
-    console.log("Dep(ColoR): ", c);
     if (c <= 10 + this.bonusDeps.length && c>0) {
       if (c > 10) return [this.bonusColors[c - 11][0], this.bonusColors[c - 11][1]];
       else if (c > 0) if (c == 8) return ["var(--Extraction)", true];

@@ -10,6 +10,9 @@ import { LoginPage } from "./login-page/login-page";
 import { Sharedrules, Departments } from './services/sharedrules';
 import { IconsNames } from './services/icons-names';
 import { NgStyle } from '@angular/common';
+import { CharaConverter } from './chara-sheet/characlass';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { FireInit } from './fire-init';
 
 @Component({
   selector: 'app-root',
@@ -24,20 +27,37 @@ export class App {
   protected title = 'ThirdTrumpet';
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
+  init=inject(FireInit);
   deps=Departments;
   showChara = 0;
   showAbno = 0;
   showArmo = 0;
   deleting=false;
-  readonly cdr = inject(ChangeDetectorRef)
   constructor(){
   }
   
-  @ViewChild(CharaSheet) chara!: CharaSheet;
+  ngOnInit(){
+    this.rules.getRules().then((e)=>{
+      this.iconsNames.makeList(true);
+      this.iconsNames.makeList(false);
+    })
+    
+  }
 
-  async deleteChara(id:number, dep: number){
-    this.chara.deleteChara(id, dep);
-    this.cdr.detectChanges;
+  async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep){
+    if(n==0) return;
+    const charRef = doc(this.init.db, 'charas/' + this.rules.gameID + '-' + n).withConverter(new CharaConverter());
+    let ind=this.rules.depsList.indexOf(d);
+    if(ind==-1) ind=6;
+    if(this.rules.deadCh.includes(n)){
+      ind=7;
+      this.rules.deadCh=this.rules.deadCh.filter(c=>c!=n);
+    }
+      else this.rules.charaList=this.rules.charaList.filter(c=>c!=n);
+
+    this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
+    await deleteDoc(charRef);
+    this.rules.addRules();
   }
 
   charaPress(id:number){

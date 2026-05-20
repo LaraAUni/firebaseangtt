@@ -24,14 +24,13 @@ export class IconsNames {
 
   async addList(bool: boolean) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        /*
         let use=[];
         if(bool)use= this.ordAbnoList.filter(c=>c);
         else use= this.ordCharaList.filter(c=>c);
         console.log("use:", use)
         let list=(new iconList(use));
         console.log("List to save: ", list);
-        await setDoc(listRef, list);*/
+        await setDoc(listRef, list);
   }
   
   async getList(bool: boolean) : Promise<void>{
@@ -65,12 +64,11 @@ export class IconsNames {
         }
   }
 
-  async makeList(type:boolean){
-    if(type && this.rules.abnoList.length==0) return; //CharaList funziona, quindi???
-    if(!type && this.rules.charaList.length==0)return;
+  async makeList(type:boolean){; //CharaList funziona, quindi???
     console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     if(type){
-      this.ordAbnoList=Array(6).fill([]);
+    this.ordAbnoList=Array(6).fill([]);
+    if(type && this.rules.abnoList.length==0) return
       for(let i=0; i<this.rules.abnoList.length; i++){
         let chara=this.getIcon(this.rules.abnoList[i], true)
         if(!chara)continue;
@@ -89,6 +87,7 @@ export class IconsNames {
     return;
     }
     this.ordCharaList=Array(8).fill([]);
+    if(!type && this.rules.charaList.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
       let ret=this.getIcon(this.rules.charaList[i], false)
       if(!ret)continue;
@@ -188,7 +187,6 @@ interface iListFS{
 
 
 export class listConverter implements FirestoreDataConverter<iconList, iListFS> {
-  rules=inject(Sharedrules);
   toFirestore(icon: WithFieldValue<iconList>) : WithFieldValue<iListFS> {
     let res: WithFieldValue<iListFS> = {};
     let len=0;
@@ -213,15 +211,6 @@ export class listConverter implements FirestoreDataConverter<iconList, iListFS> 
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): iconList {
       const data = snapshot.data(options) as iListFS;
       let res = [ data.dep1 ?? [], data.dep2 ?? [], data.dep3 ?? [], data.dep4 ?? [], data.dep5 ?? [], data.dep6 ?? [], data.dep7 ?? [], data.dep8 ?? [] ];
-      let l= this.rules.depsList.length;
-      if(res[6] || res[7])  {let newRes=[]
-        for(let i=0; i<l; i++){
-          newRes.push(res[i]);
-        }
-        newRes.push(res[6]);
-        newRes.push(res[7]);
-        res=newRes;
-      }
       return new iconList(res);
   }
 }

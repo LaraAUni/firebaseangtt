@@ -1,167 +1,254 @@
-.grid {
+
+.sheet {
     display: grid;
-    grid-template-rows: 20% 5% 5% 6% 4% 20% 20% auto;
-    scrollbar-color: #010101 #EF944D;
+    grid-template-rows: 26% 8% 5% 4% 4% 19% 17% 16%;
+    gap: 0.7%;
 }
 
-.sheet .intro {
-    grid-row: 1;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr 1fr 2fr;
-    max-height: 100%;
-    gap: 1%;
-    margin-top:0.7%;
-}
-
-.intro .icon {
-    grid-row: 1/4;
-    grid-column: 1;
-    border: 5px solid aquamarine;
-    max-width: 90%;
-    max-height: 90%;
-    contain: scale-down;
-    margin-left: 4vh;
-}
-
-.intro .agentname, .role{
+.intro .agentname,
+.role {
     display: grid;
     grid-column: 2;
     grid-row: 1;
     background-color: aliceblue;
-    color: #010101;
-    border: 0.3vh solid gray;
+    color: black;
+    border: 0.2vh solid gray;
     align-content: center;
     background-clip: padding-box;
-    font-size: 150%;
-    max-height: 110%;
-    margin-right: 2%;
+    max-height: 100%;
+    font-family: 'Mikodacs';
+    margin-left: 2%;
+    max-width: 100%;
 }
 
-.intro .agentname{
+.intro .agentname {
     grid-template-columns: 1fr 1fr;
-    padding:1%
+    font-size: 3vh;
+    border: 0.35vh solid gray;
 }
-.intro .role{
+
+.intro .role {
     grid-row: 2;
     grid-template-columns: 1fr 1fr;
     background-color: gray;
     gap: 0.5%;
     margin-top: 1%;
+    cursor: pointer;
+    font-size: 2.5vh;
 }
 
-.sheet .gridbox{
-    margin: 0.8%;
-    background-clip: padding-box;
-    align-content: center;
-    padding: 1.5%;
+.intro .submit{
+    grid-column: 1;
+    grid-row: 3;
+    display: flex;
+}
+.submit .subbutton{
+    background-color: #010101;
+    color: #EF944D;
+    border: 0.3vh solid #EF944D;
+    max-width: 40%;
+    margin-left: 10%;
+    font-size: 1.8vh;
 }
 
 .intro .equip {
-    grid-column: 2;
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border: 0.3vh solid #E2E6AE;
-    padding: 5px;
+    border: 1% solid #EF944D;
+    padding: 1%;
     contain: scale-down;
     max-height: 100%;
-    margin: 1%;
-    margin-right: 2%;
-    margin-bottom: 2%;
+    margin-top: 1.5%;
+    margin-bottom: 0;
+    font-size: 2vh;
 }
 
 .equip .equips {
-    max-height: 100%;
-    max-width: 100%;
     contain: scale-down;
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
 }
 
-.sheet .ability {
+.equip .equiptxt {
+    grid-row: 2;
+}
+
+.sheet .abilities {
     grid-row: 2;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    background-color: aliceblue;
-    color: #010101;
-    border: 0.3vh solid grey;
-    font-size: 140%;
-    align-content: center;
-    gap: 1%;
-    margin-top: 2%;
     margin-left: 2%;
     margin-right: 2%;
+}
+
+.sheet .ability {
+    background-color: aliceblue;
+    border: 0.3vh solid grey;
+    color: #010101;
+    font-size: 2vh;
+    align-items: center;
+    justify-items: center;
+    padding-left: 1%;
 }
 
 .sheet .stresstraumas {
     grid-row: 3;
     display: grid;
-    color: #E2E6AE;
-    grid-template-columns: 1.3fr 2fr 2fr 2fr;
-    background-color: #E2E6AE;
-    border: 2px solid #E2E6AE;
-    margin: 1%;
-    gap: 1%;
-    font-size: 120%;
+    color: var(--title-yellow);
+    grid-template-columns: 1.8fr 2fr 2fr 2fr;
+    background-color: var(--title-yellow);
+    border: 0.8% solid var(--title-yellow);
+    background-clip: padding-box;
+    gap: 0.6%;
+    font-size: 2.2vh;
     margin-left: 2%;
     margin-right: 2%;
     max-height: 100%;
 }
 
-.sheet .stresstrauma{
+.sheet .stresstrauma {
     margin: 0.8%;
-    background-clip: padding-box;
-    max-height: 95%;
-    align-content: center;
-    font-size: 120%;
+    text-align: center;
+    padding-top: 7%;
     background-color: #010101;
+    color: var(--title-yellow);
+}
+.stresstext{
+    padding: 0;
+    font-size: 80%;
+    border-width: 0;
+    color: var(--title-yellow);
+    background-color: #010101;
+    width: 2vh;
+}
+
+.check{
+    cursor: pointer;
+}
+.check input {
+    position: absolute;
+    height: 0;
+    width: 0;
+    opacity: 0;
+}
+
+.container {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    height: 1.5vh;
+    width: 1.5vh;
+    background-color: black;
+    border: 0.3vh solid var(--title-yellow);
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input~.checkmark {
+    background-color: var(--title-yellow);
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked~.checkmark {
+    background-color: #EF944D;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 35%;
+    top: 15%;
+    width: 20%;
+    height: 60%;
+    border: solid white;
+    border-width: 0 0.3vh 0.3vh 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .sheet .health {
     grid-row: 4;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1.5fr 1.5fr 0.5fr 0.5fr 0.5fr;
+    grid-template-columns: 2fr 2fr 1.5fr 2fr 3fr;
     display: grid;
     border: 0.3vh solid #EF944D;
     background-color: #EF944D;
-    gap: 1%;
-    row-gap: 4%;
+    gap: 0.7%;
+    row-gap: 9%;
     color: #010101;
     max-height: 95%;
     margin-left: 2%;
     margin-right: 2%;
-    font-size: 130%;
+    font-size: 3vh;
     font-family: Impact;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .health .physical {
-    display: grid;
-    grid-row: 1;
-    background-color: rgb(255, 61, 61);
+    background-color: var(--HP);
     justify-content: center;
     align-content: center;
+    contain: scale-down;
+    min-height: 3vh;
 }
-
-.health .mental {
-    display: grid;
-    grid-row: 2;
-    background-color: rgb(67, 233, 255);
-    justify-content: center;
-    align-content: center;
+.health .hicon{
+    max-height: 3vh;
+    contain: scale-down;
 }
 
 .sheet .exp {
     grid-row: 5;
-    max-width: 50%;
-    min-width: 50%;
-    border: 0.4vh solid #EF944D;
+    border: 0.3vh solid #EF944D;
     background-color: #010101;
     color: #EF944D;
     justify-self: center;
     justify-content: center;
     align-content: center;
-    max-height: 100%;
-    font-size: 110%;
-    margin-top: 1%;
+    min-width: 50%;
+    height: 90%;
+    font-size: 2.5vh;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.sheet .expinp{
+    background-color: #010101;
+    padding: 0;
+    color: #EF944D;
+    font-size: 120%;
+    width: 2.5vh;
 }
 
 .sheet .skills {
@@ -170,35 +257,40 @@
     grid-template-columns: 40% 10% 40% 10%;
     grid-template-rows: repeat(5, 1fr);
     color: #010101;
-    margin: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
     background-color: gray;
-    border: 2px solid gray;
+    border: 0.2vh solid gray;
     max-height: 100%;
+    overflow: hidden;
+    padding: 0%;
 }
 
 .skills .skill {
-    grid-column: 1, 3;
     margin: 0.8%;
     background-clip: padding-box;
     max-height: 95%;
     align-content: center;
-    font-size: 120%;
+    font-family: 'Mikodacs';
+    padding-top: 2%;
+    font-size: 2.5vh;
 }
 
 .skills .skillnum {
-    grid-column: 2, 4;
     margin: 0.8%;
     background-color: #010101;
     background-clip: padding-box;
     max-height: 95%;
-    align-content: center;
-    font-size: 140%;
+    align-content: center;  
     color: #EF944D;
+    font-size: 2.8vh;
+    padding: 0;
+    max-width: none;
 }
 
-.virtueshell{
-    margin-left: 20%;
-    margin-right: 20%;
+.virtueshell {
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .sheet .virtues {
@@ -211,19 +303,23 @@
     max-height: 100%;
     contain: scale-down;
     background-clip: padding-box;
-    margin: 2%;
+    cursor: pointer;
 }
 
 .virtues .virtue {
     display: grid;
     grid-template-columns: 1fr 3fr 1.5fr 1.5fr 3fr 1fr;
     grid-template-rows: 1fr 2fr 2fr 1fr;
-    border: 0.4vh solid;
-    max-height: 110%;
+    border: 0.3vh solid;
+    max-height: 100%;
     border: 1%;
     contain: scale-down;
+    font-family: 'Mikodacs';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
 
 .virtue .virtueborder {
     background-color: #010101;
@@ -240,9 +336,76 @@
     justify-content: space-around;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
+    margin: 5%;
     margin-right: 0;
+    padding-top: 3%;
 }
+.virtbutton{
+    align-content: center;
+    justify-content: space-around;
+    contain: scale-down;
+    position:sticky;    
+    contain: scale-down;
+    max-height: 4vh;
+    justify-self: center;
+    opacity: 0;
+    border-radius: 20%;
+    margin-top: 4%;
+}
+.virtbutton:hover{
+    -webkit-animation: fadein 1s;
+    animation: fadein 1s;
+    opacity: 1;
+}
+.virtbutton:active{
+    opacity: 1 !important;
+    transform: translateY(4px);
+}
+
+@-webkit-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 
 .virtue .virtueitem2 {
     grid-row: 2/4;
@@ -252,40 +415,47 @@
     justify-content: center;
     contain: scale-down;
     max-height: 100%;
-    margin: 0.4vh;
+    margin: 5%;
     margin-left: 0;
     font-size: 4vh;
+    padding-top: 8%;
 }
 
 .virtue .virtueicon {
-    max-height: 4vh;
+    max-height: 3.7vh;
     contain: scale-down;
 }
 
 
 .sheet .gifts {
     grid-row: 8;
-    display: flex;
     border: 0.3vh solid #EF944D;
-    max-height: 100%;
+    height: 100%;
     background-color: #EF944D;
     color: #EF944D;
     gap: 1%;
     background-clip: padding-box;
-    min-height: max-content;
-    flex-direction: column;
     margin: 2%;
     margin-left: 10%;
     margin-right: 10%;
+    overflow-y: scroll;
 }
 
 
 .gifts .giftname {
     background-color: #010101;
     max-height: min-content;
+    font-size: 2vh;
+    padding: 0.5%;
+    margin: 0.2%;
 }
 
 .gifts .gifticon {
     max-height: 2.5vh;
     contain: scale-down;
+}
+@media (max-width:600px) {
+.stresstext{
+    font-size: 2.5vh;
+}
 }

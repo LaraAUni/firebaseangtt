@@ -14,13 +14,19 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { GoogleAuthProvider } from "@firebase/auth";
 import { environment } from "./environments/environment";
 import { LoginPage } from './app/login-page/login-page';
+import { FireInit } from './app/fire-init';
+import { addDoc, collection } from "firebase/firestore";
+import { inject } from '@angular/core';
 
 
 @Directive({
   selector: "[googleSso]",
 })
 export class GoogleSsoDirective {
-  constructor(private angularFireAuth: AngularFireAuth) {}
+
+  constructor(private angularFireAuth: AngularFireAuth) {
+    
+  }
   @HostListener("click")
   async onClick() {
     const creds = await this.angularFireAuth.signInWithPopup(

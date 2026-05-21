@@ -1,80 +1,275 @@
+body{
+    color-scheme: light;
+    line-height: normal !important;
+    background: aliceblue;
+    scrollbar-color: #010101 #EF944D !important;
+    font-size: 2vh;
+}
+
+html, body { height: 100%;
+    overflow-y: hidden;}
+body { margin: 0;}
+.label{
+    max-height: 0; opacity: 0;
+    max-width: 0;
+}
+:root{
+    --lightbackg: #fff8d3;
+    --whitetext: aliceblue;
+    --border: #EF944D;
+    --title-yellow: #FAFF8E;
+    --summary-background: #83FFCE;
+    --ZAYIN: #6FFF00;
+    --TETH: #658FFF;
+    --HE: #F6FF00;
+    --WAW: #8100FF;
+    --ALEPH: #E4200C;
+    --HP: #E2433C;
+    --SP: #699CE4;
+    --Healing:#74FF00;
+    --RedDam: #CB2642;
+    --WhiteDam: #EFECC0;
+    --BlackDam: #814A84;
+    --PaleDam: #3FCCBD;
+    --Control: #D1DE22;
+    --Information: #7B0BA4;
+    --Training: #C88611;
+    --Safety: #73AA2A;
+    --Central: #EFCF00;
+    --Disciplinary: #E4200C;
+    --Welfare: #6949FF;
+    --Extraction: #2E2E2E;
+    --Records: #606060;
+    --Architecture: #FFFFFF;
+    --Bonus: #9AC2FF;
+    --First-Trumpet: #EEC700;
+    --Second-Trumpet: #E65B00;
+    --Third-Trumpet: #E4200C;
+    --Asiya: #F7FF00;
+    --Briah: #6DFF00;
+    --Atziluth: #C0C0C0;
+}
+
+@font-face {
+  font-family: 'Mikodacs';
+  src: url('/public/Mikodacs.otf') !important;
+}
+@font-face {
+  font-family: 'Norwester';
+  src: url('/public/Norwester.otf') !important;
+}
+@font-face{
+  font-family: 'Gill Sans';
+  src: url('/public/Gill Sans.otf') !important;
+}
+
+
+@-webkit-keyframes fade {
+    0% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0;
+    }
+
+    34% {
+        opacity: 0;
+    }
+
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .sheet {
     position: fixed;
     right: 0;
     top: 0;
     z-index: 2;
-    width: calc(100vw / 3);
-    font-family: 'Mikodacs';
-    background-color: #010101;
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif !important;
+    background: black;
     color: aliceblue;
-    border-left: 0.4vh solid #EF944D;
+    border-left: 0.4vh solid var(--border);
     text-align: center;
     text-justify: center;
-    font-size: 120%;
     overflow-x: hidden;
-    scrollbar-color: #010101 #EF944D;
-    min-width: 500px;
-    width: calc(100vw / 3);
-    max-height: 100vh;
-    min-height: 100vh;
-}
-@font-face {
-  font-family: Mikodacs;
-  src: url(/public/Mikodacs.otf);
-}
-@font-face {
-  font-family: BebasKai;
-  src: url(/public/BebasKai.otf);
+    scrollbar-color: #010101 #EF944D !important;
+    width: 30vw;
+    height: 100vh;
+    contain: scale-down;
+    gap: 0.7%;
 }
 
+.clock {
+    border-radius: 50%;
+    contain: scale-down;
+    max-height: 9vh;
+    max-width: 9vh;
+    border: var(--title-yellow) solid 0.4vh;
+    justify-self: center;
+}
+input{
+    background: inherit;
+    color: inherit;
+    border-style: none;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: center;
+}
+input[inputmode="numeric"] {
+    max-width: max-content;
+}
+textarea{
+    background: inherit;
+    color: inherit;
+    border-style: none;
+    font-size: inherit;
+    font-family: inherit;
+    max-width: max-content;
+    align-content: start;
+    text-align: center;
+}
+select{
+    border-radius: 0%;
+    line-height: normal !important;
+}
+select,
+::picker(select) {
+  appearance: base-select;
+  z-index: 1;
+  position: relative;
+}
+::picker-icon{
+    display: none;
+}
+selectedcontent{
+    text-overflow: clip;
+}
+
+
+select optgroup {
+    font-size: 110%;
+    font-style: normal;
+}
 
 .sheet .intro {
     grid-row: 1;
     display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr 1fr 2fr;
+    grid-template-rows: 1.2fr 0.8fr 2fr;
     max-height: 100%;
     gap: 1%;
+    padding-top: 0.7%;
+    padding-bottom: 1%;
     margin-top:0.7%;
+    font-size: 180%;
+    margin-right: 3%;
 }
 
-.intro .icon {
-    grid-row: 1/4;
+.intro .iconside{
     grid-column: 1;
-    border: 5px solid aquamarine;
-    max-width: 90%;
-    max-height: 90%;
+    grid-row: 1/4;
+    display: grid;
+    grid-row: 3fr 1fr;
+}
+.intro .icon {
+    border: 0.4vh solid var(--Bonus);
+    max-width: 95%; 
+    max-height: 100%;
     contain: scale-down;
-    margin-left: 4vh;
+    margin-left: 5%;
+    padding-top: 0;
 }
 
 .sheet .gridbox{
     margin: 0.8%;
     background-clip: padding-box;
-    align-content: center;
-    padding: 1.5%;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5%;
 }
 
-.intro .equip {
+input{
+    padding: 1%;
+    text-align: center;
+    border-style: none;
+}
+::placeholder{
+    color: inherit;
+}
+
+.newbutt{
+    cursor: pointer;
+    background-color: var(--border);
+    padding: 1%;
+    contain: scale-down;
+    max-height: 100%;
+    font-size: 150%;
+    color: aliceblue;
+    max-width: 2vw;
+    max-height: 2vw;
+    text-align: center;
+    padding-top: 0;
+    border-style: ridge;
+    border: var(--Second-Trumpet) solid 0.3vh;
+}
+
+.newbutt:active{
+    transform: translateY(2px);
+}
+.equip {
     grid-column: 2;
     grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border: 0.3vh solid #E2E6AE;
-    padding: 5px;
+    grid-template-rows: 1fr 0.1fr;
+    border: 0.3vh solid var(--title-yellow);
+    padding: 1%;
     contain: scale-down;
     max-height: 100%;
-    margin: 1%;
-    margin-right: 2%;
-    margin-bottom: 2%;
+    margin-left: 2%;
 }
 
 .equip .equips {
-    max-height: 100%;
+    max-height: 10vh;
     max-width: 100%;
     contain: scale-down;
 }
 
 
-html, body { height: 100%; }
-body { margin: 0;}
+@media (max-width: 600px){
+.sheet{
+    width: 100vw;
+}
+.newbutt{
+    max-width: 10vw;
+    max-height: 7vw;
+}
+}

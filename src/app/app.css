@@ -1,33 +1,79 @@
 
 @font-face {
-  font-family: Mikodacs;
-  src: url(/public/Mikodacs.otf);
+  font-family: 'Mikodacs';
+  src: url('../../public/Mikodacs.otf');
 }
 @font-face {
-  font-family: BebasKai;
-  src: url(/public/BebasKai.otf);
+  font-family: 'Norwester';
+  src: url('../../public/Norwester.otf');
+}
+@keyframes shake{
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes spin{
+    0% {transform: rotate(36deg); opacity: 1;}
+    10% {transform: rotate(108deg); opacity: 1;}
+    20% {transform: rotate(180deg); opacity: 0.8;}
+    30% {transform: rotate(242deg); opacity: 0.8;}
+    40% {transform: rotate(314deg); opacity: 0.6;}
+    50% {transform: rotate(36deg); opacity: 0.6;}
+    60% {transform: rotate(108deg); opacity: 0.4;}
+    70% {transform: rotate(180deg); opacity: 0.4;}
+    80% {transform: rotate(242deg); opacity: 0.2;}
+    90% {transform: rotate(314deg); opacity: 0.2;}
 }
 
 .page {
     /*PC*/
-    font-family: 'Mikodacs';
     font-size: large;
     min-width: 100vw;
     min-height: 100vh;
-    scrollbar-color: #010101 #EF944D;
+    scrollbar-color: #010101 #EF944D !important;
 }
 
 .expansion{
-    background-color: #010101;
+    background-color: black;
     font: initial;
+    box-shadow: none !important;
 }
 
 .iconbtn{
-    border: 0.3vh solid aquamarine;
-    max-width: 4.5vh;
+    border-style: solid;
+    border-width: 0.3vh;
+    max-width: 5vh;
+    margin: 0.5vh;
+    grid-row: 1;
+}
+.iconshake{
+    border-style: solid;
+    border-width: 0.3vh;
+    max-width: 5vh;
+    margin: 0.5vh;
+    grid-row: 1;
+}
+.iconshake:hover{
+  /* Start the shake animation and make the animation last for 0.5 seconds */
+  animation: shake 0.4s;
+
+  /* When the animation is finished, start again */
+  animation-iteration-count: infinite;
+}
+.iconshake:active{
+    animation: spin 0.3s forwards;
 }
 .weapbtn{
-    border: 0.3vh solid aquamarine;
+    border: 0.3vh solid  var(--Bonus);
     max-height: 5vh;
 }
 
@@ -35,24 +81,25 @@
     padding: 3%;
     text-decoration: none;
     font-size: 3vh;
-    color: #818181;
+    color: var(--border);
     display: block;
     transition: 0.3s;
     left: 4vh;
-    font-family: "BebasKai";
+    font-family: "Norwester" !important;
+    line-height: unset;
 }
 .links:hover {
-    color: #f1f1f1;
+    color: aliceblue;
 }
 .closebtn {
     position: fixed;
-    right: calc(100vw  / 3);
+    right: 30vw;
     top: 0;
     background-color: #EF944D;
     max-height: 8vh;
     max-width: 4vh;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
 }
 .openbtn {
     position: fixed;
@@ -63,7 +110,7 @@
     top: 0.5vh;
     right: 0.2vw;
     max-height: 3vh;
-    z-index: 1;
+    z-index: 2;
 }
 
 .buttonanim {
@@ -88,7 +135,7 @@
     }
 
     20% {
-        opacity: 1;
+        opacity: 0;
     }
 
     34% {
@@ -100,7 +147,7 @@
     }
 
     100% {
-        opacity: 1;
+        opacity: 0;
     }
 }
 
@@ -110,7 +157,7 @@
     }
 
     20% {
-        opacity: 1;
+        opacity: 0;
     }
 
     34% {
@@ -122,18 +169,19 @@
     }
 
     100% {
-        opacity: 1;
+        opacity: 0;
     }
 }
 
 .sidenav {
-    width: calc(100vw  / 3); /*non so perché si è rotto ed è più piccolo*/
+    width: 30vw !important; /*non so perché si è rotto ed è più piccolo*/
     height: 100vh;
     background-color: #010101;
     overflow-x: hidden;
-    border-left: 0.4vh solid #EF944D;
+    border-left: 0.4vh solid #EF944D !important;
     scrollbar-color: #010101 #EF944D;
-    padding: 0.4vh #010101;
+    box-sizing: content-box;
+    font-family: 'Norwester' !important;
 }
 
 .sidenav .mat-toolbar {
@@ -150,7 +198,7 @@
 .barra {
     font: initial; /*ereditava cose in più da mat che lo rompono*/
     position: fixed;
-    font-family: 'BebasKai';
+    font-family: 'Norwester';
     top: 0;
     right: 0;
     background-color: #010101;
@@ -160,6 +208,65 @@
     border-bottom: 0.4vh solid #EF944D;
     color: #EF944D;
     font-size: 2vh;
+    z-index: 1;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 68px;
+  left: 10%;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--lightbackg);
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 68px;  
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 52px;
+  width: 52px;
+  left: 8px;
+  bottom: 8px;
+  background-color: grey;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+
+input:checked + .slider {
+  background-color: #010101;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #010101;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(52px);
+  -ms-transform: translateX(52px);
+  transform: translateX(52px);
 }
 
 
@@ -167,17 +274,36 @@
     position: absolute;
     font-size: 3vh;
     padding: 0.5vh;
-    color: #ED0506;
+    color: var(--Third-Trumpet);
     left: 45vw;
-    font-family: 'BebasKai';
+    font-family: 'Norwester';
 }
 
 .recap {
     position: fixed;
-    top: calc(4vh + 1000px);
+    top: 80vh;
     left: 0;
-    width: 100%;
-    height: calc(96vh - 1000px);
+    width: 100vw;
+    height: 20vh;
     background-color: aqua;
     scrollbar-color: aqua #010101;
+}
+
+.newbutt{
+    font-size: 3vh;
+    margin: 1vh;
+    padding: 0.5vh;
+    width: 2vh;
+    height: 2vh;
+    grid-row: 1;
+    background-color: #010101;
+}
+
+@media (max-width: 600px) {
+    .sidenav{
+        width: 100vw !important;
+    }
+    .closebtn{
+        left: 0;
+    }
 }

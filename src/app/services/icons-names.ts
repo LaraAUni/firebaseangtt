@@ -120,7 +120,7 @@ export class IconsNames {
     this.addList(type);
   }
 
-  async deleteList(type:boolean){
+  async deleteList(id:number ,type:boolean){
     const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
     deleteDoc(listRef);
   };

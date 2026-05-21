@@ -37,9 +37,7 @@ export class AbnoSheet {
 ngOnInit(){
   if(!this.getAbno(this.rules.lookFor)) this.abnoID=this.rules.lookFor;
   else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
-    this.abnoID=(this.rules.abnoList.length+1);
-    this.addAbno();
-    this.addData();
+    //Funzione per nuove Abno wip, ma avrà un selettore per quelle esistenti
   }
   console.log("AbnoData: ", this.AbnoData);
   const form = document.getElementById('abnoForm') as HTMLFormElement;
@@ -50,12 +48,13 @@ ngOnInit(){
   event.preventDefault();
 
   // Rest of the logic (collect data, updatewiew)
-  const formData = new FormData(form);
+const formData = new FormData(form);
 
 let inp;
 inp=formData.get('AbnoName');
 if(inp)this.AbnoSheet.fullName.Name=inp.toString();
 console.log("Abno: ",formData.entries());
+
 
 this.ref.markForCheck();
 this.addData();
@@ -90,14 +89,14 @@ this.addAbno();
     console.log("thisAbnoData: ", this.AbnoData);
   }
   async addAbno() : Promise<void>{
-    if(this.abnoID==0) return;//ricordati di toglierlo per nuovi default
+    if(this.abnoID==0) return;//Toglierlo per cambiare default, ma meglio modificarli da Firebase
       const abnoRef = doc(this.db, 'abnos/'+this.abnoID).withConverter(new AbnoConverter());
       await setDoc(abnoRef, this.AbnoSheet);
       const snapshot1 = await getDoc(abnoRef);
       console.log("Abnormality saved: ", snapshot1.data());} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
 
   async addData() : Promise<void>{
-    //if(this.AbnoData.gameID==0) return; //ricordati di toglierlo per nuovi default
+    if(this.rules.gameID==0) return;
       const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
       await setDoc(abnoRef, this.AbnoData);
       const snapshot1 = await getDoc(abnoRef);

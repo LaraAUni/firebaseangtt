@@ -7,6 +7,9 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules , Departments} from '../services/sharedrules';
 import { IconsNames } from '../services/icons-names';
+import { UserData } from '../services/userdata';
+import { Userinfo } from '../services/userinfo';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-chara-sheet',
@@ -20,6 +23,7 @@ export class CharaSheet {
   fireInit = inject(FireInit);
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
+  userd=inject(Userinfo);
   deps=Departments;
   db = this.fireInit.db;
   Chara : Character;
@@ -34,14 +38,15 @@ export class CharaSheet {
   depChange=false;
   oldDep=0;
   new=false;
+  owns=false;
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
 }
 
 ngOnInit(){
-  if(this.rules.lookFor){ this.charID=this.rules.lookFor; this.getChara(this.charID);
-  }
+  if(this.rules.lookFor){this.charID=this.rules.lookFor; this.getChara(this.charID);}
   else{this.Chara.role[1]=this.rules.lookDep; this.depColorUp();
+    this.owns=true
     let maxA:number;
     if(this.rules.charaList.length) maxA=Math.max(...this.rules.charaList);
     else  maxA=0;
@@ -62,7 +67,9 @@ ngOnInit(){
   event.preventDefault();
 
   // Rest of the logic (collect data, updatewiew)
-  const formData = new FormData(form);
+const formData = new FormData(form);
+
+if(!this.owns) return;
 
 let inp;
 this.oldDep=this.Chara.role[1];
@@ -157,6 +164,8 @@ if(inp){inp=Number(inp);
     this.rules.charaList=[...this.rules.charaList, this.charID];
     this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
     this.new=false;
+    this.userd.info.characters=[...this.userd.info.characters, this.rules.gameID + '-' + this.charID];
+    this.userd.addUser();
     this.rules.addRules();
   } else{
   let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
@@ -214,7 +223,9 @@ this.ref.markForCheck();
     this.depAbsUp();
     this.depColorUp();
     this.isdead = this.rules.deadCh.includes(this.charID);
+    this.checkownership().then((e)=>{
     this.ref.markForCheck();
+    })
     }
     console.log("thisChara: ", this.Chara);
   }
@@ -224,6 +235,27 @@ this.ref.markForCheck();
     await setDoc(charRef, this.Chara);
     const snapshot1 = await getDoc(charRef);
     console.log("Chara saved: ", snapshot1.data());
+  }
+
+  async checkownership(){
+    if(this.rules.isDM) this.owns=true;
+    else{
+    for(let i=0; i<this.userd.info.characters.length;i++){
+    let [game, findId]=this.userd.info.characters[i].split('-');
+    console.log(this.userd.info.characters[i]);
+    if(Number(game)!=this.rules.gameID) continue;
+    if(Number(findId)==this.charID) this.owns=true;
+    break;
+    }
+        if(this.owns==false){
+        for(let i=0; i<this.userd.info.characters.length;i++){
+        let [game, findId]=this.userd.info.characters[i].split('-');
+        if(Number(game)!=this.rules.gameID) continue;
+        if(Number(findId)==this.charID) this.owns=true;
+        break;
+        }
+      }
+    }
   }
 
   depAbsUp(c: number=this.Chara.role[1]){

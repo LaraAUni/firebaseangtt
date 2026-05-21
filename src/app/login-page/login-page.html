@@ -62,13 +62,19 @@ ui.start('#firebaseui-auth-container', {
   <form for="newGameName" name="MapOp" id="MapOp">
     @if(mapOp){
     <div class="infobox">
-      @for(i of user.games; track i; let ind=$index){
-        <button type="button" class="butt" (click)="this.getGame(i);">{{this.user.gamenames[ind]}}</button>
+      @for(i of info.info.games; track i; let ind=$index){
+        <button type="button" class="butt" (click)="this.getGame(i);">{{this.info.info.gamenames[ind]}}</button>
       }
       
-      @if(this.newGame){
+      @if(newGame){
         <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="New Game Name">
-      }@else{<button class="newbutt" (click)="this.newGame=true">+</button>}
+        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh; margin-left: 0.3vw;"  (click)="newGame=false;">
+      }@else{<button class="newbutt" (click)="newGame=true">+</button>
+      @if(deleting){
+        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        @else{
+        <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}
+      }
     </div>
    }</form>
 </div>

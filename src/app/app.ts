@@ -11,8 +11,11 @@ import { Sharedrules, Departments } from './services/sharedrules';
 import { IconsNames } from './services/icons-names';
 import { NgStyle } from '@angular/common';
 import { CharaConverter } from './chara-sheet/characlass';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { FireInit } from './fire-init';
+import { Userinfo } from './services/userinfo';
+import { Rules } from './rules';
+import { UserConverter } from './services/userdata';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +31,7 @@ export class App {
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
   init=inject(FireInit);
+  userd=inject(Userinfo)
   deps=Departments;
   showChara = 0;
   showAbno = 0;
@@ -36,17 +40,21 @@ export class App {
   constructor(){
   }
   
-  ngOnInit(){
-    this.rules.getRules().then((e)=>{
-      this.iconsNames.makeList(true);
-      this.iconsNames.makeList(false);
-    })
-    
-  }
-
-  async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep){
+  async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep, id=this.rules.gameID, temp: boolean=true){
     if(n==0) return;
-    const charRef = doc(this.init.db, 'charas/' + this.rules.gameID + '-' + n).withConverter(new CharaConverter());
+    if(!this.rules.isDM){
+    let owns=false;
+    for(let i=0; i<this.userd.info.characters.length;i++){
+    let [game, findId]=this.userd.info.characters[i].split('-');
+    console.log(this.userd.info.characters[i]);
+    if(Number(game)!=this.rules.gameID) continue;
+    if(Number(findId)==n) owns=true;
+    break;
+    }
+    if(!owns) return;
+    }
+    const charRef = doc(this.init.db, 'charas/' + id + '-' + n).withConverter(new CharaConverter());
+    if(d){
     let ind=this.rules.depsList.indexOf(d);
     if(ind==-1) ind=6;
     if(this.rules.deadCh.includes(n)){
@@ -56,8 +64,40 @@ export class App {
       else this.rules.charaList=this.rules.charaList.filter(c=>c!=n);
 
     this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
+    }
     await deleteDoc(charRef);
-    this.rules.addRules();
+    if(temp) this.rules.addRules();
+  }
+
+  async deleteAbno(n: number=this.rules.lookFor, d:number=this.rules.lookDep, id=this.rules.gameID, temp: boolean=true){
+    const abnoRef = doc(this.init.db, 'gameabnos/' + id + '-' + n).withConverter(new CharaConverter());
+    if(!this.rules.isDM) return;
+    if(d){
+    let ind=this.rules.depsList.indexOf(d);
+    this.rules.abnoList=this.rules.abnoList.filter(c=>c!=n);
+    this.iconsNames.ordAbnoList[ind]=this.iconsNames.ordAbnoList[ind].filter(c=>c.id!=n);
+    }
+    await deleteDoc(abnoRef);
+    if(temp) this.rules.addRules();
+  }
+
+  async deleteGame(id:number, you:string=this.userd.id){
+    let nrules:Rules;
+    nrules=await this.rules.findRules(id);
+    if(!nrules.DMIds.includes(you)) return;
+    nrules.charaList.forEach(element => {
+      this.deleteChara(element, undefined, id, false);
+    });
+    nrules.abnoList.forEach(element => {
+      this.deleteAbno(element, undefined, id, false);
+    });
+    this.iconsNames.deleteList(id,false);
+    this.iconsNames.deleteList(id,true);
+    nrules.DMIds.forEach(element=>{
+      const useRef = doc(this.init.db, 'userdata/'+you).withConverter(new UserConverter());
+      //da cancellare da user
+    })
+    this.rules.deleteRules(id);
   }
 
   charaPress(id:number){

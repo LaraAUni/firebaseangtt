@@ -17,6 +17,8 @@ import {
 import { UserData, UserConverter } from '../services/userdata';
 import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
 import { IconsNames } from '../services/icons-names';
+import { Userinfo } from '../services/userinfo';
+
 
 @Component({
   selector: 'app-login-page',
@@ -29,7 +31,7 @@ export class LoginPage {
   rules = inject(Sharedrules);
   auth = getAuth(this.fireInit.app);
   iconsNames=inject(IconsNames);
-  id: string = '';
+  info=inject(Userinfo)
   email: string;
   password: string;
   provider = new GoogleAuthProvider();
@@ -37,11 +39,10 @@ export class LoginPage {
   inpopen = false;
   subopen = false;
   optionsOp = false;
+  deleting=false;
   userName: string | null = 'Guest';
   mapOp = false;
-  newGame= false;
-  uid = '';
-  user = new UserData();
+  newGame= false; //funzione?
 
   constructor(private ref: ChangeDetectorRef) {
     this.email = '';
@@ -58,23 +59,21 @@ export class LoginPage {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        this.uid = user.uid;
+        this.info.id = user.uid;
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
-        this.id = user.uid;
-        await this.getData();
-        if (this.rules.DMIds.includes(user.uid)) {
-          this.rules.isDM = true;
-        }
-       
+        await this.info.getUser().then((e)=>{
+        console.log("user:", this.info.info.games[0])
+        if(this.info.info.games)this.getGame(this.info.info.games[0]);
+        });     
         // ...
       } else {
         // User is signed out
         this.signedIn = false;
         this.userName = 'Guest';
+        this.getGame(0); //da mettere un link
         // ...
       }
-      this.getGame();
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
     });
 
@@ -112,9 +111,12 @@ export class LoginPage {
       if(inp){
         this.newGame=false;
         await this.rules.newGame(inp.toString());
-        this.user.games.push(this.rules.gameID);
-        this.user.gamenames.push(inp.toString());
-        this.addData(this.uid);
+        this.info.info.games.push(this.rules.gameID);
+        this.info.info.gamenames.push(inp.toString());
+        this.info.addUser(this.info.id);
+        // setCustomUserClaims is an Admin SDK operation and cannot be
+        // performed from the client. Call a secure backend or Cloud
+        // Function to set custom claims for this.info.id instead.
       }
     })
   }
@@ -140,7 +142,6 @@ export class LoginPage {
       .then((userCredential) => {
         // Signed in 
         this.inpopen = false;
-        const user = userCredential.user;
         // ...
         this.ref.markForCheck(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
       })
@@ -153,6 +154,8 @@ export class LoginPage {
     auth.signOut().then(() => {
       this.optionsOp = false;
       this.ref.markForCheck();
+      this.getGame(0);
+      this.rules.isDM=false;
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -164,7 +167,7 @@ export class LoginPage {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        this.uid = user.uid;
+        this.info.id = user.uid;
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         // ...
@@ -178,26 +181,6 @@ export class LoginPage {
     });
   }
 
-  getUser(): any {
-    const auth = this.auth;
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        this.uid = user.uid;
-        this.signedIn = true;
-        this.userName = user.displayName || user.email || 'Username';
-        // ...
-        return user;
-      } else {
-        // User is signed out
-        // ...
-        this.signedIn = false;
-        this.userName = 'Guest';
-        return null;
-      }
-    });
-  }
 
   updateName(name: string): void {
     const auth = this.auth;
@@ -216,24 +199,17 @@ export class LoginPage {
     }
   }
 
-  async getGame(id: number=this.rules.gameID){
+
+  async getGame(id: number){
     this.rules.getRules(id).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
+        if(this.rules.DMIds.includes(this.info.id)) {
+          this.rules.isDM = true;
+        }
     })
   }
 
-  async getData(id: string=this.uid): Promise<void> {
-    const dataRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());
-    const snapshot1: DocumentSnapshot<UserData> = await getDoc(dataRef);
-    const uData: UserData = snapshot1.data()!;
-    if (uData) {
-      this.user = uData;
-    }
-  }
-  async addData(id: string=this.uid): Promise<void> {
-    const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter()); //(this.gameID*200) ?? ma non vaaaa
-    await setDoc(userRef, this.user);
-  }
+
 
 }

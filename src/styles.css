@@ -52,15 +52,15 @@ body { margin: 0;}
 
 @font-face {
   font-family: 'Mikodacs';
-  src: url('/public/Mikodacs.otf')!;
+  src: url('/public/Mikodacs.otf') !important;
 }
 @font-face {
   font-family: 'Norwester';
-  src: url('/public/Norwester.otf');
+  src: url('/public/Norwester.otf') !important;
 }
 @font-face{
   font-family: 'Gill Sans';
-  src: url('/public/Gill Sans.otf')
+  src: url('/public/Gill Sans.otf') !important;
 }
 
 

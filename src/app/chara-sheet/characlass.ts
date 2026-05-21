@@ -2,7 +2,6 @@ import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, Snapshot
 
 export class Character{
     //gameID e CharID: non serve, è nel nome del documento e nella ricerca
-    playerID : { Owner: string[], Borrower: string[] };
     icoUrl: string;
     fullName: string;
     role: [string, number];
@@ -16,7 +15,6 @@ export class Character{
     skills : number[];
     gifts: { imgUrl: string, Name: string, Exp: number }[];
     constructor(
-        playerID: { Owner: string[], Borrower: string[] } = { Owner: ["AlphaTT"], Borrower: [] },
         icoUrl = "0000",
         fullName = "Alpha",
         role: [string, number] = ["Clerk", 0],
@@ -30,7 +28,6 @@ export class Character{
         skills = Array(10).fill(0),
         gifts:{ imgUrl: string, Name: string, Exp: number }[] = [],
     ) {
-        this.playerID = playerID;
         this.icoUrl = icoUrl,
         this.fullName = fullName,
         this.role = role,
@@ -48,7 +45,6 @@ export class Character{
 
 
 interface CharaFS{
-    plr: { Owner: string[], Borrower: string[] };
     icoU: string;
     fName: string;
     rl: [string, number];
@@ -66,7 +62,6 @@ interface CharaFS{
 export class CharaConverter implements FirestoreDataConverter<Character, CharaFS> {
     toFirestore(chara: WithFieldValue<Character>): WithFieldValue<CharaFS> {
         return {
-            plr: chara.playerID,
             icoU: chara.icoUrl,
             fName: chara.fullName,
             rl: chara.role,
@@ -84,6 +79,6 @@ export class CharaConverter implements FirestoreDataConverter<Character, CharaFS
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Character {
         const data = snapshot.data(options) as CharaFS;
-        return new Character(data.plr, data.icoU, data.fName, data.rl, data.eqp, data.abs, data.str, data.trm, data.arm, data.psH, data.xp, data.sks, data.gfs);
+        return new Character(data.icoU, data.fName, data.rl, data.eqp, data.abs, data.str, data.trm, data.arm, data.psH, data.xp, data.sks, data.gfs);
     }
 }

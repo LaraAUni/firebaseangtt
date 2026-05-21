@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { collection, query, waitForPendingWrites, where } from "firebase/firestore";
-import { doc, getDoc, DocumentSnapshot, setDoc } from 'firebase/firestore';
+import { doc, getDoc, DocumentSnapshot, setDoc, deleteDoc } from 'firebase/firestore';
 import { FireInit } from '../fire-init';
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from '../abno-sheet/abnoclass';
 import { Character, CharaConverter } from '../chara-sheet/characlass';
@@ -119,6 +119,11 @@ export class IconsNames {
     }
     this.addList(type);
   }
+
+  async deleteList(type:boolean){
+    const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
+    deleteDoc(listRef);
+  };
 
  async getIcon(id: number, type: boolean) : Promise<[{id: number, name: string, icon: string}, number]|null>{
     if(!type){

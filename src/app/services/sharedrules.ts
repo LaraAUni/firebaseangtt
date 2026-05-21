@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentSnapshot, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { DocumentSnapshot, doc, getDoc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
 import { Rules, RulesConverter } from '../rules';
 import { inject } from '@angular/core';
 import { FireInit } from '../fire-init';
@@ -9,8 +9,8 @@ import { FireInit } from '../fire-init';
 })
 export class Sharedrules {
   gameID: number = 0;
-  gameName: string = '';
   DMIds: string[] = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
+  playerIDs: string[]=[];
   charaList: number[] = [];//id personaggi
   deadCh: number[] = [];
   abnoList: number[] = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
@@ -52,10 +52,10 @@ export class Sharedrules {
     const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
     const uRules: Rules = snapshot1.data()!;
+    this.gameID=id;
     if (uRules) {
-      this.gameID = uRules.gameID;
-      this.gameName = uRules.gameName;
       this.DMIds = uRules.DMIds;
+      this.playerIDs=uRules.playerIDs;
       this.charaList = uRules.charaList;
       this.deadCh = uRules.deadCh;
       this.abnoList = uRules.abnoList;
@@ -89,9 +89,21 @@ export class Sharedrules {
   async addRules(): Promise<void> {
     //if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
-    await setDoc(rulesRef, new Rules(this.gameID, this.gameName, this.DMIds, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
+    await setDoc(rulesRef, new Rules(this.DMIds, this.playerIDs, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
     const snapshot1 = await getDoc(rulesRef);
     console.log("Rules saved: ", snapshot1.data());
+  }
+
+  async findRules(id:number): Promise<Rules> {
+    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
+    const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
+    const uRules: Rules = snapshot1.data()!;
+    return uRules;
+  }
+
+  async deleteRules(id:number){
+    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
+    deleteDoc(rulesRef);
   }
 
   async newGame(n: string): Promise<void> {
@@ -103,9 +115,9 @@ export class Sharedrules {
       gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
       snapshot1 = await getDoc(gameRef);
     }
-    this.gameID = i;
-    this.gameName = n;
-      this.DMIds = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
+      this.gameID = i;
+      this.DMIds = [];
+      this.playerIDs=[];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
       this.charaList = [];//id personaggi
       this.deadCh = [];
       this.abnoList = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova

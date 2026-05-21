@@ -53,12 +53,14 @@
     border-width: 0.3vh;
     max-width: 5vh;
     margin: 0.5vh;
+    grid-row: 1;
 }
 .iconshake{
     border-style: solid;
     border-width: 0.3vh;
     max-width: 5vh;
     margin: 0.5vh;
+    grid-row: 1;
 }
 .iconshake:hover{
   /* Start the shake animation and make the animation last for 0.5 seconds */

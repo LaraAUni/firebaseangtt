@@ -2,9 +2,8 @@ import { Departments } from './services/sharedrules';
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 
 export class Rules {
-      gameID:number = 0;
-      gameName:string = '';
       DMIds: string[] = [];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
+      playerIDs: string[]=[];
       charaList:number[] = [];//id personaggi
       deadCh:number[] = [];
       abnoList:number[] = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
@@ -32,9 +31,8 @@ export class Rules {
       traumas: string[] = [];
       traum3nabled=false; //per il progetto che dà un'altro slot se completato
       constructor(
-      gameID: number = 0,
-      gameName: string = '',
       DMIds: string[] = [],
+      playerIDs: string[]=[],
       charaList: number[] = [],
       deadCh: number[] = [],
       abnoList: number[] = [],//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
@@ -61,9 +59,8 @@ export class Rules {
       agentAbs=["Unassuming","Temporary Lucidity", "Face the Fear", "Virtuous", "Skilled"],
       traumas=["Cold","Haunted","Obsessed","Distrustful","Reckless","Soft","Volatile","Vicious"],
       traum3nabled=false){
-            this.gameID=gameID;
-            this.gameName=gameName;
             this.DMIds=DMIds;
+            this.playerIDs=playerIDs;
             this.charaList=charaList;
             this.deadCh=deadCh;
             this.abnoList=abnoList;
@@ -94,9 +91,8 @@ export class Rules {
 }
 
 interface rulesFS{
-      gameID:number;
-      gameName:string;
       DMIds: string[];
+      playIDs: string[];
       charaList:number[];
       deadCh:number[];
       abnoList:number[];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
@@ -128,9 +124,8 @@ interface rulesFS{
 export class RulesConverter implements FirestoreDataConverter<Rules, rulesFS> {
     toFirestore(user: WithFieldValue<Rules>): WithFieldValue<rulesFS> {
         return {
-            gameID: user.gameID,
-            gameName: user.gameName,
             DMIds: user.DMIds,
+            playIDs: user.playerIDs,
             charaList: user.charaList,
             deadCh: user.deadCh,
             abnoList: user.abnoList,
@@ -162,6 +157,6 @@ export class RulesConverter implements FirestoreDataConverter<Rules, rulesFS> {
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Rules {
         const data = snapshot.data(options) as rulesFS;
-        return new Rules(data.gameID, data.gameName, data.DMIds, data.charaList, data.deadCh, data.abnoList, data.depsList, data.bonusDeps, data.bonusColors, data.capPassive, data.controlAbs, data.infoAbs, data.safetyAbs, data.trainAbs, data.discAbs, data.centralAbs, data.welfareAbs, data.recordsAbs, data.extractAbs, data.architAbs, data.bonus1Abs, data.bonus2Abs, data.bonus3Abs, data.bonus4Abs, data.bonus5Abs, data.bonus6Abs, data.agentAbs, data.traumas, data.traum3nabled);
+        return new Rules(data.DMIds, data.playIDs, data.charaList, data.deadCh, data.abnoList, data.depsList, data.bonusDeps, data.bonusColors, data.capPassive, data.controlAbs, data.infoAbs, data.safetyAbs, data.trainAbs, data.discAbs, data.centralAbs, data.welfareAbs, data.recordsAbs, data.extractAbs, data.architAbs, data.bonus1Abs, data.bonus2Abs, data.bonus3Abs, data.bonus4Abs, data.bonus5Abs, data.bonus6Abs, data.agentAbs, data.traumas, data.traum3nabled);
     }
 }

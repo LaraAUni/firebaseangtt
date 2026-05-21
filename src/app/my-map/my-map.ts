@@ -22,7 +22,7 @@ departments=this.map.departments;
 floordisp: number = this.map.floors;
 constructor(){
   console.log(this.map);
-  //this.saveMap();
+  //this.saveMap(); Ho dimenticato che Firebase non salva gli Array di Array
 }
   async saveMap(){
     const mapRef = doc(this.init.db, 'maps/' + this.rules.gameID).withConverter(new MapConverter()); //(this.gameID*200) ?? ma non vaaaa

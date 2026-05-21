@@ -101,7 +101,7 @@ export class App {
   }
 
   charaPress(id:number){
-    this.showChara=1;
+    this.showRouterOutlet=0;
     //poi vai al numero aaaa
   }
 }

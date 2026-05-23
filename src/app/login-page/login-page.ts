@@ -18,6 +18,7 @@ import { UserData, UserConverter } from '../services/userdata';
 import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
+import { App } from '../app';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class LoginPage {
   auth = getAuth(this.fireInit.app);
   iconsNames=inject(IconsNames);
   info=inject(Userinfo)
+  app=inject(App);
   email: string;
   password: string;
   provider = new GoogleAuthProvider();
@@ -72,6 +74,7 @@ export class LoginPage {
         this.signedIn = false;
         this.userName = 'Guest';
         this.getGame(0); //da mettere un link
+        this.info=new Userinfo;
         // ...
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -114,9 +117,7 @@ export class LoginPage {
         this.info.info.games.push(this.rules.gameID);
         this.info.info.gamenames.push(inp.toString());
         this.info.addUser(this.info.id);
-        // setCustomUserClaims is an Admin SDK operation and cannot be
-        // performed from the client. Call a secure backend or Cloud
-        // Function to set custom claims for this.info.id instead.
+        //customUserclaims?
       }
     })
   }
@@ -154,8 +155,7 @@ export class LoginPage {
     auth.signOut().then(() => {
       this.optionsOp = false;
       this.ref.markForCheck();
-      this.getGame(0);
-      this.rules.isDM=false;
+      this.info=new Userinfo;
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -204,6 +204,8 @@ export class LoginPage {
     this.rules.getRules(id).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
+      this.rules.lookFor = 0;
+      this.rules.lookDep = 0;
         if(this.rules.DMIds.includes(this.info.id)) {
           this.rules.isDM = true;
         }

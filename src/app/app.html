@@ -46,7 +46,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList[6]; track j.id){
+            @for(j of this.iconsNames.ordCharaList[6]; track j.name){
                @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.deleteChara(j.id, 0)">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">

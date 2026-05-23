@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DocumentSnapshot, doc, getDoc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
+import { DocumentSnapshot, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { Rules, RulesConverter } from '../rules';
 import { inject } from '@angular/core';
 import { FireInit } from '../fire-init';
+import { Userinfo } from './userinfo';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +42,7 @@ export class Sharedrules {
   lookDep = 0;
   isDM = false;
   init = inject(FireInit);
-
+  info= inject(Userinfo)
 
   constructor() {
   }
@@ -116,7 +117,7 @@ export class Sharedrules {
       snapshot1 = await getDoc(gameRef);
     }
       this.gameID = i;
-      this.DMIds = [];
+      this.DMIds = [this.info.id];
       this.playerIDs=[];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
       this.charaList = [];//id personaggi
       this.deadCh = [];

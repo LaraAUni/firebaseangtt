@@ -11,11 +11,11 @@ import { Sharedrules, Departments } from './services/sharedrules';
 import { IconsNames } from './services/icons-names';
 import { NgStyle } from '@angular/common';
 import { CharaConverter } from './chara-sheet/characlass';
-import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, deleteDoc, getDoc, DocumentSnapshot, setDoc } from 'firebase/firestore';
 import { FireInit } from './fire-init';
 import { Userinfo } from './services/userinfo';
 import { Rules } from './rules';
-import { UserConverter } from './services/userdata';
+import { UserConverter, UserData } from './services/userdata';
 
 @Component({
   selector: 'app-root',
@@ -66,7 +66,7 @@ export class App {
     this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
     }
     await deleteDoc(charRef);
-    if(temp) this.rules.addRules();
+    if(temp) this.rules.addRules(); //temp vuol dire che non è per cancellare la partita, altrimenti rischio di salvare le regole dopo che sono state cancellate perché è asynch
   }
 
   async deleteAbno(n: number=this.rules.lookFor, d:number=this.rules.lookDep, id=this.rules.gameID, temp: boolean=true){
@@ -84,7 +84,9 @@ export class App {
   async deleteGame(id:number, you:string=this.userd.id){
     let nrules:Rules;
     nrules=await this.rules.findRules(id);
+    console.log(nrules);
     if(!nrules.DMIds.includes(you)) return;
+    console.log('deleting', id)
     nrules.charaList.forEach(element => {
       this.deleteChara(element, undefined, id, false);
     });
@@ -93,15 +95,34 @@ export class App {
     });
     this.iconsNames.deleteList(id,false);
     this.iconsNames.deleteList(id,true);
-    nrules.DMIds.forEach(element=>{
-      const useRef = doc(this.init.db, 'userdata/'+you).withConverter(new UserConverter());
-      //da cancellare da user
+    nrules.DMIds.forEach(async element=>{
+      const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
+      const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
+            const uInfo: UserData = snapshot1.data()!;
+            uInfo.games.indexOf(id);
+            uInfo.games=uInfo.games.filter(c=>c==id);
+            let name= uInfo.gamenames[uInfo.games.indexOf(id)]
+            uInfo.gamenames=uInfo.gamenames.filter(c=>c==name);
+            setDoc(userRef, uInfo).then((e)=>{if(element==you)this.userd.getUser(you);})
+    })
+    nrules.playerIDs.forEach(async element=>{
+      const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
+      const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
+            const uInfo: UserData = snapshot1.data()!;
+            uInfo.games.indexOf(id);
+            uInfo.games=uInfo.games.filter(c=>c==id);
+            let name= uInfo.gamenames[uInfo.games.indexOf(id)]
+            uInfo.gamenames=uInfo.gamenames.filter(c=>c==name);
+            setDoc(userRef, uInfo);
     })
     this.rules.deleteRules(id);
+      this.rules.getRules(0).then((e)=>{
+      this.iconsNames.ordCharaList=[];
+      this.iconsNames.ordAbnoList=[];
+      this.rules.lookFor = 0;
+      this.rules.lookDep = 0;
+      this.rules.isDM = false;
+    })
   }
 
-  charaPress(id:number){
-    this.showChara=1;
-    //poi vai al numero aaaa
-  }
 }

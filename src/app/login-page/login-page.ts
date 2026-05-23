@@ -2,8 +2,23 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { GoogleAuthProvider, signInWithPopup, signOut, user, Auth } from  '@angular/fire/auth';
-import { inject } from '@angular/core';
+import { Sharedrules } from '../services/sharedrules'
+import {
+  EmailAuthCredential,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  createUserWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+import { UserData, UserConverter } from '../services/userdata';
+import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
+import { IconsNames } from '../services/icons-names';
+import { Userinfo } from '../services/userinfo';
+
 
 @Component({
   selector: 'app-login-page',

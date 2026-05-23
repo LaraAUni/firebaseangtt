@@ -1,6 +1,15 @@
 import { ChangeDetectorRef, Component, inject,} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { FireInit } from '../fire-init';
+import { getDoc, setDoc, doc, DocumentSnapshot, deleteDoc } from "firebase/firestore";
+import { NgTemplateOutlet } from '@angular/common';
+import { Character, CharaConverter } from './characlass';
+import { Sharedrules , Departments} from '../services/sharedrules';
+import { IconsNames } from '../services/icons-names';
+import { UserData } from '../services/userdata';
+import { Userinfo } from '../services/userinfo';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-chara-sheet',
@@ -350,23 +359,3 @@ this.ref.markForCheck();
     return (this.Chara.skills[a]?1:0) + (this.Chara.skills[b]?1:0) + (this.Chara.skills[c]?1:0) + (this.Chara.skills[d]?1:0);
   }
 }
-
-import { collection, getDocs } from "firebase/firestore"; 
-import { getFirestore } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAl6MOHLbKkHSp2UTNmmkzRZphfthmEn3E",
-  authDomain: "third-trumpet.firebaseapp.com",
-  projectId: "third-trumpet",
-  storageBucket: "third-trumpet.firebasestorage.app",
-  messagingSenderId: "218218565698",
-  appId: "1:218218565698:web:e02d7bf55af32ab7251ddb",
-  measurementId: "G-3RHTFBTNWY"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const querySnapshot = await getDocs(collection(db, "users"));
-querySnapshot.forEach((doc) => {
-  console.log(`${doc.id} => ${doc.data()}`);
-});

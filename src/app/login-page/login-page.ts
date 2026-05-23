@@ -66,7 +66,7 @@ export class LoginPage {
         this.userName = user.displayName || user.email || 'Username';
         await this.info.getUser().then((e)=>{
         console.log("user:", this.info.info.games[0])
-        if(this.info.info.games)this.getGame(this.info.info.games[0].id);
+        if(this.info.info.games)this.getGame(this.info.info.games[0]);
         });     
         // ...
       } else {
@@ -114,7 +114,8 @@ export class LoginPage {
       if(inp){
         this.newGame=false;
         await this.rules.newGame(inp.toString());
-        this.info.info.games.push({id: this.rules.gameID, name: inp.toString()});
+        this.info.info.games.push(this.rules.gameID);
+        this.info.info.gamenames.push(inp.toString());
         this.info.addUser(this.info.id);
         //customUserclaims?
       }

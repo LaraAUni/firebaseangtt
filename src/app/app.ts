@@ -99,14 +99,20 @@ export class App {
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             const uInfo: UserData = snapshot1.data()!;
-            uInfo.games=uInfo.games.filter(c=>c.id==id);
+            uInfo.games.indexOf(id);
+            uInfo.games=uInfo.games.filter(c=>c==id);
+            let name= uInfo.gamenames[uInfo.games.indexOf(id)]
+            uInfo.gamenames=uInfo.gamenames.filter(c=>c==name);
             setDoc(userRef, uInfo).then((e)=>{if(element==you)this.userd.getUser(you);})
     })
     nrules.playerIDs.forEach(async element=>{
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             const uInfo: UserData = snapshot1.data()!;
-            uInfo.games=uInfo.games.filter(c=>c.id==id);
+            uInfo.games.indexOf(id);
+            uInfo.games=uInfo.games.filter(c=>c==id);
+            let name= uInfo.gamenames[uInfo.games.indexOf(id)]
+            uInfo.gamenames=uInfo.gamenames.filter(c=>c==name);
             setDoc(userRef, uInfo);
     })
     this.rules.deleteRules(id);

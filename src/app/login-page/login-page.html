@@ -62,10 +62,10 @@ ui.start('#firebaseui-auth-container', {
   <form for="newGameName" name="MapOp" id="MapOp">
     @if(mapOp){
     <div class="infobox">
-      @if(deleting){@for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.app.deleteGame(i);">{{this.info.info.gamenames[ind]}}</button>}
+      @if(deleting){@for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.app.deleteGame(i.id);">{{i.name}}</button>}
       }
       @else{
-        @for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i);">{{this.info.info.gamenames[ind]}}</button>}
+        @for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.id);">{{i.name}}</button>}
       }
 
       @if(newGame){

@@ -65,9 +65,9 @@ export class LoginPage {
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'Username';
         await this.info.getUser().then((e)=>{
+        if(this.info.info.games[0])this.getGame(this.info.info.games[0].id);
         console.log("user:", this.info.info.games[0])
-        if(this.info.info.games)this.getGame(this.info.info.games[0].id);
-        });     
+        });
         // ...
       } else {
         // User is signed out
@@ -203,11 +203,6 @@ export class LoginPage {
     this.rules.getRules(id).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
-      this.rules.lookFor = 0;
-      this.rules.lookDep = 0;
-        if(this.rules.DMIds.includes(this.info.id)) {
-          this.rules.isDM = true;
-        }
     })
   }
 

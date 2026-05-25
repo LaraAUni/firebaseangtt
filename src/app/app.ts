@@ -14,12 +14,14 @@ import { CharaConverter } from './chara-sheet/characlass';
 import { doc, deleteDoc, getDoc, DocumentSnapshot, setDoc } from 'firebase/firestore';
 import { FireInit } from './fire-init';
 import { Userinfo } from './services/userinfo';
-import { Rules } from './rules';
+import { Rules, RulesConverter } from './rules';
 import { UserConverter, UserData } from './services/userdata';
+import { Messages } from "./messages/messages";
+import { Notifs } from './notifs';
 
 @Component({
   selector: 'app-root',
-  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, LoginPage, NgStyle],
+  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, LoginPage, NgStyle, Messages],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -32,6 +34,7 @@ export class App {
   iconsNames = inject(IconsNames);
   init=inject(FireInit);
   userd=inject(Userinfo)
+  notifs=inject(Notifs);
   deps=Departments;
   showChara = 0;
   showAbno = 0;
@@ -82,41 +85,38 @@ export class App {
   }
 
   async deleteGame(id:number, you:string=this.userd.id){
-    let nrules:Rules;
-    nrules=await this.rules.findRules(id);
-    console.log(nrules);
-    if(!nrules.DMIds.includes(you)) return;
+    const rulesRef=doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
+    const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
+    let uRules = snapshot1.data()!;
+    console.log(uRules);
+    if(!uRules.DMIds.includes(you)) return;
     console.log('deleting', id)
-    nrules.charaList.forEach(element => {
+    uRules.charaList.forEach(element => {
       this.deleteChara(element, undefined, id, false);
     });
-    nrules.abnoList.forEach(element => {
+    uRules.deadCh.forEach(element => {
+      this.deleteChara(element, undefined, id, false);
+    });
+    uRules.abnoList.forEach(element => {
       this.deleteAbno(element, undefined, id, false);
     });
     this.iconsNames.deleteList(id,false);
     this.iconsNames.deleteList(id,true);
-    nrules.DMIds.forEach(async element=>{
+    uRules.DMIds.forEach(async element=>{
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
-            const uInfo: UserData = snapshot1.data()!;
-            uInfo.games=uInfo.games.filter(c=>c.id==id);
-            setDoc(userRef, uInfo).then((e)=>{if(element==you)this.userd.getUser(you);})
+            let uInfo: UserData = snapshot1.data()!;
+            uInfo.games=uInfo.games.filter(c=>c.id!=id);
+            setDoc(userRef, uInfo)
+            if(element==you) this.userd.info=uInfo;
     })
-    nrules.playerIDs.forEach(async element=>{
+    uRules.playerIDs.forEach(async element=>{
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
-            const uInfo: UserData = snapshot1.data()!;
-            uInfo.games=uInfo.games.filter(c=>c.id==id);
+            let uInfo: UserData = snapshot1.data()!;
+            uInfo.games=uInfo.games.filter(c=>c.id!=id);
             setDoc(userRef, uInfo);
     })
     this.rules.deleteRules(id);
-      this.rules.getRules(0).then((e)=>{
-      this.iconsNames.ordCharaList=[];
-      this.iconsNames.ordAbnoList=[];
-      this.rules.lookFor = 0;
-      this.rules.lookDep = 0;
-      this.rules.isDM = false;
-    })
   }
-
 }

@@ -50,10 +50,12 @@ export class Sharedrules {
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
 
   async getRules(id: number = this.gameID): Promise<void> {
-    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
+    let uRules: Rules;
+    if(id){const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
-    const uRules: Rules = snapshot1.data()!;
-    this.gameID=id;
+    uRules = snapshot1.data()!;
+    this.gameID=id;}
+    else uRules= new Rules;
     if (uRules) {
       this.DMIds = uRules.DMIds;
       this.playerIDs=uRules.playerIDs;
@@ -83,23 +85,21 @@ export class Sharedrules {
       this.agentAbs = uRules.agentAbs;
       this.traumas = uRules.traumas;
       this.traum3nabled = uRules.traum3nabled;
-      console.log("Rules obtained: ", this.gameID);
+      console.log("Rules obtained: ", this.gameID, "DM:", this.isDM);
     }
+    this.isDM=this.DMIds.includes(this.info.id);
+    console.log("Got Rules:", uRules)
+    return;
   }
   
+  
+
   async addRules(): Promise<void> {
     //if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(rulesRef, new Rules(this.DMIds, this.playerIDs, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
     const snapshot1 = await getDoc(rulesRef);
     console.log("Rules saved: ", snapshot1.data());
-  }
-
-  async findRules(id:number): Promise<Rules> {
-    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
-    const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
-    const uRules: Rules = snapshot1.data()!;
-    return uRules;
   }
 
   async deleteRules(id:number){
@@ -145,6 +145,7 @@ export class Sharedrules {
       this.agentAbs = [];
       this.traumas = [];
       this.traum3nabled = false;
+      this.isDM=true;
     this.addRules();
   }
 

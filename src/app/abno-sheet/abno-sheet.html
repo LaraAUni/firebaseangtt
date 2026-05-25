@@ -5,21 +5,21 @@
             <label for="wDamage" class="label">Work Damage</label>
         <span class="damage">
             <img src="{{AbnoSheet.wDam[0]}}Damage.png" alt="{{AbnoSheet.wDam[0]}}" class="damicon">
-            <select id="wDamage" name="wDamage" class="damselect">
+            <select id="wDamage" name="wDamage" class="damselect" [disabled]="(!this.isDM)">
                 @for(i of ["Red", "White", "Black", "Pale"]; track i){
                     @if(i==AbnoSheet.wDam[0]){<option selected value="{{i}}" (click)="AbnoSheet.wDam[0]=i"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
                     @else{<option value="{{i}}" (click)="AbnoSheet.wDam[0]=i"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
                 }
-                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[1]}}" name="wDam1"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[2]}}" name="wDam2"></span>
+                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[1]}}" name="wDam1" [readonly]="(!this.isDM)"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.wDam[2]}}" name="wDam2" [readonly]="(!this.isDM)"></span>
         </div>
         @if(this.AbnoData.clock1[0]==this.AbnoData.clock1[1]){
-        @if(showname){<input type=text placeholder="{{AbnoSheet.fullName.Name}}" class="abnoname" autocomplete="off" name="AbnoName" maxlength="30">}
-        @else{<input type=text placeholder="{{AbnoSheet.fullName.Nickname}}" class="abnoname" autocomplete="off" name="AbnoNick" maxlength="30">}
+        @if(showname){<input type=text placeholder="{{AbnoSheet.fullName.Name}}" class="abnoname" autocomplete="off" name="AbnoName" maxlength="30" [readonly]="(!this.isDM)">}
+        @else{<input type=text placeholder="{{AbnoSheet.fullName.Nickname}}" class="abnoname" autocomplete="off" name="AbnoNick" maxlength="30" [readonly]="(!this.isDM)">}
         }
         @else{<span class="abnoname">???</span>}
         <div class="codedange">
-        <input type=text placeholder="{{AbnoSheet.fullName.Code}}" class="code" autocomplete="off" name="AbnoCode">
-                <select class="danger" id="danger" name="danger" [ngStyle]="{'background-color': dangerColor}">
+        <input type=text placeholder="{{AbnoSheet.fullName.Code}}" class="code" autocomplete="off" name="AbnoCode" [readonly]="(!this.isDM)">
+                <select class="danger" id="danger" name="danger" [ngStyle]="{'background-color': dangerColor}" [disabled]="(!this.isDM)">
                 @for(i of [1, 2, 3, 4, 5]; track i){
                     @if(i==AbnoSheet.danger){<option selected>{{dang[i]}}</option>}
                     @else{<option>{{dang[i]}}</option>}
@@ -37,36 +37,36 @@
         </div>
     </div>
     <div class="escape">
-        <div class="counterdam"><span class="counter"><input type="text" style="background:none" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoData.qClock}}" name="currQlip"></span>
+        <div class="counterdam"><span class="counter"><input type="text" style="background:none" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoData.qClock}}" name="currQlip" [readonly]="(!this.isDM)"></span>
                 <label for="eDamage" class="label">Escape Damage</label>
             <div class="escapedam">
             <img src="{{AbnoSheet.eDam[0]}}Damage.png" alt="{{AbnoSheet.eDam[0]}}" class="damicon">
-                <select id="eDamage" name="eDamage" class="damselect">
+                <select id="eDamage" name="eDamage" class="damselect" [disabled]="(!this.isDM)">
                 @for(i of ["Red", "White", "Black", "Pale"]; track i){
                     @if(i==AbnoSheet.eDam[0]){<option selected value="{{i}}" (click)="AbnoSheet.eDam[0] = i;"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
                     @else{<option value="{{i}}" (click)="AbnoSheet.eDam[0] = i;"><img src="{{i}}Damage.png" alt="{{i}}" class="resicon"></option>}
                 }
-                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[1]}}" name="eDam1"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[2]}}" name="eDam2"></div>
+                </select><span style="opacity: 0; max-width: 3vw;">---</span>  <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[1]}}" name="eDam1" [readonly]="(!this.isDM)"> - <input type="text" inputmode="numeric" maxlength="2" size="2" placeholder="{{AbnoSheet.eDam[2]}}" name="eDam2" [readonly]="(!this.isDM)"></div>
         </div>
     <div class="resistances">
             <div class="resistance" style="border-color: #CB2642; color:#CB2642;">
                     <div class="resitem1"><img class="resicon" src="RedDamage.png" alt=""></div>
-                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[0]%1==0?AbnoSheet.resistances[0]+'.0':AbnoSheet.resistances[0])}}" name="res1">
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[0]%1==0?AbnoSheet.resistances[0]+'.0':AbnoSheet.resistances[0])}}" name="res1" [readonly]="(!this.isDM)">
             </div>
             </div>
             <div class="resistance" style="border-color: #EFECC0; color:#EFECC0;">
                     <div class="resitem1"><img class="resicon" src="WhiteDamage.png" alt=""></div>
-                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[1]%1==0?AbnoSheet.resistances[1]+'.0':AbnoSheet.resistances[1])}}" name="res1">
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[1]%1==0?AbnoSheet.resistances[1]+'.0':AbnoSheet.resistances[1])}}" name="res1" [readonly]="(!this.isDM)">
             </div>
             </div>
             <div class="resistance" style="border-color: #814A84; color:#814A84;">
                     <div class="resitem1"><img class="resicon" src="BlackDamage.png" alt=""></div>
-                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[2]%1==0?AbnoSheet.resistances[2]+'.0':AbnoSheet.resistances[2])}}" name="res1">
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[2]%1==0?AbnoSheet.resistances[2]+'.0':AbnoSheet.resistances[2])}}" name="res1" [readonly]="(!this.isDM)">
             </div>
             </div>  
             <div class="resistance" style="border-color: #3FCCBD; color:#3FCCBD;">
                     <div class="resitem1"><img class="resicon" src="PaleDamage.png" alt=""></div>
-                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[3]%1==0?AbnoSheet.resistances[3]+'.0':AbnoSheet.resistances[3])}}" name="res1">
+                    <div class="resitem2">x <input type="text" inputmode="numeric" maxlength="3" size="3" max="2" placeholder="{{(AbnoSheet.resistances[3]%1==0?AbnoSheet.resistances[3]+'.0':AbnoSheet.resistances[3])}}" name="res1" [readonly]="(!this.isDM)">
             </div>
             </div>
         </div>
@@ -74,26 +74,26 @@
         <div class="preferences">
             <div class="preference" style=" border-color: #008837;"><label for="prefType" class="label">Preferred Work Type</label>
                 @for(i of AbnoSheet.preferences[0].type; track i; let ind=$index){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt="">
-                <select id="prefType" name="prefType{{ind}}" class="prefselect">
+                <select id="prefType" name="prefType{{ind}}" class="prefselect" [disabled]="(!this.isDM)">
                 @for(j of ["Instinct", "Insight", "Attachment", "Repression"]; track j){
                     @if(j==i){<option selected value="{{j}}" (click)="AbnoSheet.preferences[0].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
                     @else{<option value="{{j}}" (click)="AbnoSheet.preferences[0].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
                 }
                 </select></div>}
                 <span class="preftext">Preferred: 
-                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[0].desc}}" name="pref1" class="preftext">{{AbnoSheet.preferences[0].desc}}</textarea>
+                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[0].desc}}" name="pref1" class="preftext" [disabled]="(!this.isDM)">{{AbnoSheet.preferences[0].desc}}</textarea>
                 </span>
             </div>
             <div class="preference" style=" border-color: #D64D4D;"><label for="prefType2" class="label">Disfavoured Work Type</label>
                 @for(i of AbnoSheet.preferences[1].type; track i; let ind=$index){<div class="prefitem1"><img class="preficon" src="{{i}}.png" alt="">
-                <select id="prefType2" name="prefType2{{ind}}" class="prefselect">
+                <select id="prefType2" name="prefType2{{ind}}" class="prefselect" [disabled]="(!this.isDM)">
                 @for(j of ["Instinct", "Insight", "Attachment", "Repression"]; track j){
                     @if(j==i){<option selected value="{{j}}" (click)="AbnoSheet.preferences[1].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
                     @else{<option value="{{j}}" (click)="AbnoSheet.preferences[1].type[ind] = j;"><img src="{{j}}.png" alt="{{j}}" class="resicon"></option>}
                 }
                 </select></div>}
                 <span class="preftext">Disfavoured: 
-                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[1].desc}}" name="pref2" class="preftext">{{AbnoSheet.preferences[1].desc}}</textarea></span>
+                    <textarea type="text" inputmode="text" cols="20" rows="2" placeholder="{{AbnoSheet.preferences[1].desc}}" name="pref2" class="preftext" [disabled]="(!this.isDM)">{{AbnoSheet.preferences[1].desc}}</textarea></span>
             </div>
         </div>
     <div class="clocks">
@@ -105,14 +105,14 @@
         <div class="hints" style="grid-row:5">
             <div class="hinttext" style="font-weight: bold;">Abilities:</div>
             @for(i of AbnoSheet.abilities; track i; let ind=$index){
-            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="ability{{ind}}">{{i}}</textarea></div>}
-            @else{<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="---" name="ability1">---</textarea></div>}}
+            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="ability{{ind}}" [disabled]="(!this.isDM)">{{i}}</textarea></div>}
+            @else{<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="---" name="ability1" [disabled]="(!this.isDM)">---</textarea></div>}}
             <div class="hinttext" style="font-weight: bold;">Trials:</div>
-            @for ( i of AbnoSheet.trials ; track i; let ind=$index) {
+            @for ( i of AbnoSheet.trials ; track i.Name; let ind=$index) {
             @if(i!=null){<div class="hinttext">
-                <input style="max-width: 15vw;" type="text" maxlength="32" size="{{i.Name.length > 10 ? i.Name.length : 10}}" placeholder="{{i.Name}}"> - <input type="text" size="2" placeholder="{{AbnoData.trialClock[ind]}}"> / <input type="text" size="2" placeholder="{{i.Clock}}">
-                <input class="hintinput" type="text" maxlength="45" size="35" placeholder="{{i.Effect}}">
-                <textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i.Desc}}" name="TrialDesc{{ind}}">{{i.Desc}}</textarea>
+                <input style="max-width: 15vw;" type="text" maxlength="32" size="{{i.Name.length > 10 ? i.Name.length : 10}}" placeholder="{{i.Name}}" [readonly]="(!this.isDM)"> - <input type="text" size="2" placeholder="{{AbnoData.trialClock[ind]}}" [readonly]="(!this.isDM)"> / <input type="text" size="2" placeholder="{{i.Clock}}" [readonly]="(!this.isDM)">
+                <input class="hintinput" type="text" maxlength="45" size="35" placeholder="{{i.Effect}}" [readonly]="(!this.isDM)">
+                <textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i.Desc}}" name="TrialDesc{{ind}}" [disabled]="(!this.isDM)">{{i.Desc}}</textarea>
             </div>}
             @if (AbnoSheet.trials.length<2) { <div class="hinttext" style="padding: 2%; padding-bottom: 15%;">
         </div>}
@@ -124,13 +124,13 @@
         </div>
         <div class="hints" style="grid-row:6">
             @for ( i of AbnoSheet.management ; track i; let ind=$index) {
-            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="manage{{ind}}">{{i}}</textarea></div>}
+            @if(i!=null){<div class="hinttext"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="{{i}}" name="manage{{ind}}" [disabled]="(!this.isDM)">{{i}}</textarea></div>}
             @if (AbnoSheet.management.length<2) { <div class="hinttext" style="padding: 2%; padding-bottom: 27%;">
         </div>}
         }
         @empty{
-        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="No Management Tips" name="manage1">No Management Tips</textarea></div>}
-        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="Nessun Suggerimento per il Management" name="manage1">Nessun Suggerimento per il Management</textarea></div>}
+        @if(lang=='en'){<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="No Management Tips" name="manage1" [disabled]="(!this.isDM)">No Management Tips</textarea></div>}
+        @else{<div class="hinttext" style="padding: 2%; padding-bottom: 27%;"><textarea class="hintinput" type="text" inputmode="text" cols="40" rows="3" placeholder="Nessun Suggerimento per il Management" name="manage1" [disabled]="(!this.isDM)">Nessun Suggerimento per il Management</textarea></div>}
         }
         </div>
 </form>

@@ -9,9 +9,7 @@
       <img class="openbtn" mat-button (click)="drawer.toggle();" src="button.png" alt="B">
     </div>
     <app-my-map></app-my-map>
-    <div class="recap">
-      <span>Recap</span>
-    </div>
+    <app-messages></app-messages>
   </mat-drawer-content>
   <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
     <mat-list>
@@ -90,6 +88,13 @@
           (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
       </mat-expansion-panel>
     </mat-list>
+    <div>
+    <img mat-button class="button" alt="FT" src="FirstTrumpet.png" (click)="this.notifs.trumpetSound(1); this.notifs.trumpets=1;">
+    <img mat-button class="button" alt="FT" src="SecondTrumpet.png" (click)="this.notifs.trumpetSound(2); this.notifs.trumpets=2;">
+    <img mat-button class="button" alt="FT" src="ThirdTrumpet.png" (click)="this.notifs.trumpetSound(3); this.notifs.trumpets=3;">
+    @if(this.notifs.trumpets!=0){
+    <img mat-button class="button" alt="FT" src="undo.png" (click)="this.notifs.trumpetSound(0); this.notifs.trumpets=0;">
+    }</div>
     <label class="switch" for="lightmode-toggle">
       <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">
       <span class="slider"></span>

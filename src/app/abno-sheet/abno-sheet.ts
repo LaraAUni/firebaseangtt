@@ -18,20 +18,22 @@ export class AbnoSheet {
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
-    isDM=false;
+    isDM=this.rules.isDM;
     AbnoSheet : Abnormality;
     AbnoData : AbnoData;
     abnoID=0;
     depColor:string;
     dangerColor:string;
     HTclocks: string[]=[];
-    showname=false;
+    showname=false; //mettere AbnoSelect in Name alla creazione
     dang= Danger;
   constructor(private ref: ChangeDetectorRef){
     this.AbnoSheet=new Abnormality();
     this.AbnoData=new AbnoData(); //Se non ha altri nomi inutile chiedere, meno rischi di sbagli per DM
     this.depColor="var(--Bonus)";
     this.dangerColor="var(--Bonus)";
+    this.AbnoData.department=1;
+    this.addData();
   }
 
 ngOnInit(){
@@ -49,6 +51,8 @@ ngOnInit(){
 
   // Rest of the logic (collect data, updatewiew)
 const formData = new FormData(form);
+
+if(!this.isDM) return;
 
 let inp;
 inp=formData.get('AbnoName');

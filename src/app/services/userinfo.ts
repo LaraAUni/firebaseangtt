@@ -19,7 +19,6 @@ export class Userinfo {
     const useRef = doc(this.fireInit.db, 'userdata/'+id).withConverter(new UserConverter());
     await setDoc(useRef, this.info);
     const snapshot1 = await getDoc(useRef);
-    console.log("User saved: ", snapshot1.data());
   }
 
   async getUser(id:string=this.id): Promise<void> {

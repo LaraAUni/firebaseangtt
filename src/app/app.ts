@@ -17,7 +17,7 @@ import { Userinfo } from './services/userinfo';
 import { Rules, RulesConverter } from './rules';
 import { UserConverter, UserData } from './services/userdata';
 import { Messages } from "./messages/messages";
-import { Notifs } from './notifs';
+import { Notifs } from './services/notifs';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +40,7 @@ export class App {
   showAbno = 0;
   showArmo = 0;
   deleting=false;
-  constructor(){
+  constructor(private ref: ChangeDetectorRef){
   }
   
   async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep, id=this.rules.gameID, temp: boolean=true){
@@ -49,7 +49,6 @@ export class App {
     let owns=false;
     for(let i=0; i<this.userd.info.characters.length;i++){
     let [game, findId]=this.userd.info.characters[i].split('-');
-    console.log(this.userd.info.characters[i]);
     if(Number(game)!=this.rules.gameID) continue;
     if(Number(findId)==n) owns=true;
     break;
@@ -88,9 +87,7 @@ export class App {
     const rulesRef=doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
     let uRules = snapshot1.data()!;
-    console.log(uRules);
     if(!uRules.DMIds.includes(you)) return;
-    console.log('deleting', id)
     uRules.charaList.forEach(element => {
       this.deleteChara(element, undefined, id, false);
     });
@@ -118,5 +115,10 @@ export class App {
             setDoc(userRef, uInfo);
     })
     this.rules.deleteRules(id);
+  }
+  trumpetSound(n:number){
+    this.notifs.trumpetSound(n);
+    this.notifs.trumpets=n;
+    this.notifs.addMessage(this.rules.gameID);
   }
 }

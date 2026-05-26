@@ -85,10 +85,8 @@ export class Sharedrules {
       this.agentAbs = uRules.agentAbs;
       this.traumas = uRules.traumas;
       this.traum3nabled = uRules.traum3nabled;
-      console.log("Rules obtained: ", this.gameID, "DM:", this.isDM);
     }
     this.isDM=this.DMIds.includes(this.info.id);
-    console.log("Got Rules:", uRules)
     return;
   }
   
@@ -99,7 +97,6 @@ export class Sharedrules {
     const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(rulesRef, new Rules(this.DMIds, this.playerIDs, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
     const snapshot1 = await getDoc(rulesRef);
-    console.log("Rules saved: ", snapshot1.data());
   }
 
   async deleteRules(id:number){

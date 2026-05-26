@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { collection, query, waitForPendingWrites, where } from "firebase/firestore";
 import { doc, getDoc, DocumentSnapshot, setDoc, deleteDoc } from 'firebase/firestore';
 import { FireInit } from '../fire-init';
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from '../abno-sheet/abnoclass';
 import { Character, CharaConverter } from '../chara-sheet/characlass';
 import { Sharedrules } from './sharedrules';
-import { WithFieldValue, QueryDocumentSnapshot, SnapshotOptions, FirestoreDataConverter } from 'firebase/firestore';
+import { Iconsclass, listConverter } from '../iconsclass';
 
 @Injectable({
   providedIn: 'root',
@@ -24,19 +23,16 @@ export class IconsNames {
 
   async addList(bool: boolean) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        let use=[];
-        if(bool)use= this.ordAbnoList.filter(c=>c);
-        else use= this.ordCharaList.filter(c=>c);
-        console.log("use:", use)
-        let list=(new iconList(use));
+        console.log('FirstChara:',this.ordCharaList[0])
+        let list=(new Iconsclass([[this.ordCharaList[0][0]],this.ordCharaList[1],this.ordCharaList[2],this.ordCharaList[3],this.ordCharaList[4],this.ordCharaList[5],this.ordCharaList[6],this.ordCharaList[7]]));
         console.log("List to save: ", list);
         await setDoc(listRef, list);
   }
   
   async getList(bool: boolean) : Promise<void>{
     const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        const snapshot1: DocumentSnapshot<iconList> = await getDoc(listRef);
-        const list: iconList = snapshot1.data()!;
+        const snapshot1: DocumentSnapshot<Iconsclass> = await getDoc(listRef);
+        const list: Iconsclass = snapshot1.data()!;
         if (list) {
           console.log("List obtained: ", list);
           if(bool) {
@@ -70,9 +66,9 @@ export class IconsNames {
     this.ordAbnoList=Array(6).fill([]);
     if(type && this.rules.abnoList.length==0) return
       for(let i=0; i<this.rules.abnoList.length; i++){
-        let chara=this.getIcon(this.rules.abnoList[i], true)
-        if(!chara)continue;
-        chara.then((res)=>{
+        let ret=this.getIcon(this.rules.abnoList[i], true)
+        if(!ret)continue;
+        ret.then((res)=>{
           if(res){
             let [ico, dep] = res;
           for(let j=0; j<this.rules.depsList.length; j++){
@@ -87,7 +83,7 @@ export class IconsNames {
     return;
     }
     this.ordCharaList=Array(8).fill([]);
-    if(!type && this.rules.charaList.length==0)return;
+    if(!type && this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
       let ret=this.getIcon(this.rules.charaList[i], false)
       if(!ret)continue;
@@ -106,6 +102,7 @@ export class IconsNames {
         }
       }).catch((err)=>{console.log(err)});
     }
+    console.log("New List?:", this.ordCharaList)
     for(let i=0; i<this.rules.deadCh.length; i++){
         let ret=this.getIcon(this.rules.deadCh[i], false)
         if(!ret)continue;
@@ -117,6 +114,7 @@ export class IconsNames {
           }
         }).catch((err)=>{console.log(err)});
     }
+    console.log("New List:", this.ordCharaList)
     this.addList(type);
   }
 
@@ -147,75 +145,3 @@ export class IconsNames {
   }
 }
 
-
-export class iconList{ //???? Non va???
-    dep1?: {id: number, name: string, icon: string}[];
-    dep2?: {id: number, name: string, icon: string}[];
-    dep3?: {id: number, name: string, icon: string}[];
-    dep4?: {id: number, name: string, icon: string}[];
-    dep5?: {id: number, name: string, icon: string}[];
-    dep6?: {id: number, name: string, icon: string}[];
-    dep7?: {id: number, name: string, icon: string}[]; //massimo 6 dipartmenti ma serve per riserve e morti
-    dep8?: {id: number, name: string, icon: string}[];
-    constructor(list:{id: number, name: string, icon: string}[][]=[]) {
-      let len=list.length;
-      console.log("List to create: ", list);
-      let newList: {id: number, name: string, icon: string}[][] = [];
-      newList=list.slice();
-      console.log("First item: ", list[0]);
-      console.log("List length: ", len);
-      console.log("New List: ", newList);
-      switch(len){
-        case 8: this.dep8=list[7];
-        case 7: this.dep7=list[6];
-        case 6: this.dep6=list[5];
-        case 5: this.dep5=list[4];
-        case 4: this.dep4=list[3];
-        case 3: this.dep3=list[2];
-        case 2: this.dep2=list[1];
-        case 1: this.dep1=list[0];
-        default: break;
-      }
-    }
-}
-
-interface iListFS{
-    dep1?: {id: number, name: string, icon: string}[];
-    dep2?: {id: number, name: string, icon: string}[];
-    dep3?: {id: number, name: string, icon: string}[];
-    dep4?: {id: number, name: string, icon: string}[];
-    dep5?: {id: number, name: string, icon: string}[];
-    dep6?: {id: number, name: string, icon: string}[];
-    dep7?: {id: number, name: string, icon: string}[];
-    dep8?: {id: number, name: string, icon: string}[];
-}
-
-
-export class listConverter implements FirestoreDataConverter<iconList, iListFS> {
-  toFirestore(icon: WithFieldValue<iconList>) : WithFieldValue<iListFS> {
-    let res: WithFieldValue<iListFS> = {};
-    let len=0;
-    for(var prop in icon){
-      if(icon[prop as keyof iconList]==undefined) continue;
-      len++;
-    }
-    console.log("Lenght toFirestore: ", len);
-    switch(len){
-      case 8: (icon.dep8 ? res.dep8=icon.dep8 : res.dep8=[]);
-      case 7: (icon.dep7 ? res.dep7=icon.dep7 : res.dep7=[]);
-      case 6: (icon.dep6 ? res.dep6=icon.dep6 : res.dep6=[]);
-      case 5: (icon.dep5 ? res.dep5=icon.dep5 : res.dep5=[]);
-      case 4: (icon.dep4 ? res.dep4=icon.dep4 : res.dep4=[]);
-      case 3: (icon.dep3 ? res.dep3=icon.dep3 : res.dep3=[]);
-      case 2: (icon.dep2 ? res.dep2=icon.dep2 : res.dep2=[]);
-      case 1: (icon.dep1 ? res.dep1=icon.dep1 : res.dep1=[]);
-      default: break;
-    }
-    return res;
-  }
-  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): iconList {
-      const data = snapshot.data(options) as iListFS;
-      let res = [ data.dep1 ?? [], data.dep2 ?? [], data.dep3 ?? [], data.dep4 ?? [], data.dep5 ?? [], data.dep6 ?? [], data.dep7 ?? [], data.dep8 ?? [] ];
-      return new iconList(res);
-  }
-}

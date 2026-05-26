@@ -16,7 +16,7 @@
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agents</mat-expansion-panel-header>
-        @for(i of this.rules.depsList; track i; let ind = $index){
+        @for(i of this.rules.depsList; track  $index; let ind = $index){
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links"
             [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
@@ -24,7 +24,7 @@
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-              @for(j of this.iconsNames.ordCharaList[ind]; track j.id){
+              @for(j of this.iconsNames.ordCharaList[ind]; track $index){
             @if(deleting){
               <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.deleteChara(j.id, i)">
               <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
@@ -44,7 +44,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList[6]; track j.name){
+            @for(j of this.iconsNames.ordCharaList[6]; track $index){
                @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.deleteChara(j.id, 0)">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
@@ -68,7 +68,7 @@
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
-        @for(i of this.rules.depsList; track i; let ind = $index){
+        @for(i of this.rules.depsList; track $index; let ind = $index){
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links"
             [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
@@ -89,11 +89,11 @@
       </mat-expansion-panel>
     </mat-list>
     <div>
-    <img mat-button class="button" alt="FT" src="FirstTrumpet.png" (click)="this.notifs.trumpetSound(1); this.notifs.trumpets=1;">
-    <img mat-button class="button" alt="FT" src="SecondTrumpet.png" (click)="this.notifs.trumpetSound(2); this.notifs.trumpets=2;">
-    <img mat-button class="button" alt="FT" src="ThirdTrumpet.png" (click)="this.notifs.trumpetSound(3); this.notifs.trumpets=3;">
+    <img mat-button class="button" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
+    <img mat-button class="button" alt="FT" src="SecondTrumpet.png" (click)="this.trumpetSound(2);">
+    <img mat-button class="button" alt="FT" src="ThirdTrumpet.png" (click)="this.trumpetSound(3);">
     @if(this.notifs.trumpets!=0){
-    <img mat-button class="button" alt="FT" src="undo.png" (click)="this.notifs.trumpetSound(0); this.notifs.trumpets=0;">
+    <img mat-button class="button" alt="FT" src="undo.png" (click)="this.trumpetSound(0);">
     }</div>
     <label class="switch" for="lightmode-toggle">
       <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">

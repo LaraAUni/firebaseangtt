@@ -41,7 +41,6 @@ ngOnInit(){
   else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
     //Funzione per nuove Abno wip, ma avrà un selettore per quelle esistenti
   }
-  console.log("AbnoData: ", this.AbnoData);
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -57,7 +56,6 @@ if(!this.isDM) return;
 let inp;
 inp=formData.get('AbnoName');
 if(inp)this.AbnoSheet.fullName.Name=inp.toString();
-console.log("Abno: ",formData.entries());
 
 
 this.ref.markForCheck();
@@ -76,7 +74,6 @@ this.addAbno();
     this.dangerColorUp();
     this.getData();
     }
-    console.log("thisAbnoSheet: ", this.AbnoSheet);
   }
 
   async getData(game:number=this.rules.gameID, id:number=this.rules.lookFor): Promise<void> {
@@ -90,21 +87,16 @@ this.addAbno();
     this.clockFill();
     this.ref.markForCheck();
     }
-    console.log("thisAbnoData: ", this.AbnoData);
   }
   async addAbno() : Promise<void>{
     if(this.abnoID==0) return;//Toglierlo per cambiare default, ma meglio modificarli da Firebase
       const abnoRef = doc(this.db, 'abnos/'+this.abnoID).withConverter(new AbnoConverter());
-      await setDoc(abnoRef, this.AbnoSheet);
-      const snapshot1 = await getDoc(abnoRef);
-      console.log("Abnormality saved: ", snapshot1.data());} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
+      await setDoc(abnoRef, this.AbnoSheet);} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
 
   async addData() : Promise<void>{
     if(this.rules.gameID==0) return;
       const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
-      await setDoc(abnoRef, this.AbnoData);
-      const snapshot1 = await getDoc(abnoRef);
-      console.log("Data saved: ", snapshot1.data()); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
+      await setDoc(abnoRef, this.AbnoData); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
 }
   depColorUp(c: number=this.AbnoData.department){
     let newC=this.rules.depColorUp(c);

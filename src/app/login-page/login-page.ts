@@ -19,6 +19,7 @@ import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "fir
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { App } from '../app';
+import { Notifs } from '../services/notifs';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class LoginPage {
   iconsNames=inject(IconsNames);
   info=inject(Userinfo)
   app=inject(App);
+  notifs=inject(Notifs);
   email: string;
   password: string;
   provider = new GoogleAuthProvider();
@@ -66,7 +68,6 @@ export class LoginPage {
         this.userName = user.displayName || user.email || 'Username';
         await this.info.getUser().then((e)=>{
         if(this.info.info.games[0])this.getGame(this.info.info.games[0].id);
-        console.log("user:", this.info.info.games[0])
         });
         // ...
       } else {
@@ -203,6 +204,8 @@ export class LoginPage {
     this.rules.getRules(id).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
+      this.notifs.getMessage(id).then((e)=>{
+      })
     })
   }
 

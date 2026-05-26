@@ -21,7 +21,6 @@ deps=Departments;
 departments=this.map.departments;
 floordisp: number = this.map.floors;
 constructor(){
-  console.log(this.map);
   //this.saveMap(); Ho dimenticato che Firebase non salva gli Array di Array
 }
   async saveMap(){

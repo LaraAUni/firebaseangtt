@@ -7,9 +7,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules , Departments} from '../services/sharedrules';
 import { IconsNames } from '../services/icons-names';
-import { UserData } from '../services/userdata';
 import { Userinfo } from '../services/userinfo';
-import { find } from 'rxjs';
+import { Notifs } from '../services/notifs';
 
 @Component({
   selector: 'app-chara-sheet',
@@ -24,6 +23,7 @@ export class CharaSheet {
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
   userd=inject(Userinfo);
+  notifs=inject(Notifs);
   deps=Departments;
   db = this.fireInit.db;
   Chara : Character;
@@ -50,11 +50,11 @@ ngOnInit(){
     let maxA:number;
     if(this.rules.charaList.length) maxA=Math.max(...this.rules.charaList);
     else  maxA=0;
-    let maxD:number
-    if(this.rules.deadCh.length) maxD=Math.max(...this.rules.charaList);
+    let maxD:number;
+    if(this.rules.deadCh.length) maxD=Math.max(...this.rules.deadCh);
     else  maxD=0;
+    console.log('Alive:',maxA,'Dead:', maxD)
     this.charID=(maxA>maxD?maxA+1:maxD+1);
-    console.log(maxA,maxD);
     this.new=true;
     this.rules.lookFor=this.charID;
   }
@@ -79,7 +79,6 @@ inp=formData.get('role1');
 if(inp)this.Chara.role[0]=inp.toString();
 inp=formData.get('role2');
 if(inp)this.Chara.role[1]=Number(inp);
-console.log("Dep: ", inp);
 this.depAbsUp();
 this.depColorUp();
 inp=formData.get('armor');
@@ -156,7 +155,6 @@ if(inp){inp=Number(inp);
   let ind=this.rules.depsList.indexOf(this.oldDep); //oldDep in caso è nuovo e per far funzionare Changedep
   if(this.oldDep==0) ind=6;
   if(this.isdead) ind=7;
-  console.log("Dep:",this.Chara.role[1],"Ind:", ind, "Icon:",this.iconsNames.ordCharaList[ind])
 
   if(this.new){
     ind=this.rules.depsList.indexOf(this.Chara.role[1]);
@@ -192,10 +190,13 @@ if(inp){inp=Number(inp);
         this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[7], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
       this.isdead=true
       this.rules.addRules();
+      let [a, ...last4]=this.notifs.last5;
+      if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
+      else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
+      this.notifs.addMessage(this.rules.gameID);
     }
     }
     else if(this.rules.deadCh.includes(this.charID)){
-      console.log("if reached");
       this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
       this.rules.charaList=[...this.rules.charaList, this.charID];
         this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=this.charID);
@@ -204,6 +205,10 @@ if(inp){inp=Number(inp);
         this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
       this.isdead=false
       this.rules.addRules();
+      let [a, ...last4]=this.notifs.last5;
+      if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
+      else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
+      this.notifs.addMessage(this.rules.gameID);
     }
 this.addChara();
 this.ref.markForCheck();
@@ -227,14 +232,11 @@ this.ref.markForCheck();
     this.ref.markForCheck();
     })
     }
-    console.log("thisChara: ", this.Chara);
   }
   async addChara() : Promise<void>{
     if(this.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + this.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(charRef, this.Chara);
-    const snapshot1 = await getDoc(charRef);
-    console.log("Chara saved: ", snapshot1.data());
   }
 
   async checkownership(){
@@ -242,7 +244,6 @@ this.ref.markForCheck();
     else{
     for(let i=0; i<this.userd.info.characters.length;i++){
     let [game, findId]=this.userd.info.characters[i].split('-');
-    console.log(this.userd.info.characters[i]);
     if(Number(game)!=this.rules.gameID) continue;
     if(Number(findId)==this.charID) this.owns=true;
     break;

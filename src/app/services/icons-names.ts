@@ -24,7 +24,7 @@ export class IconsNames {
   async addList(bool: boolean) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
         console.log('FirstChara:',this.ordCharaList[0])
-        let list=(new Iconsclass([[this.ordCharaList[0][0]],this.ordCharaList[1],this.ordCharaList[2],this.ordCharaList[3],this.ordCharaList[4],this.ordCharaList[5],this.ordCharaList[6],this.ordCharaList[7]]));
+        let list=(new Iconsclass());
         console.log("List to save: ", list);
         await setDoc(listRef, list);
   }
@@ -34,7 +34,6 @@ export class IconsNames {
         const snapshot1: DocumentSnapshot<Iconsclass> = await getDoc(listRef);
         const list: Iconsclass = snapshot1.data()!;
         if (list) {
-          console.log("List obtained: ", list);
           if(bool) {
             if(list.dep1) this.ordAbnoList=[list.dep1];
             if(list.dep2) this.ordAbnoList=[...this.ordAbnoList, list.dep2];
@@ -102,7 +101,6 @@ export class IconsNames {
         }
       }).catch((err)=>{console.log(err)});
     }
-    console.log("New List?:", this.ordCharaList)
     for(let i=0; i<this.rules.deadCh.length; i++){
         let ret=this.getIcon(this.rules.deadCh[i], false)
         if(!ret)continue;
@@ -114,7 +112,6 @@ export class IconsNames {
           }
         }).catch((err)=>{console.log(err)});
     }
-    console.log("New List:", this.ordCharaList)
     this.addList(type);
   }
 
@@ -122,6 +119,18 @@ export class IconsNames {
     const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
     deleteDoc(listRef);
   };
+
+  async toReserve(n: number, ind: number, id=this.rules.gameID){
+    if(ind==0) return;
+    const charRef = doc(this.fireInit.db, 'charas/' + this.rules.gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+          const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
+          let uChara: Character = snapshot1.data()!;
+          uChara.role[1]=0;
+          if(!this.rules.deadCh.includes(n)){
+          this.ordCharaList[ind]=this.ordCharaList[ind].filter(c=>c.id!=n);
+          this.ordCharaList[6]=[...this.ordCharaList[6], {id:n, name:uChara.fullName, icon:uChara.icoUrl}];}
+          await setDoc(charRef, uChara);
+  }
 
  async getIcon(id: number, type: boolean) : Promise<[{id: number, name: string, icon: string}, number]|null>{
     if(!type){

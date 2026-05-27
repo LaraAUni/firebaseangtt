@@ -35,7 +35,7 @@
             }
           <span class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</span>
           @if(deleting){
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
           @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}</span>
           </span>
@@ -52,7 +52,7 @@
               }
           <span class="newbutt" (click)="this.rules.lookDep=0; showChara=1; drawer.toggle(); this.rules.lookFor=0; this.rules.lookDep=0">+</span>
           @if(deleting){
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
           @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}
           </span>
@@ -78,7 +78,9 @@
             @for(j of this.iconsNames.ordAbnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
               (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
             <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-          <div class="newbutt" (click)="this.rules.lookDep=i; showAbno=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
+          @if(this.rules.isDM){
+            <div class="newbutt" (click)="this.rules.lookDep=i; showAbno=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
+          }
           </span>
         </mat-expansion-panel>
         }
@@ -89,11 +91,11 @@
       </mat-expansion-panel>
     </mat-list>
     <div>
-    <img mat-button class="button" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
-    <img mat-button class="button" alt="FT" src="SecondTrumpet.png" (click)="this.trumpetSound(2);">
-    <img mat-button class="button" alt="FT" src="ThirdTrumpet.png" (click)="this.trumpetSound(3);">
+    <img mat-button class="trumpetbutton" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
+    <img mat-button class="trumpetbutton" alt="FT" src="SecondTrumpet.png" (click)="this.trumpetSound(2);">
+    <img mat-button class="trumpetbutton" alt="FT" src="ThirdTrumpet.png" (click)="this.trumpetSound(3);">
     @if(this.notifs.trumpets!=0){
-    <img mat-button class="button" alt="FT" src="undo.png" (click)="this.trumpetSound(0);">
+    <img mat-button class="trumpetbutton" alt="FT" src="Undo.ico" (click)="this.trumpetSound(0);">
     }</div>
     <label class="switch" for="lightmode-toggle">
       <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">

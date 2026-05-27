@@ -148,8 +148,13 @@ export class Sharedrules {
 
   depColorUp(c: Departments) {
     if (c <= 10 + this.bonusDeps.length && c>0) {
-      if (c > 10) return [this.bonusColors[c - 11][0], this.bonusColors[c - 11][1]];
-      else if (c > 0) if (c == 8) return ["var(--Extraction)", true];
+      if (c > 10){ if(this.bonusColors.length > c - 11) return [this.bonusColors[c - 11][0], this.bonusColors[c - 11][1]]
+        else return ["var(--Bonus)", false];
+      }
+      else if (c > 0){ if (c == 8) return ["var(--Extraction)", true];
+        else if(c==2) return ["var(--Information)", true];
+      else if(c==7) return ["var(--Welfare)", true];}
+      
       return ["var(--" + Departments[c] + ")", false];
     }
     return ["var(--Bonus)", false];
@@ -159,7 +164,7 @@ export class Sharedrules {
     let slice = 100 / max; //calcolo quanto dall'orologio è riempito e per i quadranti uso uno sprite che li divide
     return `conic-gradient(${color} 0 ${filled * slice}%, ${background} ${filled * slice}% 100%)`;
   }
-
+  
   dangerColorUp(c: Danger) {
     if (c > 0 && c < 6) return "var(--" + Danger[c] + ")";
     return "var(--Bonus)";

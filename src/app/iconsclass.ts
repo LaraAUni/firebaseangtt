@@ -1,4 +1,5 @@
 import { WithFieldValue, QueryDocumentSnapshot, SnapshotOptions, FirestoreDataConverter } from 'firebase/firestore';
+
 export class Iconsclass{ //???? Non va???
     dep1?: {id: number, name: string, icon: string}[];
     dep2?: {id: number, name: string, icon: string}[];
@@ -8,23 +9,21 @@ export class Iconsclass{ //???? Non va???
     dep6?: {id: number, name: string, icon: string}[];
     dep7?: {id: number, name: string, icon: string}[]; //massimo 6 dipartmenti ma serve per riserve e morti
     dep8?: {id: number, name: string, icon: string}[];
-    constructor(list:{id: number, name: string, icon: string}[][]=[]) {
-      let len=list.length;
-      console.log("List to create: ", list);
-      let newList: {id: number, name: string, icon: string}[][] = [];
-      newList=list.slice();
-      switch(len){
-        case 8: this.dep8=list[7];
-        case 7: this.dep7=list[6];
-        case 6: this.dep6=list[5];
-        case 5: this.dep5=list[4];
-        case 4: this.dep4=list[3];
-        case 3: this.dep3=list[2];
-        case 2: this.dep2=list[1];
-        case 1: this.dep1=list[0];
-        default: break;
-      }
+      constructor(dep1:{id: number, name: string, icon: string}[]=[], dep2:{id: number, name: string, icon: string}[]=[],
+      dep3:{id: number, name: string, icon: string}[]=[], dep4:{id: number, name: string, icon: string}[]=[],
+      dep5:{id: number, name: string, icon: string}[]=[], dep6:{id: number, name: string, icon: string}[]=[],
+      dep7:{id: number, name: string, icon: string}[]=[], dep8:{id: number, name: string, icon: string}[]=[]){ {
+      console.log("List to create: ", dep1);
+      dep1 ? this.dep1=dep1 : this.dep1=[];
+      dep2 ? this.dep2=dep2 : this.dep2=[];
+      dep3 ? this.dep3=dep3 : this.dep3=[];
+      dep4 ? this.dep4=dep4 : this.dep4=[];
+      dep5 ? this.dep5=dep5 : this.dep5=[];
+      dep6 ? this.dep6=dep6 : this.dep6=[];
+      dep7 ? this.dep7=dep7 : this.dep7=[];
+      dep8 ? this.dep8=dep8 : this.dep8=[];
     }
+}
 }
 
 interface iListFS{
@@ -63,6 +62,6 @@ export class listConverter implements FirestoreDataConverter<Iconsclass, iListFS
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Iconsclass {
       const data = snapshot.data(options) as iListFS;
       let res = [ data.dep1 ?? [], data.dep2 ?? [], data.dep3 ?? [], data.dep4 ?? [], data.dep5 ?? [], data.dep6 ?? [], data.dep7 ?? [], data.dep8 ?? [] ];
-      return new Iconsclass(res);
+      return new Iconsclass(...res);
   }
 }

@@ -9,6 +9,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInAnonymously,
   signInWithPopup,
   signOut,
   createUserWithEmailAndPassword,
@@ -20,6 +21,7 @@ import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { App } from '../app';
 import { Notifs } from '../services/notifs';
+import {NgStyle} from '@angular/common';
 
 
 @Component({
@@ -47,6 +49,7 @@ export class LoginPage {
   userName: string | null = 'Guest';
   mapOp = false;
   newGame= false; //funzione?
+  depsList= Array(16).fill(false);
 
   constructor(private ref: ChangeDetectorRef) {
     this.email = '';
@@ -73,8 +76,8 @@ export class LoginPage {
       } else {
         // User is signed out
         this.signedIn = false;
-        this.userName = 'Guest';
-        this.getGame(0); //da mettere un link
+        this.userName = 'Guest?';
+        this.getGame(0); //da mettere un link 
         this.info=new Userinfo;
         // ...
       }
@@ -151,6 +154,25 @@ export class LoginPage {
         const errorMessage = error.message;
       });
   }
+  
+  SignInAnonymously(auth = this.auth): void {
+  signInAnonymously(auth)
+  .then(() => {
+        this.inpopen = false;
+        this.signedIn = true;
+        this.userName = 'Guest';
+        this.getGame(0); //da usare il link
+        this.info.id='Guest';
+        // ...
+        this.ref.markForCheck();
+    // Signed in..
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ...
+  });
+  }
   signOut(auth = this.auth): void {
     auth.signOut().then(() => {
       this.optionsOp = false;
@@ -199,13 +221,36 @@ export class LoginPage {
     }
   }
 
+  updateDeps(n: number){
+    if(!this.rules.isDM) return;
+      let ind=this.rules.depsList.indexOf(n);
+    if(this.depsList[n-1]){
+      for(let i=0; i<this.iconsNames.ordCharaList[ind].length; i++){
+      let id=this.iconsNames.ordCharaList[ind][i].id;
+      this.iconsNames.toReserve(id, ind);}
+      this.rules.depsList=this.rules.depsList.filter(c=>c!=n);
+      this.depsList[n-1]=false;
+    }
+    else{this.rules.depsList=[...this.rules.depsList, n];
+      this.depsList[n-1]=true;
+      if(n>10) this.rules.bonusDeps=[...this.rules.bonusDeps, 'Custom'];
+    }
+    this.rules.addRules();
+  }
 
   async getGame(id: number){
     this.rules.getRules(id).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
-      this.notifs.getMessage(id).then((e)=>{
-      })
+      this.notifs.getMessage(id);
+      this.depsList=[this.rules.depsList.includes(1), this.rules.depsList.includes(2),
+        this.rules.depsList.includes(3), this.rules.depsList.includes(4),
+        this.rules.depsList.includes(5), this.rules.depsList.includes(6),
+        this.rules.depsList.includes(7), this.rules.depsList.includes(8),
+        this.rules.depsList.includes(9), this.rules.depsList.includes(10),
+        this.rules.depsList.includes(11), this.rules.depsList.includes(12),
+        this.rules.depsList.includes(13), this.rules.depsList.includes(14),
+        this.rules.depsList.includes(15), this.rules.depsList.includes(16)];
     })
   }
 

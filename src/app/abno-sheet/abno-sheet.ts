@@ -60,7 +60,7 @@ if(inp)this.AbnoSheet.fullName.Name=inp.toString();
 
 this.ref.markForCheck();
 this.addData();
-this.addAbno();
+//  this.addAbno(); solo in cassi speciali
 });
 }
 

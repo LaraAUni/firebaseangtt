@@ -39,6 +39,11 @@ export class Notifs {
       body:"",
       icon: "ThirdIco.ico",
     })} break;
+    case 0:{var notification=new Notification("The Trumpet's Over",{
+      lang: 'en',
+      body:"",
+      icon: "Undo.ico",
+    })} break;
     default: break; //4th se la partita viene cancellata?
     }
   }else if(Notification.permission !== 'denied'){
@@ -59,6 +64,7 @@ export class Notifs {
           const uNotif = snapshot1.data()!;
           if(uNotif){
             this.last5 = uNotif.last5;
+            //Se cacheable  if(this.trumpets!=uNotif.trumpets)this.trumpetSound(uNotif.trumpets);
             this.trumpets=uNotif.trumpets;
           }
     }

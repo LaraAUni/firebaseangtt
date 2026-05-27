@@ -290,7 +290,7 @@ input:checked + .slider:before {
     background-color: #010101;
 }
 
-.button{
+.trumpetbutton{
     align-content: center;
     justify-content: space-around;
     contain: scale-down;
@@ -305,7 +305,7 @@ input:checked + .slider:before {
     border: gray solid 0.5vh;
     border-style: inset;
 }
-.button:active{
+.trumpetbutton:active{
     transform: translateY(4px);
 }
 

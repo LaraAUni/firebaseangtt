@@ -58,9 +58,9 @@ ui.start('#firebaseui-auth-container', {
     <span>{{userName}}</span>
     <img class="icon" src="cogIco.png" alt="Options" (click)="optionsOp=!optionsOp">
     }
-  <img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">
+  @if(this.signedIn && this.info.id!='Guest'){<img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">}
   <form for="newGameName" name="MapOp" id="MapOp">
-    @if(mapOp){
+    @if(mapOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
       @if(deleting){@for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.app.deleteGame(i.id);">{{i.name}}</button>}
       }
@@ -69,24 +69,109 @@ ui.start('#firebaseui-auth-container', {
       }
       @if(newGame){
         <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="New Game Name">
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh; margin-left: 0.3vw;"  (click)="newGame=false;">
-      }@else{<button class="newbutt" (click)="newGame=true">+</button>
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh; margin-left: 0.3vw;"  (click)="newGame=false;">
+      }@else{
+        <button class="newbutt" (click)="newGame=true">+</button>
       @if(deleting){
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
         @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}
       }
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; overflow-y: auto;">
+    <span>
+  <label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[0]">
+  <span class="checkmark" style="background-color: var(--Control);" (click)="updateDeps(1)">Control</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[1]">
+  <span class="checkmark" style="background-color: var(--Information); color: white;" (click)="updateDeps(2)">Information</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[2]">
+  <span class="checkmark" style="background-color: var(--Safety);" (click)="updateDeps(3)">Safety</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[3]">
+  <span class="checkmark" style="background-color: var(--Training);" (click)="updateDeps(4)">Training</span>
+</label>
+</span>
+      
+  <span style="margin-left: 11 wv;">
+  <label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[4]">
+  <span class="checkmark" style="background-color: var(--Disciplinary);" (click)="updateDeps(5)">Disciplinary</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[5]">
+  <span class="checkmark" style="background-color: var(--Central);" (click)="updateDeps(6)">Central-Command</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[6]">
+  <span class="checkmark" style="background-color: var(--Welfare); color: white;" (click)="updateDeps(7)">Welfare</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[7]">
+  <span class="checkmark" style="background-color: var(--Extraction); color: white;" (click)="updateDeps(8)">Extraction</span>
+</label>
+    </span>
+    <span>
+  <label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[8]">
+  <span class="checkmark" style="background-color: var(--Records);" (click)="updateDeps(9)">Records</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[9]">
+  <span class="checkmark" style="background-color: var(--Architecture);" (click)="updateDeps(10)">Architecture</span>
+</label>
+  
+@if (this.rules.bonusDeps.length>0) {
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[10]">
+  <span class="checkmark" (click)="updateDeps(11)">Custom1</span>
+</label>
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[11]">
+  <span class="checkmark" (click)="updateDeps(12)">Custom2</span>
+</label>}
+    </span>
+
+      @if(this.rules.bonusDeps.length>1){
+    <span>
+  <label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[12]">
+  <span class="checkmark" (click)="updateDeps(13)">Custom3</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[13]">
+  <span class="checkmark" (click)="updateDeps(14)">Custom5</span>
+</label>
+
+<label class="container">-
+  <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[14]">
+  <span class="checkmark" (click)="updateDeps(15)">Custom6</span>
+</label>
+    </span>}
+  </div>
     </div>
+
    }</form>
 </div>
       <form for="Options" name="optionsForm" id="optionsForm">
     @if(optionsOp){
       <div class="infobox">
+        @if(this.info.id!='Guest'){
         New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}">
-        <div>
-        <button type="submit" class="buttsign">Save</button>
+        <button type="submit" class="buttsign">Save</button>}
         <button type="button" class="buttsign" (click)="signOut()">Sign Out</button>
-        </div>
       </div>
     }
     </form>
@@ -105,6 +190,7 @@ ui.start('#firebaseui-auth-container', {
         Sign Up
       }
       </button>
+      @if(inpopen){<button type="button" class="buttsign" (click)="SignInAnonymously()">Guest</button>}
     </div>
   }
   </form>

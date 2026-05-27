@@ -36,6 +36,52 @@
 .buttsign:active{
     transform: translateY(2px);
 }
+/* Customize the label (the container) */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-height: 4vh;
+  min-height: 2vh;
+  width: 9vw;
+  background-color: #eee;
+  color: #010101;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  border: 0.35vh solid grey;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
 
 .newbutt{
     max-width: 8vw;
@@ -45,7 +91,7 @@
 }
 
 .infobox{
-  height: 15vh;
+  height: 17vh;
   width: 30vw;
   background-color: aliceblue;
   position: absolute;
@@ -70,7 +116,7 @@ input{
   gap: 1%;
 }
 .infobox{
-  height: 25vh;
+  height: 30vh;
   width: 96vw;
   font-size: 2.5vh;
 }
@@ -88,4 +134,10 @@ input{
 }
 .smallinput{
   width: 55vw;}
+  .checkmark {
+    width: 30vw;
+    height: 6vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
 }

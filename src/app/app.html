@@ -30,8 +30,7 @@
               <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             @else{
               <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
-            }
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             }
           <span class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</span>
           @if(deleting){

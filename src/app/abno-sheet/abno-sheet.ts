@@ -32,12 +32,11 @@ export class AbnoSheet {
     this.AbnoData=new AbnoData(); //Se non ha altri nomi inutile chiedere, meno rischi di sbagli per DM
     this.depColor="var(--Bonus)";
     this.dangerColor="var(--Bonus)";
-    this.AbnoData.department=1;
-    this.addData();
   }
 
 ngOnInit(){
-  if(!this.getAbno(this.rules.lookFor)) this.abnoID=this.rules.lookFor;
+  if(!this.abnoID){ this.abnoID=this.rules.lookFor;
+  this.getAbno(this.rules.lookFor)}
   else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
     //Funzione per nuove Abno wip, ma avrà un selettore per quelle esistenti
   }
@@ -60,7 +59,7 @@ if(inp)this.AbnoSheet.fullName.Name=inp.toString();
 
 this.ref.markForCheck();
 this.addData();
-//  this.addAbno(); solo in cassi speciali
+//  this.addAbno(); solo in casi speciali
 });
 }
 

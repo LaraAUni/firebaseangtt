@@ -45,8 +45,8 @@ export class Rules {
       safetyAbs=["Dead Man Walking", "Bedside Manners", "Not On My Watch", "The Fearlessness to Keep On Living"],
       trainAbs=["Sink or Swim", "Right Out of the Handbook", "Stick to the Plan!", "The Hope to Be a Better Person"],
       discAbs=["Big EGO", "Pain Bringer", "Vitality", "The Courage to Protect"],
-      centralAbs=["---"], //reskin di Control
-      welfareAbs=["---"], //Al momento è solo per reskin di Safety
+      centralAbs=["Corrective Action", "Controlling Coordinator", "Cross-Departmental Efficiency", "The Will To Stand Up Straight"], //reskin di Control
+      welfareAbs=["Dead Man Walking", "Bedside Manners", "Not On My Watch", "The Fearlessness to Keep On Living"], //Al momento è solo per reskin di Safety
       recordsAbs=["---"], //reskin di Information
       extractAbs=["---"], //reskin di Disciplinary
       architAbs=["---"], //reskin di Training

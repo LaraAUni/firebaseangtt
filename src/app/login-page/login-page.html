@@ -58,7 +58,16 @@ ui.start('#firebaseui-auth-container', {
     <span>{{userName}}</span>
     <img class="icon" src="cogIco.png" alt="Options" (click)="optionsOp=!optionsOp">
     }
-  @if(this.signedIn && this.info.id!='Guest'){<img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">}
+  @if(this.signedIn && this.info.id!='Guest'){
+  <img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">
+  <img class="icon" src="User.png" alt="Players" (click)="userOp=!userOp">
+  }
+  @if(userOp && this.signedIn && this.info.id!='Guest'){
+    <div class="infobox">
+      <input type="text" placeholder="Search Username..." maxlength="20" class="smallinput">
+      <div>Friends</div>
+    </div>
+  }
   <form for="newGameName" name="MapOp" id="MapOp">
     @if(mapOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
@@ -143,8 +152,8 @@ ui.start('#firebaseui-auth-container', {
 </label>}
     </span>
 
-      @if(this.rules.bonusDeps.length>1){
-    <span>
+  @if(this.rules.bonusDeps.length>1){
+  <span>
   <label class="container">-
   <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[12]">
   <span class="checkmark" (click)="updateDeps(13)">Custom3</span>
@@ -162,7 +171,6 @@ ui.start('#firebaseui-auth-container', {
     </span>}
   </div>
     </div>
-
    }</form>
 </div>
       <form for="Options" name="optionsForm" id="optionsForm">

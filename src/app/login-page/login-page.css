@@ -91,7 +91,7 @@
 }
 
 .infobox{
-  height: 17vh;
+  height: 20vh;
   width: 30vw;
   background-color: aliceblue;
   position: absolute;
@@ -111,6 +111,8 @@ input{
 .smallerinput{
   width: 8vw;
 }
+
+
 @media (max-width: 600px){
 .cont{
   gap: 1%;

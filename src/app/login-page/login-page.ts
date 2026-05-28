@@ -48,6 +48,7 @@ export class LoginPage {
   deleting=false;
   userName: string | null = 'Guest';
   mapOp = false;
+  userOp=false;
   newGame= false; //funzione?
   depsList= Array(16).fill(false);
 
@@ -163,6 +164,7 @@ export class LoginPage {
         this.userName = 'Guest';
         this.getGame(0); //da usare il link
         this.info.id='Guest';
+        this.rules.isDM=false;
         // ...
         this.ref.markForCheck();
     // Signed in..
@@ -254,6 +256,8 @@ export class LoginPage {
     })
   }
 
-
-
+  searchUser(name: string){
+    
+  }
+  
 }

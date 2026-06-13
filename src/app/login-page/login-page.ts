@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+
+import { ChangeDetectorRef, Component, StreamingResourceOptions } from '@angular/core';
 import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
@@ -16,7 +17,7 @@ import {
   updateProfile
 } from "firebase/auth";
 import { UserData, UserConverter } from '../services/userdata';
-import { doc, setDoc, getDoc, DocumentSnapshot, waitForPendingWrites } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { App } from '../app';
@@ -51,6 +52,8 @@ export class LoginPage {
   userOp=false;
   newGame= false; //funzione?
   depsList= Array(16).fill(false);
+  playerSearch: string='';
+  friendsList: {name: string, code: string}[]=[];
 
   constructor(private ref: ChangeDetectorRef) {
     this.email = '';
@@ -62,28 +65,7 @@ export class LoginPage {
     const form = document.getElementById('signForm') as HTMLFormElement; //non legge il form
     const options = document.getElementById('optionsForm') as HTMLFormElement;
     const map = document.getElementById('MapOp') as HTMLFormElement;
-    // Add submit event listener
-    onAuthStateChanged(this.auth, async (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        this.info.id = user.uid;
-        this.signedIn = true;
-        this.userName = user.displayName || user.email || 'Username';
-        await this.info.getUser().then((e)=>{
-        if(this.info.info.games[0])this.getGame(this.info.info.games[0].id);
-        });
-        // ...
-      } else {
-        // User is signed out
-        this.signedIn = false;
-        this.userName = 'Guest?';
-        this.getGame(0); //da mettere un link 
-        this.info=new Userinfo;
-        // ...
-      }
-      this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
-    });
+    const search = document.getElementById('playerSearch') as HTMLFormElement;
 
     form.addEventListener('submit', async (event) => {
 
@@ -100,7 +82,7 @@ export class LoginPage {
       if (this.inpopen) this.signIn();
       else if (this.subopen) this.signUp();
     });
-
+    
     options.addEventListener('submit', async (event) => {
       event.preventDefault();
       const optionData = new FormData(options);
@@ -111,19 +93,32 @@ export class LoginPage {
         this.updateName(this.userName);
       }
     });
+
     map.addEventListener('submit', async (event) => {
       event.preventDefault();
       const nameData = new FormData(map);
       let inp;
-      inp = nameData.get('newGameName');  
-      if(inp){
+      inp = nameData.get('newGameName');
+      if(this.newGame){if(inp){
         this.newGame=false;
-        await this.rules.newGame(inp.toString());
-        this.info.info.games.push({id: this.rules.gameID, name: inp.toString()});
+        let time=new Date;
+        let date=Number('' + time.getDay() + time.getMonth() + time.getFullYear() + time.getHours() + time.getMinutes() + time.getSeconds());
+        this.rules.newGame(inp.toString(), date).then(()=>{
+        this.info.info.games=[...this.info.info.games, {date: date, name: inp.toString()}];
         this.info.addUser(this.info.id);
+        this.ref.markForCheck();});
         //customUserclaims?
-      }
+      }}
+      
     })
+
+      search.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const find= new FormData(search).get('search')?.toString()??'';
+        if(find.length>0){
+          this.searchUser(find);
+        }
+      });
   }
 
   signUp(auth = this.auth, email = this.email, password = this.password): void {
@@ -132,10 +127,19 @@ export class LoginPage {
         // Signed up
         this.subopen = false;
         const user = userCredential.user;
+        this.userName = user.displayName || user.email || 'Username';
+        this.info.id = user.uid;
+        this.info.info.name=this.userName;
+        let empty=true;
+        do{this.info.info.code=this.generateRandomString();
+          const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.info.code));    
+          getDocs(q).then((querySnapshot) => {
+          empty=querySnapshot.empty}).catch((err)=>{console.log(err)});
+        }while(!empty); //se ho trovato un codice uguale lo rifaccio
+        this.info.addUser(this.info.id);
         this.ref.markForCheck();
         // ...
-      })
-      .catch((error) => {
+      }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
@@ -145,7 +149,7 @@ export class LoginPage {
   signIn(auth = this.auth, email = this.email, password = this.password): void {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+        // Signed in
         this.inpopen = false;
         // ...
         this.ref.markForCheck(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -162,8 +166,9 @@ export class LoginPage {
         this.inpopen = false;
         this.signedIn = true;
         this.userName = 'Guest';
-        this.getGame(0); //da usare il link
+        this.getGame(0, 'NoGame'); //da usare il link
         this.info.id='Guest';
+        this.info.info.name='guest';
         this.rules.isDM=false;
         // ...
         this.ref.markForCheck();
@@ -187,18 +192,36 @@ export class LoginPage {
   }
 
   checkAuthState(auth = this.auth): void {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         this.info.id = user.uid;
         this.signedIn = true;
-        this.userName = user.displayName || user.email || 'Username';
+        this.userName = user.displayName || user.email || 'NewUser';
+        this.info.getUser().then(async (e)=>{
+          if(this.userName && this.userName!=this.info.info.name){ {
+          this.info.info.name=this.userName;
+          this.info.addUser(this.info.id);
+        let name=window.document.location.href;
+        let [game, date]=name?.split('/game/')[1]?.split('-')??[];
+        let g: {date:number, name: string}|undefined=this.info.info.games.find(g=>g.date==Number(date)  &&  g.name==game);
+        if(g!=undefined && date) await this.getGame(Number(date), g.name);
+        else {await this.getGame(0, 'NoGame');
+        this.depsList= Array(16).fill(false);}
+        }
+        }});
         // ...
       } else {
         // User is signed out
         this.signedIn = false;
         this.userName = 'Guest';
+        let name=window.history.state;
+        let [game, date]=name?.url?.split('/game/')[1]?.split('-')??[];
+        if(date) await this.getGame(Number(date), game);
+        else {await this.getGame(0, 'NoGame');
+        this.depsList= Array(16).fill(false);}
+        this.info=new Userinfo;
         // ...
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -213,6 +236,10 @@ export class LoginPage {
       updateProfile(user, {
         displayName: name
       }).then(() => {
+        this.userName = name;
+        this.info.info.name = this.userName ?? '';
+        this.info.addUser(this.info.id);
+        this.ref.markForCheck();
         // Update successful
       }).catch((error) => {
         // An error occurred
@@ -240,11 +267,14 @@ export class LoginPage {
     this.rules.addRules();
   }
 
-  async getGame(id: number){
-    this.rules.getRules(id).then((e)=>{
+  async getGame(date: number, name: string): Promise<void> {
+    if(date==0) { window.history.pushState({}, '');
+        this.depsList= Array(16).fill(false);
+    }
+    this.rules.getRules(date, name).then((e)=>{
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
-      this.notifs.getMessage(id);
+      this.notifs.getMessage(date);
       this.depsList=[this.rules.depsList.includes(1), this.rules.depsList.includes(2),
         this.rules.depsList.includes(3), this.rules.depsList.includes(4),
         this.rules.depsList.includes(5), this.rules.depsList.includes(6),
@@ -253,11 +283,44 @@ export class LoginPage {
         this.rules.depsList.includes(11), this.rules.depsList.includes(12),
         this.rules.depsList.includes(13), this.rules.depsList.includes(14),
         this.rules.depsList.includes(15), this.rules.depsList.includes(16)];
-    })
+    window.history.pushState({}, '', '/game/' + name + '-' + date);
+    this.ref.markForCheck();
+    }).catch((error)=>{this.getGame(0, 'NoGame');});
   }
 
-  searchUser(name: string){
-    
+  async deleteGame(date:number, name:string){
+    await this.app.deleteGame(name, date).then(async ()=>{ //bro wtf perché cancella tutto??
+    this.ref.markForCheck();
+    if(date==this.rules.gameID){
+      window.history.back();
+      let name=window.history.state;
+        let [game, date]=name?.url?.split('/game/')[1]?.split('-')??[];
+        if(date) await this.getGame(Number(date), game);
+        else {await this.getGame(0, 'NoGame');}
+    }
+    }).catch((err)=>{console.log(err)});
   }
-  
+
+  async searchUser(code: string){
+    if(code.length==0||code==this.info.info.code) return;
+    console.log('Searching...', code);
+    const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", code));
+    getDocs(q).then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    this.playerSearch=doc.data()['name'];
+    });}).catch((err)=>{console.log(err)});
+    this.ref.markForCheck();
+  }
+
+  generateRandomString(len: number=8): string {
+  const charas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let res = '';
+  for (let i = 0; i < len; i++) {
+    const randomIndex = Math.floor(Math.random() * charas.length);
+    res += charas.charAt(randomIndex);
+  }
+  return res;
+}
+
 }

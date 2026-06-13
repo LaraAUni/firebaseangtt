@@ -35,11 +35,16 @@ export class AbnoSheet {
   }
 
 ngOnInit(){
-  if(!this.abnoID){ this.abnoID=this.rules.lookFor;
-  this.getAbno(this.rules.lookFor)}
-  else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
-    //Funzione per nuove Abno wip, ma avrà un selettore per quelle esistenti
-  }
+  this.getAbno(this.rules.lookFor);
+  this.getData().then((res)=>{if(!res){
+    this.AbnoData=new AbnoData();
+    this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true);
+    this.depColorUp();
+    this.dangerColorUp();
+    this.clockFill();
+    this.ref.markForCheck();
+    this.addData();
+  }}).catch((err)=>{console.log(err)});
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -75,8 +80,8 @@ this.addData();
     }
   }
 
-  async getData(game:number=this.rules.gameID, id:number=this.rules.lookFor): Promise<void> {
-    const abnoRef = doc(this.db, 'gameabnos/'+game+'-'+id).withConverter(new DataConverter());
+  async getData(game:number=this.rules.gameID, name:string=this.rules.name, id:number=this.rules.lookFor): Promise<boolean> {
+    const abnoRef = doc(this.db, 'gameabnos/'+name+'-'+game+'-'+id).withConverter(new DataConverter());
     const snapshot1: DocumentSnapshot<AbnoData> = await getDoc(abnoRef);
     const uChara: AbnoData = snapshot1.data()!;
     if (uChara) {
@@ -85,7 +90,9 @@ this.addData();
     this.depColorUp();
     this.clockFill();
     this.ref.markForCheck();
+    return true;
     }
+    return false;
   }
   async addAbno() : Promise<void>{
     if(this.abnoID==0) return;//Toglierlo per cambiare default, ma meglio modificarli da Firebase
@@ -94,7 +101,7 @@ this.addData();
 
   async addData() : Promise<void>{
     if(this.rules.gameID==0) return;
-      const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
+      const abnoRef = doc(this.db, 'gameabnos/'+this.rules.name+'-'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
       await setDoc(abnoRef, this.AbnoData); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
 }
   depColorUp(c: number=this.AbnoData.department){

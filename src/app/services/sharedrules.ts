@@ -41,7 +41,6 @@ export class Sharedrules {
   lookFor = 0;
   lookDep = 0;
   isDM = false;
-  name = '';
   init = inject(FireInit);
   info= inject(Userinfo)
 
@@ -50,13 +49,12 @@ export class Sharedrules {
 
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
 
-  async getRules(date: number, name: string=this.name): Promise<void> {
+  async getRules(id: number = this.gameID): Promise<void> {
     let uRules: Rules;
-    this.name=name;
-    this.gameID=date;
-    if(date){const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
+    if(id){const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
-    uRules = snapshot1.data()!;}
+    uRules = snapshot1.data()!;
+    this.gameID=id;}
     else uRules= new Rules;
     if (uRules) {
       this.DMIds = uRules.DMIds;
@@ -94,21 +92,58 @@ export class Sharedrules {
   
   
 
-  async addRules(name: string=this.name, date: number=this.gameID): Promise<void> {
-    if(date==0) return;
-    const rulesRef = doc(this.init.db, 'rules/'  + name + '-' + date).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
+  async addRules(): Promise<void> {
+    //if(this.rules.gameID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
+    const rulesRef = doc(this.init.db, 'rules/' + this.gameID).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(rulesRef, new Rules(this.DMIds, this.playerIDs, this.charaList, this.deadCh, this.abnoList, this.depsList, this.bonusDeps, this.bonusColors, this.capPassive, this.controlAbs, this.infoAbs, this.safetyAbs, this.trainAbs, this.discAbs, this.centralAbs, this.welfareAbs, this.recordsAbs, this.extractAbs, this.architAbs, this.bonus1Abs, this.bonus2Abs, this.bonus3Abs, this.bonus4Abs, this.bonus5Abs, this.bonus6Abs, this.agentAbs, this.traumas, this.traum3nabled));
+    const snapshot1 = await getDoc(rulesRef);
   }
 
-  async deleteRules(date:number, name:string): Promise<void> {
-    const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
+  async deleteRules(id:number){
+    const rulesRef = doc(this.init.db, 'rules/' + id).withConverter(new RulesConverter());
     deleteDoc(rulesRef);
   }
 
-  async newGame(n: string, date: number): Promise<void> {
-      if(date==0) return;
-      const rulesRef = doc(this.init.db, 'rules/'  + n + '-' + date).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
-      await setDoc(rulesRef, new Rules([this.info.id]));
+  async newGame(n: string): Promise<void> {
+    let i = 1;
+    let gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+    let snapshot1: DocumentSnapshot<Rules> = await getDoc(gameRef);
+    while (snapshot1.data()) {
+      i++; //cerco un id libero perché uno potrebbe essersi liberato cancellando un partita vecchia, mi aspetto poco traffico quindi meno di 50 partite alla volta ed è un' operazione rarissima
+      gameRef = doc(this.init.db, 'rules/' + i).withConverter(new RulesConverter());
+      snapshot1 = await getDoc(gameRef);
+    }
+      this.gameID = i;
+      this.DMIds = [this.info.id];
+      this.playerIDs=[];  //Meglio mettere gameID nell'account insieme alla lingua per cercarli, ma serve permesso da DM
+      this.charaList = [];//id personaggi
+      this.deadCh = [];
+      this.abnoList = [];//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
+      this.depsList = []; //ENUM
+      this.bonusDeps = [];
+      this.bonusColors = [];//da usare per bonusDeps e customDeps, se si aggiungono altri bonusDeps o customDeps basta aggiungerli qui, bool è per testo bianco o nero
+      this.capPassive = [];
+      this.controlAbs = [];
+      this.infoAbs = [];
+      this.safetyAbs = [];
+      this.trainAbs = [];
+      this.discAbs = [];
+      this.centralAbs = [];
+      this.welfareAbs = [];
+      this.recordsAbs = [];
+      this.extractAbs = [];
+      this.architAbs = [];
+      this.bonus1Abs = [];
+      this.bonus2Abs = [];
+      this.bonus3Abs = [];
+      this.bonus4Abs = [];
+      this.bonus5Abs = [];
+      this.bonus6Abs = [];
+      this.agentAbs = [];
+      this.traumas = [];
+      this.traum3nabled = false;
+      this.isDM=true;
+    this.addRules();
   }
 
   depColorUp(c: Departments) {
@@ -119,6 +154,7 @@ export class Sharedrules {
       else if (c > 0){ if (c == 8) return ["var(--Extraction)", true];
         else if(c==2) return ["var(--Information)", true];
       else if(c==7) return ["var(--Welfare)", true];}
+      
       return ["var(--" + Departments[c] + ")", false];
     }
     return ["var(--Bonus)", false];

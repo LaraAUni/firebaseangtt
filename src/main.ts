@@ -4,7 +4,7 @@ import { App } from './app/app';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { getFirestore } from "firebase/firestore";
-import { initializeApp } from "firebase/app";// = require("firebase-admin/app");
+import { initializeApp } from "firebase/app";
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { BrowserModule } from '@angular/platform-browser';

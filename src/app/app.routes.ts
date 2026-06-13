@@ -1,13 +1,39 @@
 import { Routes } from '@angular/router';
+import { CharaSheet } from './chara-sheet/chara-sheet';
+import { AbnoSheet } from './abno-sheet/abno-sheet';
+import { Armoury } from './armoury/armoury';
 import { App } from './app';
-import { NotFoundComponent } from './not-found-component/not-found-component';
+import { LoginPage } from './login-page/login-page';
 
 export const routes: Routes = [
   {
     path: '',
     component: App,
-    title: 'Third Trumpet',
+    title: 'Third Trumpet', 
+    children: [
+       {
+          path: 'characters',
+          component: CharaSheet,
+          title: 'Character Sheet',
+          outlet: 'sheetOut'
+        },
+        {
+          path: 'abnormalities',
+          component: AbnoSheet,
+          title: 'Abnormality Sheet',
+          outlet: 'sheetOut'
+        },
+        {
+          path: 'armoury',
+          component: Armoury,
+          title: 'Armoury',
+          outlet: 'sheetOut'
+        }
+    ]
   },
-{ path: '**', component: NotFoundComponent}
-
+  {
+    path:'sign-in',
+    component: LoginPage,
+    title: 'Sign In'
+  }
 ];

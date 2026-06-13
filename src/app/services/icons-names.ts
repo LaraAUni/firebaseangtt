@@ -21,16 +21,16 @@ export class IconsNames {
   }
   
 
-  async addList(bool: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<void>{
-        const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
+  async addList(bool: boolean) : Promise<void>{
+        const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
         console.log('FirstChara:',this.ordCharaList[0])
         let list=(new Iconsclass());
         console.log("List to save: ", list);
         await setDoc(listRef, list);
   }
-
-  async getList(bool: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<void>{
-    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
+  
+  async getList(bool: boolean) : Promise<void>{
+    const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
         const snapshot1: DocumentSnapshot<Iconsclass> = await getDoc(listRef);
         const list: Iconsclass = snapshot1.data()!;
         if (list) {
@@ -115,14 +115,14 @@ export class IconsNames {
     this.addList(type);
   }
 
-  async deleteList(type:boolean, name:string=this.rules.name, gameID:number=this.rules.gameID){
-    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
+  async deleteList(id:number ,type:boolean){
+    const listRef = doc(this.fireInit.db, 'icolist/' + this.rules.gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
     deleteDoc(listRef);
   };
 
-  async toReserve(n: number, ind: number, id=this.rules.gameID, name=this.rules.name){
+  async toReserve(n: number, ind: number, id=this.rules.gameID){
     if(ind==0) return;
-    const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+    const charRef = doc(this.fireInit.db, 'charas/' + this.rules.gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           let uChara: Character = snapshot1.data()!;
           uChara.role[1]=0;
@@ -132,9 +132,9 @@ export class IconsNames {
           await setDoc(charRef, uChara);
   }
 
- async getIcon(id: number, type: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<[{id: number, name: string, icon: string}, number]|null>{
+ async getIcon(id: number, type: boolean) : Promise<[{id: number, name: string, icon: string}, number]|null>{
     if(!type){
-          const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+          const charRef = doc(this.fireInit.db, 'charas/' + this.rules.gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           const uChara: Character = snapshot1.data()!;
           let res = { id: id, name: uChara.fullName, icon: uChara.icoUrl };
@@ -144,7 +144,7 @@ export class IconsNames {
           const charRef = doc(this.fireInit.db, 'abnos/'+id).withConverter(new AbnoConverter());
           const snapshot1: DocumentSnapshot<Abnormality> = await getDoc(charRef);
           const uChara: Abnormality = snapshot1.data()!;
-          const charRef2 = doc(this.fireInit.db, 'gameabnos/'+ name + '-' + gameID + '-' + id).withConverter(new DataConverter());
+          const charRef2 = doc(this.fireInit.db, 'gameabnos/'+this.rules.gameID + '-' + id).withConverter(new DataConverter());
           const snapshot2: DocumentSnapshot<AbnoData> = await getDoc(charRef2);
           const uData: AbnoData = snapshot2.data()!;
           let res = { id: id, name: (uData.clock1[0] == uData.clock1[1] ? (uChara.fullName.Nickname ? (uData.trueNameRev ? uChara.fullName.Name : uChara.fullName.Nickname) : uChara.fullName.Name) : "???" ), icon: uChara.icoUrl };

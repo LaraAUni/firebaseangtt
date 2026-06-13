@@ -1,8 +1,7 @@
 <mat-drawer-container>
   <mat-drawer-content class="page">
     <header class="barra">
-      @if(this.rules.gameID==0){<span class="title">THIRD TRUMPET !!!</span>}
-      @else {<span class="title">{{this.rules.name}}</span>}
+      <span class="title">THIRD TRUMPET !!!</span>
       <app-login-page></app-login-page>
     </header>
     <div>
@@ -60,7 +59,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
           <span style="color: grey; display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList[7]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+            @for(j of this.iconsNames.ordCharaList[7]; track j.id){<img class="iconbtn" src="Charas/{{j.icon}}.png"
               alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;" style="filter: grayscale(80%);">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
           </span>
@@ -75,13 +74,11 @@
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordAbnoList[ind]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
+            @for(j of this.iconsNames.ordAbnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
               (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
             <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
           @if(this.rules.isDM){
-            <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-            @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-            <select id="newAbno" name="newAbno"><option value="1" (click)="this.rules.lookFor=1; showAbno=1; drawer.toggle(); addAbno=false">Pinocchio</option></select>}
+            <div class="newbutt" (click)="this.rules.lookDep=i; showAbno=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
           }
           </span>
         </mat-expansion-panel>
@@ -90,10 +87,6 @@
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links"
           (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
-      </mat-expansion-panel>
-      <mat-expansion-panel hideToggle class="expansion">
-        <mat-expansion-panel-header class="links"
-          (click)="showRes=1; drawer.toggle();">Research</mat-expansion-panel-header>
       </mat-expansion-panel>
     </mat-list>
     <div>
@@ -121,8 +114,4 @@
 @if(showArmo>0){
 <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
 <app-armoury></app-armoury>
-}
-@if(showRes>0){
-<img class="closebtn" (click)="drawer.toggle(); showRes=0" src="buttonclose.png" alt="">
-<app-research></app-research>
 }

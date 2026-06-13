@@ -52,14 +52,14 @@ export class Notifs {
     })
   }
   }
-    async addMessage(id=this.rules.gameID) : Promise<void>{
-      if(id==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
-      const notifRef = doc(this.init.db, 'message/' + id).withConverter(new MessageConverter()); //(this.gameID*200) ?? ma non vaaaa
+    async addMessage(date=this.rules.gameID, name=this.rules.name) : Promise<void>{
+      if(date==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
+      const notifRef = doc(this.init.db, 'message/' + name + '-' + date).withConverter(new MessageConverter()); //(this.gameID*200) ?? ma non vaaaa
       await setDoc(notifRef, this);
     }
-    async getMessage(id=this.rules.gameID){
-      if(id==0) return; 
-      const notifRef = doc(this.init.db, 'message/' + id).withConverter(new MessageConverter());
+    async getMessage(date=this.rules.gameID, name=this.rules.name){
+      if(date==0) return; 
+      const notifRef = doc(this.init.db, 'message/' + name + '-' + date).withConverter(new MessageConverter());
           const snapshot1: DocumentSnapshot<Notifclass> = await getDoc(notifRef);
           const uNotif = snapshot1.data()!;
           if(uNotif){

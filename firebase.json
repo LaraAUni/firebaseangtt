@@ -4,7 +4,7 @@
     "source": ".",
     "headers": [ {
       "key": "Cache-Control",
-      "value": " max-age=300, s-maxage=600"
+      "value": "public, max-age=300, s-maxage=600"
     } ],
     "ignore": [
       "firebase.json",

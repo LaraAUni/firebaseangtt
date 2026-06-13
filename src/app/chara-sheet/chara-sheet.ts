@@ -162,7 +162,7 @@ if(inp){inp=Number(inp);
     this.rules.charaList=[...this.rules.charaList, this.charID];
     this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
     this.new=false;
-    this.userd.info.characters=[...this.userd.info.characters, this.rules.gameID + '-' + this.charID];
+    this.userd.info.characters=[...this.userd.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
     this.userd.addUser();
     this.rules.addRules();
   } else{
@@ -214,8 +214,8 @@ this.addChara();
 this.ref.markForCheck();
 });
 }
-  async getChara(id:number): Promise<void> {
-    const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + id).withConverter(new CharaConverter());
+  async getChara(id:number, name:string=this.rules.name, gameID:number=this.rules.gameID): Promise<void> {
+    const charRef = doc(this.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter());
     const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
     const uChara: Character = snapshot1.data()!;
     if (uChara) {
@@ -233,9 +233,9 @@ this.ref.markForCheck();
     })
     }
   }
-  async addChara() : Promise<void>{
+  async addChara( name:string=this.rules.name, gameID:number=this.rules.gameID) : Promise<void>{
     if(this.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
-    const charRef = doc(this.db, 'charas/' + this.rules.gameID + '-' + this.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
+    const charRef = doc(this.db, 'charas/' + name + '-' + gameID + '-' + this.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(charRef, this.Chara);
   }
 
@@ -243,14 +243,16 @@ this.ref.markForCheck();
     if(this.rules.isDM) this.owns=true;
     else{
     for(let i=0; i<this.userd.info.characters.length;i++){
-    let [game, findId]=this.userd.info.characters[i].split('-');
+    let [name ,game, findId]=this.userd.info.characters[i].split('-');
+    if(name!=this.rules.name) continue;
     if(Number(game)!=this.rules.gameID) continue;
     if(Number(findId)==this.charID) this.owns=true;
     break;
     }
         if(this.owns==false){
         for(let i=0; i<this.userd.info.characters.length;i++){
-        let [game, findId]=this.userd.info.characters[i].split('-');
+        let [name ,game, findId]=this.userd.info.characters[i].split('-');
+        if(name!=this.rules.name) continue;
         if(Number(game)!=this.rules.gameID) continue;
         if(Number(findId)==this.charID) this.owns=true;
         break;

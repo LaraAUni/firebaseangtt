@@ -12,7 +12,7 @@ import { Sharedrules, Departments } from './services/sharedrules';
 import { IconsNames } from './services/icons-names';
 import { NgStyle } from '@angular/common';
 import { CharaConverter } from './chara-sheet/characlass';
-import { doc, deleteDoc, getDoc, DocumentSnapshot, setDoc, namedQuery } from 'firebase/firestore';
+import { doc, deleteDoc, getDoc, DocumentSnapshot, setDoc, namedQuery, waitForPendingWrites } from 'firebase/firestore';
 import { FireInit } from './fire-init';
 import { Userinfo } from './services/userinfo';
 import { Rules, RulesConverter } from './rules';
@@ -45,22 +45,22 @@ export class App {
   constructor(private ref: ChangeDetectorRef){
   }
   
+  
+  ngOnInit(){
+  }
 
-  async deleteChara(n: number=this.rules.lookFor, d:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
+  async deleteChara(n: number=this.rules.lookFor, dep:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
     if(n==0) return;
-    if(!this.rules.isDM){
-    let owns=false;
-    for(let i=0; i<this.userd.info.characters.length;i++){
-    let [game, findId]=this.userd.info.characters[i].split('-');
-    if(Number(game)!=date) continue;
-    if(Number(findId)==n) owns=true;
-    break;
-    }
-    if(!owns) return;
-    }
+    if(this.userd.info.characters.includes(name+date+n)){
+    this.userd.info.characters=this.userd.info.characters.filter(c=>c!=name+date+n);
+    this.userd.addUser();
+    }else if(!this.rules.isDM)return;
+
     const charRef = doc(this.init.db, 'charas/'+ name + '-' + date + '-' + n).withConverter(new CharaConverter());
-    if(d){
-    let ind=this.rules.depsList.indexOf(d);
+    await deleteDoc(charRef);
+    if(temp){
+    if(dep){
+    let ind=this.rules.depsList.indexOf(dep);
     if(ind==-1) ind=6;
     if(this.rules.deadCh.includes(n)){
       ind=7;
@@ -70,20 +70,21 @@ export class App {
 
     this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
     }
-    await deleteDoc(charRef);
-    if(temp) this.rules.addRules(); //temp vuol dire che non è per cancellare la partita, altrimenti rischio di salvare le regole dopo che sono state cancellate perché è asynch
+    this.rules.addRules();
+    } //temp vuol dire che non è per cancellare la partita, altrimenti rischio di salvare le regole dopo che sono state cancellate perché è asynch
   }
 
   async deleteAbno(n: number=this.rules.lookFor, d:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
     const abnoRef = doc(this.init.db, 'gameabnos/'+ name + '-' + date + '-' + n).withConverter(new CharaConverter());
     if(!this.rules.isDM) return;
-    if(d){
-    let ind=this.rules.depsList.indexOf(d);
-    this.rules.abnoList=this.rules.abnoList.filter(c=>c!=n);
-    this.iconsNames.ordAbnoList[ind]=this.iconsNames.ordAbnoList[ind].filter(c=>c.id!=n);
-    }
     await deleteDoc(abnoRef);
-    if(temp) this.rules.addRules();
+    if(temp){ 
+    if(d){
+      let ind=this.rules.depsList.indexOf(d);
+      this.rules.abnoList=this.rules.abnoList.filter(c=>c!=n);
+      this.iconsNames.ordAbnoList[ind]=this.iconsNames.ordAbnoList[ind].filter(c=>c.id!=n);
+    } this.rules.addRules();
+    }
   }
 
   async deleteGame(name:string, date:number, you:string=this.userd.id){
@@ -107,6 +108,15 @@ export class App {
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             let uInfo: UserData = snapshot1.data()!;
             uInfo.games=uInfo.games.filter(c=>c.date!=date && c.name!=name);
+            let datee=date.toString();
+            let l=uInfo.characters.length;
+            for(let i=0;i<l;i++){
+              let [nam,dat,num]=uInfo.characters[i].split('-');
+              if(nam==name && dat==datee){ uInfo.characters=uInfo.characters.filter(c=>c!=uInfo.characters[i]);
+                l--;
+                i--;
+              }
+            }
             setDoc(userRef, uInfo)
             if(element==you) this.userd.info=uInfo;
     })
@@ -115,6 +125,15 @@ export class App {
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             let uInfo: UserData = snapshot1.data()!;
             uInfo.games=uInfo.games.filter(c=>c.date!=date && c.name!=name);
+            let datee=date.toString();
+            let l=uInfo.characters.length;
+            for(let i=0;i<l;i++){
+              let [nam,dat,num]=uInfo.characters[i].split('-');
+              if(nam==name && dat==datee){ uInfo.characters=uInfo.characters.filter(c=>c!=uInfo.characters[i]);
+                l--;
+                i--;
+              }
+            }
             setDoc(userRef, uInfo);
     })
     this.rules.deleteRules(date, name);
@@ -126,7 +145,8 @@ export class App {
     this.notifs.addMessage(this.rules.gameID);
   }
 }
-/*
+
+  
 let swRegistration = null;
 
 if ("serviceWorker" in navigator) {
@@ -161,4 +181,3 @@ const appShellFiles = [
   "/public/Attachment.png",
   "/public/Repression.png",
 ];
-*/

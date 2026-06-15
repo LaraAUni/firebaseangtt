@@ -32,7 +32,8 @@
     "@angular/material": "^21.0.3",
     "@angular/platform-browser": "^21.0.0",
     "@angular/router": "^21.0.0",
-    "fire": "^0.55.1",
+    "@angular/service-worker": "^21.0.0",
+    "fire": "^0.46.4",
     "firebase-admin": "^10.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -45,5 +46,17 @@
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
+  },
+  "allowScripts": {
+    "@firebase/util@1.12.1": true,
+    "protobufjs@6.11.6": true,
+    "protobufjs@7.6.4": true,
+    "protobufjs@6.11.3": true,
+    "protobufjs@7.6.0": true,
+    "@parcel/watcher@2.5.1": true,
+    "esbuild@0.26.0": true,
+    "esbuild@0.25.12": true,
+    "lmdb@3.4.3": true,
+    "msgpackr-extract@3.0.3": true
   }
 }

@@ -67,6 +67,11 @@ export class LoginPage {
     const map = document.getElementById('MapOp') as HTMLFormElement;
     const search = document.getElementById('playerSearch') as HTMLFormElement;
 
+    
+        let name=window.document.location.href; //non va???
+        let [game, date]=name?.split('/game/')[1]?.split('-')??[];
+        if(game && date)this.getGame(Number(date), game);
+        
     form.addEventListener('submit', async (event) => {
 
       // Prevent default form submission (page reload)
@@ -203,12 +208,11 @@ export class LoginPage {
           if(this.userName && this.userName!=this.info.info.name){ {
           this.info.info.name=this.userName;
           this.info.addUser(this.info.id);
-        let name=window.document.location.href;
+        let name=window.document.location.href; //non va???
         let [game, date]=name?.split('/game/')[1]?.split('-')??[];
-        let g: {date:number, name: string}|undefined=this.info.info.games.find(g=>g.date==Number(date)  &&  g.name==game);
-        if(g!=undefined && date) await this.getGame(Number(date), g.name);
-        else {await this.getGame(0, 'NoGame');
-        this.depsList= Array(16).fill(false);}
+        console.log('Codice Partita:', game, date);
+        if(game && date) await this.getGame(Number(date), game);
+        else {await this.getGame(0, 'NoGame');}
         }
         }});
         // ...
@@ -217,10 +221,10 @@ export class LoginPage {
         this.signedIn = false;
         this.userName = 'Guest';
         let name=window.history.state;
-        let [game, date]=name?.url?.split('/game/')[1]?.split('-')??[];
-        if(date) await this.getGame(Number(date), game);
-        else {await this.getGame(0, 'NoGame');
-        this.depsList= Array(16).fill(false);}
+        let [game, date]=name?.url?.split('/game/')[1]?.split('-')??['',''];
+        console.log('Codice Partita:', name, date);
+        if(name && date) await this.getGame(Number(date), game);
+        else {await this.getGame(0, 'NoGame');}
         this.info=new Userinfo;
         // ...
       }
@@ -268,10 +272,20 @@ export class LoginPage {
   }
 
   async getGame(date: number, name: string): Promise<void> {
-    if(date==0) { window.history.pushState({}, '');
+    if(date==0) {
         this.depsList= Array(16).fill(false);
+        this.ref.markForCheck();
+        let name=window.document.location.href; //non va???
+        let [base, game]=name?.split('/game/')
+        window.location.replace(base); //va dove voglio ma ricarica e va in loop??
+        return;
     }
     this.rules.getRules(date, name).then((e)=>{
+      if(!e){
+        this.getGame(0, 'NoGame');
+        return;
+      }
+    
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
       this.notifs.getMessage(date);
@@ -285,17 +299,17 @@ export class LoginPage {
         this.rules.depsList.includes(15), this.rules.depsList.includes(16)];
     window.history.pushState({}, '', '/game/' + name + '-' + date);
     this.ref.markForCheck();
-    }).catch((error)=>{this.getGame(0, 'NoGame');});
+    });
   }
 
   async deleteGame(date:number, name:string){
-    await this.app.deleteGame(name, date).then(async ()=>{ //bro wtf perché cancella tutto??
+    await this.app.deleteGame(name, date).then(async ()=>{
     this.ref.markForCheck();
-    if(date==this.rules.gameID){
+    if(name==this.rules.name && date==this.rules.gameID){
       window.history.back();
       let name=window.history.state;
         let [game, date]=name?.url?.split('/game/')[1]?.split('-')??[];
-        if(date) await this.getGame(Number(date), game);
+        if(game && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
     }
     }).catch((err)=>{console.log(err)});

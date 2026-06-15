@@ -36,7 +36,7 @@ export class Rules {
       charaList: number[] = [],
       deadCh: number[] = [],
       abnoList: number[] = [],//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
-      depsList: Departments[] = [Departments.Control, Departments.Information, Departments.Safety, Departments.Training, Departments.Disciplinary], //ENUM
+      depsList: Departments[] = [], //ENUM
       bonusDeps: string[]=[],
       bonusColors: [string,boolean][]=[],//da usare per bonusDeps e customDeps, se si aggiungono altri bonusDeps o customDeps basta aggiungerli qui, bool è per testo bianco o nero
       capPassive=["Manager, Shut It Down!", "Solo Research", "Containment Protocols", "Shadow", "Rabbit Protocol","---","---","---","---","---","---","---","---","---","---","---"],

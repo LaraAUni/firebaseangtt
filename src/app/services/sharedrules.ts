@@ -50,14 +50,19 @@ export class Sharedrules {
 
   //da salvare in una raccolta su Firebase e cambiarlo da un menù quindi serve comunque un componente ma cose come depsList e depColor() servono a tutti
 
-  async getRules(date: number, name: string=this.name): Promise<void> {
+  async getRules(date: number, name: string=this.name): Promise<boolean> {
     let uRules: Rules;
     this.name=name;
     this.gameID=date;
     if(date){const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
-    uRules = snapshot1.data()!;}
-    else uRules= new Rules;
+    if(snapshot1.data()!=undefined){
+    uRules = snapshot1.data()!;
+    }
+    else return false;
+    ;
+    }
+    else return false;
     if (uRules) {
       this.DMIds = uRules.DMIds;
       this.playerIDs=uRules.playerIDs;
@@ -89,7 +94,7 @@ export class Sharedrules {
       this.traum3nabled = uRules.traum3nabled;
     }
     this.isDM=this.DMIds.includes(this.info.id);
-    return;
+    return true;
   }
   
   

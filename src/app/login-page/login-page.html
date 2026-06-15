@@ -28,10 +28,10 @@
   <form for="newGameName" name="MapOp" id="MapOp">
     @if(mapOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
-      @if(deleting){@for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
+      @if(deleting){@for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
       }
       @else{
-        @for(i of info.info.games; track i; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
+        @for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
       }
       @if(newGame){
         <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="New Game Name">

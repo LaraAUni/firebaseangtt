@@ -42,7 +42,7 @@ export class App {
   showRes=0;
   addAbno=false;
   deleting=false;
-  constructor(private ref: ChangeDetectorRef){
+  constructor(private ref: ChangeDetectorRef, private service: ServiceWorker){
   }
   
   
@@ -145,39 +145,3 @@ export class App {
     this.notifs.addMessage(this.rules.gameID);
   }
 }
-
-  
-let swRegistration = null;
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/sw.js")
-    .then((reg) => {
-      swRegistration = reg;
-    });
-}
-self.addEventListener("install", (e) => {
-  console.log("[Service Worker] Install");
-});
-const cacheName = "ttcache-v1";
-const appShellFiles = [
-  "/",
-  "/index.html",
-  "/app.js",
-  "/style.css",
-  "/public/BebasKai.otf",
-  "/public/Gill Sans.otf",
-  "/public/Mikodacs.otf",
-  "/public/Norwester.otf",
-  "/public/ThirdIco.ico",
-  "/public/User.png",
-  "/public/Undo.ico",
-  "/public/RedDamage.png",
-  "/public/BlackDamage.png",
-  "/public/WhiteDamage.png",
-  "/public/PaleDamage.png",
-  "/public/Instinct.png",
-  "/public/Insight.png",
-  "/public/Attachment.png",
-  "/public/Repression.png",
-];

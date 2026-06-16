@@ -1,5 +1,5 @@
 {
-  "short_name": "TT!",
+  "short_name": "TTT!!!",
   "name": "Third TrumpeT",
   "description":"A character sheet and map database for Third Trumpet TTRPG",
   "icons": [
@@ -15,7 +15,7 @@
     }
   ],
   "id": "/",
-  "start_url": "/",
+  "start_url": "./",
   "display": "browser",
   "theme_color": "black",
   "background_color": "white",

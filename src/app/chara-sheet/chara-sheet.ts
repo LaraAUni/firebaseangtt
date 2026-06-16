@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject,} from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FireInit } from '../fire-init';
@@ -14,6 +14,7 @@ import { Notifs } from '../services/notifs';
   selector: 'app-chara-sheet',
   imports: [CommonModule, RouterOutlet, NgTemplateOutlet],
   templateUrl: './chara-sheet.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chara-sheet.css',
 })
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { getDoc, setDoc, doc, DocumentSnapshot } from "firebase/firestore";
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from './abnoclass';
@@ -10,6 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
   selector: 'app-abno-sheet',
   imports: [CommonModule],
   templateUrl: './abno-sheet.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './abno-sheet.css',
 })
 export class AbnoSheet {

@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatExpansionModule} from '@angular/material/expansion';
 import { CharaSheet } from './chara-sheet/chara-sheet';
@@ -23,6 +23,7 @@ import { Notifs } from './services/notifs';
   selector: 'app-root',
   imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, Research, LoginPage, NgStyle, Messages],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./app.css']
 })
 

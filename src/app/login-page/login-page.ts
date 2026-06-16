@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, StreamingResourceOptions } from '@angular/core';
+import { ChangeDetectorRef, Component, StreamingResourceOptions, ChangeDetectionStrategy } from '@angular/core';
 import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
@@ -29,6 +29,7 @@ import {NgStyle} from '@angular/common';
   selector: 'app-login-page',
   imports: [],
   templateUrl: './login-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login-page.css',
 })
 export class LoginPage {

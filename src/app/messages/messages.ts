@@ -5,7 +5,7 @@ import { Notifs } from '../services/notifs';
   selector: 'app-messages',
   imports: [],
   templateUrl: './messages.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './messages.css',
 })
 export class Messages {

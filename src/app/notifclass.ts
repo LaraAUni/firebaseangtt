@@ -1,6 +1,5 @@
 
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
-import { last } from "rxjs";
 export class Notifclass {
   last5:[string, string, string, string, string]= ['','','','',''];
   trumpets:number=0;

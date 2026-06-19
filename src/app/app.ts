@@ -23,7 +23,7 @@ import { Notifs } from './services/notifs';
   selector: 'app-root',
   imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, Research, LoginPage, NgStyle, Messages],
   templateUrl: './app.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrls: ['./app.css']
 })
 
@@ -43,7 +43,7 @@ export class App {
   showRes=0;
   addAbno=false;
   deleting=false;
-  constructor(private ref: ChangeDetectorRef, private service: ServiceWorker){
+  constructor(private ref: ChangeDetectorRef){
   }
   
   

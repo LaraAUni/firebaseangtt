@@ -10,7 +10,7 @@ import {setDoc, getDoc, doc} from "firebase/firestore";
   selector: 'app-my-map',
   imports: [CommonModule],
   templateUrl: './my-map.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './my-map.css',
 })
 export class MyMap {

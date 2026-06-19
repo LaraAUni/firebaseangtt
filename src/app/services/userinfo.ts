@@ -1,4 +1,4 @@
-import { inject, Injectable, Inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { UserData, UserConverter } from './userdata';
 import { doc, setDoc, getDoc, DocumentSnapshot } from "firebase/firestore";
 import { FireInit } from '../fire-init';

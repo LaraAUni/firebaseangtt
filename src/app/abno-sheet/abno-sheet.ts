@@ -10,7 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
   selector: 'app-abno-sheet',
   imports: [CommonModule],
   templateUrl: './abno-sheet.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './abno-sheet.css',
 })
 export class AbnoSheet {

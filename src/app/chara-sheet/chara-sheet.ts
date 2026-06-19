@@ -14,7 +14,7 @@ import { Notifs } from '../services/notifs';
   selector: 'app-chara-sheet',
   imports: [CommonModule, RouterOutlet, NgTemplateOutlet],
   templateUrl: './chara-sheet.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './chara-sheet.css',
 })
 

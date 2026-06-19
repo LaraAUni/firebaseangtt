@@ -1,11 +1,9 @@
 
-import { ChangeDetectorRef, Component, StreamingResourceOptions, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy } from '@angular/core';
 import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
-import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { Sharedrules } from '../services/sharedrules'
 import {
-  EmailAuthCredential,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -22,14 +20,13 @@ import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { App } from '../app';
 import { Notifs } from '../services/notifs';
-import {NgStyle} from '@angular/common';
 
 
 @Component({
   selector: 'app-login-page',
   imports: [],
   templateUrl: './login-page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './login-page.css',
 })
 export class LoginPage {
@@ -189,8 +186,9 @@ export class LoginPage {
   signOut(auth = this.auth): void {
     auth.signOut().then(() => {
       this.optionsOp = false;
+      this.info.info = new UserData();
+      this.info.id = '';
       this.ref.markForCheck();
-      this.info=new Userinfo;
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -226,7 +224,8 @@ export class LoginPage {
         console.log('Codice Partita:', name, date);
         if(name && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
-        this.info=new Userinfo;
+        this.info.info = new UserData();
+        this.info.id = '';
         // ...
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -276,9 +275,11 @@ export class LoginPage {
     if(date==0) {
         this.depsList= Array(16).fill(false);
         this.ref.markForCheck();
-        let name=window.document.location.href; //non va???
-        let [base, game]=name?.split('/game/')
-        window.location.replace(base); //va dove voglio ma ricarica e va in loop??
+        const href = window.document.location.href;
+        if (href.includes('/game/')) {
+          const [base] = href.split('/game/');
+          window.location.replace(base);
+        }
         return;
     }
     this.rules.getRules(date, name).then((e)=>{

@@ -1,7 +1,8 @@
 <mat-drawer-container>
   <mat-drawer-content class="page">
     <header class="barra">
-      <span class="title">THIRD TRUMPET !!!</span>
+      @if(this.rules.gameID==0){<span class="title">THIRD TRUMPET !!!</span>}
+      @else {<span class="title">{{this.rules.name}}</span>}
       <app-login-page></app-login-page>
     </header>
     <div>
@@ -9,16 +10,14 @@
       <img class="openbtn" mat-button (click)="drawer.toggle();" src="button.png" alt="B">
     </div>
     <app-my-map></app-my-map>
-    <div class="recap">
-      <span>Recap</span>
-    </div>
+    <app-messages></app-messages>
   </mat-drawer-content>
   <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
     <mat-list>
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agents</mat-expansion-panel-header>
-        @for(i of this.rules.depsList; track i; let ind = $index){
+        @for(i of this.rules.depsList; track  $index; let ind = $index){
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links"
             [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
@@ -26,18 +25,17 @@
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-              @for(j of this.iconsNames.ordCharaList[ind]; track j.id){
+              @for(j of this.iconsNames.ordCharaList[ind]; track $index){
             @if(deleting){
               <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.deleteChara(j.id, i)">
               <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             @else{
               <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
-            }
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             }
           <span class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</span>
           @if(deleting){
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
           @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}</span>
           </span>
@@ -46,7 +44,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList[6]; track j.id){
+            @for(j of this.iconsNames.ordCharaList[6]; track $index){
                @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.deleteChara(j.id, 0)">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
@@ -54,7 +52,7 @@
               }
           <span class="newbutt" (click)="this.rules.lookDep=0; showChara=1; drawer.toggle(); this.rules.lookFor=0; this.rules.lookDep=0">+</span>
           @if(deleting){
-        <img class="newbutt" src="undo.png" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
           @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleting=true;">}
           </span>
@@ -62,7 +60,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
           <span style="color: grey; display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList[7]; track j.id){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+            @for(j of this.iconsNames.ordCharaList[7]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png"
               alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;" style="filter: grayscale(80%);">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
           </span>
@@ -70,17 +68,21 @@
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Abnormalities</mat-expansion-panel-header>
-        @for(i of this.rules.depsList; track i; let ind = $index){
+        @for(i of this.rules.depsList; track $index; let ind = $index){
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links"
             [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordAbnoList[ind]; track j){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
+            @for(j of this.iconsNames.ordAbnoList[ind]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
               (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
             <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-          <div class="newbutt" (click)="this.rules.lookDep=i; showAbno=1; drawer.toggle(); this.rules.lookFor=0;">+</div>
+          @if(this.rules.isDM){
+            <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
+            @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
+            <select id="newAbno" name="newAbno"><option value="1" (click)="this.rules.lookFor=1; showAbno=1; drawer.toggle(); addAbno=false">Pinocchio</option></select>}
+          }
           </span>
         </mat-expansion-panel>
         }
@@ -89,7 +91,18 @@
         <mat-expansion-panel-header class="links"
           (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
       </mat-expansion-panel>
+      <mat-expansion-panel hideToggle class="expansion">
+        <mat-expansion-panel-header class="links"
+          (click)="showRes=1; drawer.toggle();">Research</mat-expansion-panel-header>
+      </mat-expansion-panel>
     </mat-list>
+    <div>
+    <img mat-button class="trumpetbutton" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
+    <img mat-button class="trumpetbutton" alt="FT" src="SecondTrumpet.png" (click)="this.trumpetSound(2);">
+    <img mat-button class="trumpetbutton" alt="FT" src="ThirdTrumpet.png" (click)="this.trumpetSound(3);">
+    @if(this.notifs.trumpets!=0){
+    <img mat-button class="trumpetbutton" alt="FT" src="Undo.ico" (click)="this.trumpetSound(0);">
+    }</div>
     <label class="switch" for="lightmode-toggle">
       <input type="checkbox" id="lightmode-toggle" title="Toggle light mode">
       <span class="slider"></span>
@@ -108,4 +121,8 @@
 @if(showArmo>0){
 <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
 <app-armoury></app-armoury>
+}
+@if(showRes>0){
+<img class="closebtn" (click)="drawer.toggle(); showRes=0" src="buttonclose.png" alt="">
+<app-research></app-research>
 }

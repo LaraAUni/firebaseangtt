@@ -36,7 +36,7 @@ export class Rules {
       charaList: number[] = [],
       deadCh: number[] = [],
       abnoList: number[] = [],//le Abno avranno una lista di base ma poi devono avere la exp memorizzata a parte quindi tanto vale avere una scheda nuova
-      depsList: Departments[] = [Departments.Control, Departments.Information, Departments.Safety, Departments.Training, Departments.Disciplinary], //ENUM
+      depsList: Departments[] = [], //ENUM
       bonusDeps: string[]=[],
       bonusColors: [string,boolean][]=[],//da usare per bonusDeps e customDeps, se si aggiungono altri bonusDeps o customDeps basta aggiungerli qui, bool è per testo bianco o nero
       capPassive=["Manager, Shut It Down!", "Solo Research", "Containment Protocols", "Shadow", "Rabbit Protocol","---","---","---","---","---","---","---","---","---","---","---"],
@@ -45,8 +45,8 @@ export class Rules {
       safetyAbs=["Dead Man Walking", "Bedside Manners", "Not On My Watch", "The Fearlessness to Keep On Living"],
       trainAbs=["Sink or Swim", "Right Out of the Handbook", "Stick to the Plan!", "The Hope to Be a Better Person"],
       discAbs=["Big EGO", "Pain Bringer", "Vitality", "The Courage to Protect"],
-      centralAbs=["---"], //reskin di Control
-      welfareAbs=["---"], //Al momento è solo per reskin di Safety
+      centralAbs=["Corrective Action", "Controlling Coordinator", "Cross-Departmental Efficiency", "The Will To Stand Up Straight"], //reskin di Control
+      welfareAbs=["Dead Man Walking", "Bedside Manners", "Not On My Watch", "The Fearlessness to Keep On Living"], //Al momento è solo per reskin di Safety
       recordsAbs=["---"], //reskin di Information
       extractAbs=["---"], //reskin di Disciplinary
       architAbs=["---"], //reskin di Training

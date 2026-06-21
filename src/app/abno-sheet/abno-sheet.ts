@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { getDoc, setDoc, doc, DocumentSnapshot } from "firebase/firestore";
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from './abnoclass';
@@ -10,6 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
   selector: 'app-abno-sheet',
   imports: [CommonModule],
   templateUrl: './abno-sheet.html',
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './abno-sheet.css',
 })
 export class AbnoSheet {
@@ -18,14 +19,14 @@ export class AbnoSheet {
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
-    isDM=false;
+    isDM=this.rules.isDM;
     AbnoSheet : Abnormality;
     AbnoData : AbnoData;
     abnoID=0;
     depColor:string;
     dangerColor:string;
     HTclocks: string[]=[];
-    showname=false;
+    showname=false; //mettere AbnoSelect in Name alla creazione
     dang= Danger;
   constructor(private ref: ChangeDetectorRef){
     this.AbnoSheet=new Abnormality();
@@ -35,11 +36,16 @@ export class AbnoSheet {
   }
 
 ngOnInit(){
-  if(!this.getAbno(this.rules.lookFor)) this.abnoID=this.rules.lookFor;
-  else{this.AbnoData.department=this.rules.lookDep; this.depColorUp();
-    //Funzione per nuove Abno wip, ma avrà un selettore per quelle esistenti
-  }
-  console.log("AbnoData: ", this.AbnoData);
+  this.getAbno(this.rules.lookFor);
+  this.getData().then((res)=>{if(!res){
+    this.AbnoData=new AbnoData();
+    this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true);
+    this.depColorUp();
+    this.dangerColorUp();
+    this.clockFill();
+    this.ref.markForCheck();
+    this.addData();
+  }}).catch((err)=>{console.log(err)});
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -50,15 +56,16 @@ ngOnInit(){
   // Rest of the logic (collect data, updatewiew)
 const formData = new FormData(form);
 
+if(!this.isDM) return;
+
 let inp;
 inp=formData.get('AbnoName');
 if(inp)this.AbnoSheet.fullName.Name=inp.toString();
-console.log("Abno: ",formData.entries());
 
 
 this.ref.markForCheck();
 this.addData();
-this.addAbno();
+//  this.addAbno(); solo in casi speciali
 });
 }
 
@@ -72,11 +79,10 @@ this.addAbno();
     this.dangerColorUp();
     this.getData();
     }
-    console.log("thisAbnoSheet: ", this.AbnoSheet);
   }
 
-  async getData(game:number=this.rules.gameID, id:number=this.rules.lookFor): Promise<void> {
-    const abnoRef = doc(this.db, 'gameabnos/'+game+'-'+id).withConverter(new DataConverter());
+  async getData(game:number=this.rules.gameID, name:string=this.rules.name, id:number=this.rules.lookFor): Promise<boolean> {
+    const abnoRef = doc(this.db, 'gameabnos/'+name+'-'+game+'-'+id).withConverter(new DataConverter());
     const snapshot1: DocumentSnapshot<AbnoData> = await getDoc(abnoRef);
     const uChara: AbnoData = snapshot1.data()!;
     if (uChara) {
@@ -85,22 +91,19 @@ this.addAbno();
     this.depColorUp();
     this.clockFill();
     this.ref.markForCheck();
+    return true;
     }
-    console.log("thisAbnoData: ", this.AbnoData);
+    return false;
   }
   async addAbno() : Promise<void>{
     if(this.abnoID==0) return;//Toglierlo per cambiare default, ma meglio modificarli da Firebase
       const abnoRef = doc(this.db, 'abnos/'+this.abnoID).withConverter(new AbnoConverter());
-      await setDoc(abnoRef, this.AbnoSheet);
-      const snapshot1 = await getDoc(abnoRef);
-      console.log("Abnormality saved: ", snapshot1.data());} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
+      await setDoc(abnoRef, this.AbnoSheet);} //questo è il DB condiviso con le schede di base di partenza che non cambiano tra le partite
 
   async addData() : Promise<void>{
     if(this.rules.gameID==0) return;
-      const abnoRef = doc(this.db, 'gameabnos/'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
-      await setDoc(abnoRef, this.AbnoData);
-      const snapshot1 = await getDoc(abnoRef);
-      console.log("Data saved: ", snapshot1.data()); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
+      const abnoRef = doc(this.db, 'gameabnos/'+this.rules.name+'-'+this.rules.gameID+'-'+this.abnoID).withConverter(new DataConverter());
+      await setDoc(abnoRef, this.AbnoData); //questo è per aggiornare i dati in quella partita, quindi HP, posizione e ricerca
 }
   depColorUp(c: number=this.AbnoData.department){
     let newC=this.rules.depColorUp(c);

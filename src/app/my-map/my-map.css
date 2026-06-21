@@ -5,7 +5,7 @@
     display: grid;
     grid-template-columns: repeat(32, 1fr);
     grid-template-rows: repeat(20, 1fr);
-    height: 80vh;
+    height: 76vh;
     width: 70vw;
     z-index: 0;
     background-color: aliceblue;
@@ -52,7 +52,10 @@
 
 @media (max-width: 600px){
     .map{
-        width: 100vw;
-        height: 38vh;
+        width: 200vw;
+        overflow-x:scroll;
     }
+.stairs{
+    max-width: 100%;
+}
 }

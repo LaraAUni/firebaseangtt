@@ -279,15 +279,6 @@ input:checked + .slider:before {
     font-family: 'Norwester';
 }
 
-.recap {
-    position: fixed;
-    top: 80vh;
-    left: 0;
-    width: 100vw;
-    height: 20vh;
-    background-color: aqua;
-    scrollbar-color: aqua #010101;
-}
 
 .newbutt{
     font-size: 3vh;
@@ -297,6 +288,25 @@ input:checked + .slider:before {
     height: 2vh;
     grid-row: 1;
     background-color: #010101;
+}
+
+.trumpetbutton{
+    align-content: center;
+    justify-content: space-around;
+    contain: scale-down;
+    position:sticky;    
+    contain: scale-down;
+    max-height: 6vh;
+    justify-self: center;
+    border-radius: 20%;
+    margin-top: 4%;
+    margin-left: 10%;
+    margin-bottom: 5%;
+    border: gray solid 0.5vh;
+    border-style: inset;
+}
+.trumpetbutton:active{
+    transform: translateY(4px);
 }
 
 @media (max-width: 600px) {

@@ -1,0 +1,10 @@
+    <div class="recap">
+    <div class="message">
+        @if(this.notifs.trumpets==1){<span style="color: var(--First-Trumpet); font-family: 'Norwester';">First Trumpet !</span>}
+        @else if(this.notifs.trumpets==2){<span style="color: var(--Second-Trumpet); font-family: 'Norwester';">Second Trumpet !!</span>}
+        @else if(this.notifs.trumpets==3){<span style="color: var(--Third-Trumpet); font-family: 'Norwester';">Third Trumpet !!!</span>}
+    </div>
+    @for(i of this.notifs.last5; track $index){
+    @if(i){<div class="message">{{i}}</div>}
+    }
+    </div>

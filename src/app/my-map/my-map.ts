@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Corridor, Department, Mapclass, MapConverter, Room} from './mapclass';
 import { inject } from '@angular/core';
@@ -10,6 +10,7 @@ import {setDoc, getDoc, doc} from "firebase/firestore";
   selector: 'app-my-map',
   imports: [CommonModule],
   templateUrl: './my-map.html',
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './my-map.css',
 })
 export class MyMap {
@@ -21,7 +22,6 @@ deps=Departments;
 departments=this.map.departments;
 floordisp: number = this.map.floors;
 constructor(){
-  console.log(this.map);
   //this.saveMap(); Ho dimenticato che Firebase non salva gli Array di Array
 }
   async saveMap(){

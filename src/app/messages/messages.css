@@ -1,0 +1,16 @@
+.recap {
+    position: fixed;
+    top: 80vh;
+    left: 0;
+    width: 100vw;
+    height: 20vh;
+    background-color:  #010101;
+    overflow-x: hidden;
+}
+.message{
+    font-family: 'Mikodacs';
+    color: var(--border);
+    font-size: 3vh;
+    border: 0.35vh solid  var(--border);
+    margin-bottom: 0.2vh;
+}

@@ -36,62 +36,71 @@
 .buttsign:active{
     transform: translateY(2px);
 }
-/* Customize the label (the container) */
+/* ho usato display:flex invece del tutorial con position:absolute
+   perché così i checkbox si mettono in fila da soli senza casini di layout */
 .container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
   cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
+  -webkit-user-select: none;
 }
 
-/* Hide the browser's default checkbox */
+/* nascondo il checkbox originale del browser, uso lo span colorato come indicatore visivo */
 .container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+  display: none;
 }
 
-/* Create a custom checkbox */
+/* lo span colorato fa da "checkbox": quando è spuntato mostra il bordo grigio */
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  max-height: 4vh;
-  min-height: 2vh;
+  display: block;
   width: 9vw;
+  min-height: 3vh;
+  line-height: 3vh;
+  text-align: center;
+  font-size: 1vw;
   background-color: #eee;
   color: #010101;
+  cursor: pointer;
 }
 
-/* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
-/* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
   border: 0.35vh solid grey;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
-
+/* il + per aggiungere partita */
 .newbutt{
-    max-width: 8vw;
-    padding-left: 3vw;
-    padding-right: 3vw;
-    margin-right: 0.4vw;
+  height: 3vh;
+  min-width: 3vh;
+  padding: 0 1vw;
+  margin-right: 0.4vw;
+  font-size: 1.5vw;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--border);
+  background-color: black;
+  border: 0.2vh solid var(--border);
 }
+.newbutt:hover { opacity: 0.7; }
+
+/* le icone cestino e annulla — stili inline qui */
+.iconbutt{
+  height: 3vh;
+  width: 3vh;
+  margin-right: 0.4vw;
+  cursor: pointer;
+  padding: 0;
+}
+.iconbutt:hover { opacity: 0.7; }
 
 .infobox{
-  height: 20vh;
+  max-height: 60vh;
+  overflow-y: auto;
   width: 30vw;
   background-color: aliceblue;
   position: absolute;

@@ -52,8 +52,6 @@ export class Sharedrules {
 
   async getRules(date: number, name: string=this.name): Promise<boolean> {
     let uRules: Rules;
-    this.name=name;
-    this.gameID=date;
     if(date){const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
     if(snapshot1.data()!=undefined){
@@ -63,6 +61,8 @@ export class Sharedrules {
     ;
     }
     else return false;
+    this.name=name;
+    this.gameID=date;
     if (uRules) {
       this.DMIds = uRules.DMIds;
       this.playerIDs=uRules.playerIDs;

@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { inject, Inject } from '@angular/core';
 import { FireInit } from '../fire-init';
 import { Sharedrules } from '../services/sharedrules'
@@ -52,6 +52,10 @@ export class LoginPage {
   depsList= Array(16).fill(false);
   playerSearch: string='';
   friendsList: {name: string, code: string}[]=[];
+
+  // NgZone serve per rientrare nella zona di Angular dopo le callback di Firebase,
+  // che girano fuori zona — senza questo il menu non si aggiorna
+  ngZone = inject(NgZone);
 
   constructor(private ref: ChangeDetectorRef) {
     this.email = '';
@@ -196,7 +200,7 @@ export class LoginPage {
   }
 
   checkAuthState(auth = this.auth): void {
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => this.ngZone.run(async () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
@@ -229,7 +233,7 @@ export class LoginPage {
         // ...
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
-    });
+    }));
   }
 
 
@@ -306,6 +310,7 @@ export class LoginPage {
 
   async deleteGame(date:number, name:string){
     await this.app.deleteGame(name, date).then(async ()=>{
+    this.deleting = false; // dopo la cancellazione esco dalla modalità elimina
     this.ref.markForCheck();
     if(name==this.rules.name && date==this.rules.gameID){
       window.history.back();

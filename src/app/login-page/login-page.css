@@ -56,13 +56,16 @@
 .checkmark {
   display: block;
   width: 9vw;
-  min-height: 3vh;
-  line-height: 3vh;
+  min-height: 2vh;
+  line-height: 2vh;
   text-align: center;
-  font-size: 1vw;
+  font-size: 1.3vw;
   background-color: #eee;
-  color: #010101;
+  color: var(--darkbackg);
   cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .container:hover input ~ .checkmark {
@@ -76,8 +79,7 @@
 /* il + per aggiungere partita */
 .newbutt{
   height: 3vh;
-  min-width: 3vh;
-  padding: 0 1vw;
+  width: 3vh;
   margin-right: 0.4vw;
   font-size: 1.5vw;
   font-weight: bold;
@@ -85,6 +87,7 @@
   color: var(--border);
   background-color: black;
   border: 0.2vh solid var(--border);
+  padding-bottom: 1vh;
 }
 .newbutt:hover { opacity: 0.7; }
 
@@ -113,7 +116,8 @@
 }
 
 input{
-  width: 80%;}
+  width: 80%;
+  border: var(--border) solid 0.3vh;}
 .smallinput{
   width: 20vw;
 }

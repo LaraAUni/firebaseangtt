@@ -35,7 +35,7 @@ export class CharaSheet {
   captAbs=["---"]
   Fort={track:[1,1,1,1,1,1]};Prud={track:[1,1,1,1,1,1]};Temp={track:[1,1,1,1,1,1]};Just={track:[1,1,1,1,1,1]};
   depColor="var(--Bonus)";//deve essere una variabile cambiata dalla funzione perché mettendo la funzione direttamente nell'html Angular la ricalcola tre volte
-  depText="#010101";
+  depText="var(--darkbackg)";
   depChange=false;
   oldDep=0;
   new=false;
@@ -300,7 +300,7 @@ this.ref.markForCheck();
     } //Con le Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--Custom1)
   }
   depColorUp(c: number=this.Chara.role[1]){
-    this.depText="#010101";
+    this.depText="var(--darkbackg)";
     let newC=this.rules.depColorUp(c);
     if(newC[1])this.depText="aliceblue";
     this.depColor=newC[0] as string;

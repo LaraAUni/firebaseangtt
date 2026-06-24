@@ -15,6 +15,7 @@ body { margin: 0;}
 }
 :root{
     --lightbackg: #fff8d3;
+    --darkbackg: #010101;
     --whitetext: aliceblue;
     --border: #EF944D;
     --title-yellow: #FAFF8E;

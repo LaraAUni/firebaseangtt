@@ -11,10 +11,11 @@
   <img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">
   <img class="icon" src="User.png" alt="Players" (click)="userOp=!userOp">
   }
-    <form for="playerSearch" name="playerSearch" id="playerSearch">
+  <form for="playerSearch" name="playerSearch" id="playerSearch"(ngSubmit)="onSearchSubmit(searching)">
   @if(userOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
-      <input type="text" placeholder="Search Friend Code" maxlength="20" class="smallinput" id="search" name="search">
+      <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: grabbing; margin-left: 0.5vw;">{{this.info.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
+      <input type="text" placeholder="Search Friend Code" maxlength="20" class="smallinput" id="search" name="search"  [(ngModel)]="searching"><img alt="Search" src="SearchIco.png" class="iconbutt" type="submit">
         <div style="display: flex; align-items: center; gap: 10px;">
           @if(playerSearch!=''){
           <span>{{playerSearch}}</span>
@@ -25,7 +26,7 @@
     </div>
   }
 </form>
-  <form for="newGameName" name="MapOp" id="MapOp">
+  <form for="newGameName" name="MapOp" id="MapOp"(ngSubmit)="onMapFormSubmit(newGameName)">
     @if(mapOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
       @if(deleting){@for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
@@ -34,14 +35,14 @@
         @for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
       }
       @if(newGame){
-        <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Nome partita">
-        <img class="iconbutt" src="Undo.ico" alt="Annulla" title="Undo" (click)="newGame=false;">
+        <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Name" [(ngModel)]="newGameName">
+        <img class="iconbutt" src="Undo.ico" alt="Undo" title="Undo" (click)="newGame=false;">
       }@else{
         <button class="newbutt" title="Nuova partita" (click)="newGame=true">+</button>
       @if(deleting){
-        <img class="iconbutt" src="Undo.ico" alt="Annulla" title="Undo Delete" (click)="deleting=false;">}
+        <img class="iconbutt" src="Undo.ico" alt="Undo" title="Undo Delete" (click)="deleting=false;">}
         @else{
-        <img class="iconbutt" src="trashcan.png" alt="Elimina" title="Delete Game" (click)="deleting=true;">}
+        <img class="iconbutt" src="trashcan.png" alt="Delete" title="Delete Game" (click)="deleting=true;">}
       }
   <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; overflow-y: auto;">
     <span>
@@ -130,24 +131,24 @@
     </div>
    }</form>
 </div>
-      <form for="Options" name="optionsForm" id="optionsForm">
+      <form for="Options" name="optionsForm" id="optionsForm"(ngSubmit)="onUpdateNameSubmit(newNameValue)">
     @if(optionsOp){
       <div class="infobox">
         @if(this.info.id!='Guest'){
-        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}">
+        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}" [(ngModel)]="newNameValue" #ctrl="ngModel">
         <button type="submit" class="buttsign">Save</button>}
         <div>Friend Code: <span style="margin-left:2vw">{{info.info.code}}</span></div>
         <button type="button" class="buttsign" (click)="signOut()">Sign Out</button>
       </div>
     }
     </form>
-  <form for="Login-Menu" name="signForm" id="signForm">
+  <form #f="ngForm" (ngSubmit)="onSignFormSubmit(f)">
   @if(inpopen || subopen){
     <div class="infobox">
       <label for="email">Email </label>
-      <input type="text" inputmode="email" id="email" name="email">
+      <input type="text" inputmode="email" id="email" name="email" ngModel>
       <div><label for="password">Password </label>
-      <input type="text" id="password" name="password"></div>
+      <input type="password" id="password" name="password" ngModel></div>
       <button type="submit" class="buttsign">
       @if(inpopen){
           Sign In

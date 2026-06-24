@@ -4,7 +4,7 @@
     left: 0;
     width: 100vw;
     height: 20vh;
-    background-color:  #010101;
+    background-color:  var(--darkbackg);
     overflow-x: hidden;
 }
 .message{

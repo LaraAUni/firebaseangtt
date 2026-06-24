@@ -39,7 +39,7 @@
     font-size: large;
     min-width: 100vw;
     min-height: 100vh;
-    scrollbar-color: #010101 #EF944D !important;
+    scrollbar-color: var(--darkbackg) var(--border) !important;
 }
 
 .expansion{
@@ -95,7 +95,7 @@
     position: fixed;
     right: 30vw;
     top: 0;
-    background-color: #EF944D;
+    background-color: var(--border);
     max-height: 8vh;
     max-width: 4vh;
     cursor: pointer;
@@ -104,7 +104,7 @@
 .openbtn {
     position: fixed;
     cursor: pointer;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     color: white;
     transition: right .5s;
     top: 0.5vh;
@@ -116,7 +116,7 @@
 .buttonanim {
     position: fixed;
     cursor: pointer;
-    background-color: #EF944D;
+    background-color: var(--border);
     transition: right .5s;
     /* If you want a transition effect */
     top: 0.5vh;
@@ -176,10 +176,10 @@
 .sidenav {
     width: 30vw !important; /*non so perché si è rotto ed è più piccolo*/
     height: 100vh;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     overflow-x: hidden;
-    border-left: 0.4vh solid #EF944D !important;
-    scrollbar-color: #010101 #EF944D;
+    border-left: 0.4vh solid var(--border) !important;
+    scrollbar-color: var(--darkbackg) var(--border);
     box-sizing: content-box;
     font-family: 'Norwester' !important;
 }
@@ -201,12 +201,12 @@
     font-family: 'Norwester';
     top: 0;
     right: 0;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     min-width: 100%;
     min-height: 4vh;
     max-height: 4vh;
-    border-bottom: 0.4vh solid #EF944D;
-    color: #EF944D;
+    border-bottom: 0.4vh solid var(--border);
+    color: var(--border);
     font-size: 2vh;
     z-index: 1;
 }
@@ -256,11 +256,11 @@
 
 
 input:checked + .slider {
-  background-color: #010101;
+  background-color: var(--darkbackg);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #010101;
+  box-shadow: 0 0 1px var(--darkbackg);
 }
 
 input:checked + .slider:before {
@@ -287,7 +287,7 @@ input:checked + .slider:before {
     width: 2vh;
     height: 2vh;
     grid-row: 1;
-    background-color: #010101;
+    background-color: var(--darkbackg);
 }
 
 .trumpetbutton{

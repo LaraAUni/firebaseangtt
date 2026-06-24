@@ -4,14 +4,19 @@
   "description":"A character sheet and map database for Third Trumpet TTRPG",
   "icons": [
     {
-      "src": "/icons/ThirdIco-192.png",
+      "src": "/icons/logo-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/ThirdIco.png",
+      "src": "/icons/logo.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/logo.ico",
+      "sizes": "128x128",
+      "type": "image/ico"
     }
   ],
   "id": "/",

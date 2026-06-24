@@ -43,16 +43,16 @@
     display: flex;
 }
 .submit .subbutton{
-    background-color: #010101;
-    color: #EF944D;
-    border: 0.3vh solid #EF944D;
+    background-color: var(--darkbackg);
+    color: var(--border);
+    border: 0.3vh solid var(--border);
     max-width: 40%;
     margin-left: 10%;
     font-size: 1.8vh;
 }
 
 .intro .equip {
-    border: 1% solid #EF944D;
+    border: 1% solid var(--border);
     padding: 1%;
     contain: scale-down;
     max-height: 100%;
@@ -83,7 +83,7 @@
 .sheet .ability {
     background-color: aliceblue;
     border: 0.3vh solid grey;
-    color: #010101;
+    color: var(--darkbackg);
     font-size: 2vh;
     align-items: center;
     justify-items: center;
@@ -109,7 +109,7 @@
     margin: 0.8%;
     text-align: center;
     padding-top: 7%;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     color: var(--title-yellow);
 }
 .stresstext{
@@ -117,7 +117,7 @@
     font-size: 80%;
     border-width: 0;
     color: var(--title-yellow);
-    background-color: #010101;
+    background-color: var(--darkbackg);
     width: 2vh;
 }
 
@@ -168,7 +168,7 @@
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked~.checkmark {
-    background-color: #EF944D;
+    background-color: var(--border);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -200,11 +200,11 @@
     grid-row: 4;
     grid-template-columns: 2fr 2fr 1.5fr 2fr 3fr;
     display: grid;
-    border: 0.3vh solid #EF944D;
-    background-color: #EF944D;
+    border: 0.3vh solid var(--border);
+    background-color: var(--border);
     gap: 0.7%;
     row-gap: 9%;
-    color: #010101;
+    color: var(--darkbackg);
     max-height: 95%;
     margin-left: 2%;
     margin-right: 2%;
@@ -231,9 +231,9 @@
 
 .sheet .exp {
     grid-row: 5;
-    border: 0.3vh solid #EF944D;
-    background-color: #010101;
-    color: #EF944D;
+    border: 0.3vh solid var(--border);
+    background-color: var(--darkbackg);
+    color: var(--border);
     justify-self: center;
     justify-content: center;
     align-content: center;
@@ -244,9 +244,9 @@
     margin-right: 10%;
 }
 .sheet .expinp{
-    background-color: #010101;
+    background-color: var(--darkbackg);
     padding: 0;
-    color: #EF944D;
+    color: var(--border);
     font-size: 120%;
     width: 2.5vh;
 }
@@ -256,7 +256,7 @@
     display: grid;
     grid-template-columns: 40% 10% 40% 10%;
     grid-template-rows: repeat(5, 1fr);
-    color: #010101;
+    color: var(--darkbackg);
     margin-left: 2%;
     margin-right: 2%;
     background-color: gray;
@@ -278,11 +278,11 @@
 
 .skills .skillnum {
     margin: 0.8%;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     background-clip: padding-box;
     max-height: 95%;
     align-content: center;  
-    color: #EF944D;
+    color: var(--border);
     font-size: 2.8vh;
     padding: 0;
     max-width: none;
@@ -299,7 +299,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 4%;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-height: 100%;
     contain: scale-down;
     background-clip: padding-box;
@@ -322,8 +322,8 @@
 }
 
 .virtue .virtueborder {
-    background-color: #010101;
-    color: #010101;
+    background-color: var(--darkbackg);
+    color: var(--darkbackg);
     opacity: 1;
     background-clip: padding-box;
 }
@@ -331,7 +331,7 @@
 .virtue .virtueitem1 {
     grid-row: 2/4;
     grid-column: 2/4;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     align-content: center;
     justify-content: space-around;
     contain: scale-down;
@@ -410,7 +410,7 @@
 .virtue .virtueitem2 {
     grid-row: 2/4;
     grid-column: 4/6;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     align-content: center;
     justify-content: center;
     contain: scale-down;
@@ -429,10 +429,10 @@
 
 .sheet .gifts {
     grid-row: 8;
-    border: 0.3vh solid #EF944D;
+    border: 0.3vh solid var(--border);
     height: 100%;
-    background-color: #EF944D;
-    color: #EF944D;
+    background-color: var(--border);
+    color: var(--border);
     gap: 1%;
     background-clip: padding-box;
     margin: 2%;
@@ -443,7 +443,7 @@
 
 
 .gifts .giftname {
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-height: min-content;
     font-size: 2vh;
     padding: 0.5%;

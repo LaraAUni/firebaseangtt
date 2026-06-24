@@ -12,7 +12,7 @@
 .intro .abnoname{
     grid-row: 1;
     grid-column: 2;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     color: aliceblue;
     align-content: center;
     font-size: 2.5vh;
@@ -56,7 +56,7 @@
     margin-left: 10%;
     padding: 2%;
     color: aliceblue;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-width: 9vw;
     font-weight: bold;
 }
@@ -124,7 +124,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 5%;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-height: 100%;
     contain: scale-down;
     background-clip: padding-box;
@@ -138,12 +138,12 @@
     max-height: 100%;
     border: 1%;
     contain: scale-down;
-    background-color: #010101;
+    background-color: var(--darkbackg);
 }
 
 .resistance .resitem1 {
     grid-column: 1;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     align-content: center;
     justify-content: space-around;
     contain: scale-down;
@@ -152,7 +152,7 @@
 
 .resistance .resitem2 {
     grid-column: 2;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     align-content: center;
     contain: scale-down;
     max-height: 100%;
@@ -178,7 +178,7 @@
     border: 0.4vh solid;
     border: 1%;
     contain: scale-down;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     margin: 3%;
     display: grid;
     grid-template-rows: 0.5fr 1fr;
@@ -204,7 +204,7 @@
 
 .resistance .prefitem1 {
     grid-row: 1;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     contain: scale-down;
     max-height: 100%;
 }
@@ -212,7 +212,7 @@
 .sheet .clocks{
     grid-row: 4;
     gap: 4%;
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-height: 100%;
     max-width: 100%;
     contain: scale-down;
@@ -249,7 +249,7 @@
 
 
 .hints .hinttext {
-    background-color: #010101;
+    background-color: var(--darkbackg);
     max-height: min-content;
     font-size: 2vh;
     padding: 0.5%;

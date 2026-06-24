@@ -7,7 +7,7 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/ThirdIco.ico",
+          "/logo.ico",
           "/index.csr.html",
           "/index.html",
           "/manifest.webmanifest",

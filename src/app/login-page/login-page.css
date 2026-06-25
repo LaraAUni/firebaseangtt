@@ -56,8 +56,9 @@
 .checkmark {
   display: block;
   width: 9vw;
-  min-height: 2vh;
+  min-height: 2.2vh;
   line-height: 2vh;
+  padding-top: 0.3vh;
   text-align: center;
   font-size: 1.3vw;
   background-color: #eee;

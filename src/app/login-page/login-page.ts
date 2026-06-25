@@ -96,30 +96,36 @@ onSearchSubmit(code: string) {
   if (code.length > 0) this.searchUser(code);
 }
 
-  signUp(email: string, password: string, auth = this.auth): void {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up
-        this.subopen = false;
-        const user = userCredential.user;
-        this.userName = user.displayName || user.email || 'Username';
-        this.info.id = user.uid;
-        this.info.info.name=this.userName;
-        let empty=true;
-        do{this.info.info.code=this.generateRandomString();
-          const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.info.code));    
-          getDocs(q).then((querySnapshot) => {
-          empty=querySnapshot.empty}).catch((err)=>{console.log(err)});
-        }while(!empty); //se ho trovato un codice uguale lo rifaccio
-        this.info.addUser(this.info.id);
-        this.ref.markForCheck();
-        // ...
-      }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
+  async signUp(email: string, password: string, auth = this.auth): Promise<void> {
+  try {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    this.subopen = false;
+    const user = credential.user;
+    this.userName = user.displayName || user.email || 'Username';
+    this.info.id = user.uid;
+    this.info.info.name = this.userName;
+
+    // cerca un codice non ancora usato
+    let taken = true;
+    while (taken) {
+      const code = this.generateRandomString();
+      const q = query(
+        collection(this.fireInit.db, 'userdata'),
+        where('code', '==', code)
+      );
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        this.info.info.code = code;
+        taken = false;
+      }
+    }
+
+    await this.info.addUser(this.info.id);
+    this.ref.markForCheck();
+  } catch (error) {
+    console.error('Errore registrazione:', error);
   }
+}
 
   signIn(email: string, password: string, auth = this.auth): void {
     signInWithEmailAndPassword(auth, email, password)

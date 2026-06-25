@@ -107,7 +107,7 @@ export class Sharedrules {
 
   async deleteRules(date:number, name:string): Promise<void> {
     const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
-    deleteDoc(rulesRef);
+    await deleteDoc(rulesRef);
   }
 
   async newGame(n: string, date: number): Promise<void> {

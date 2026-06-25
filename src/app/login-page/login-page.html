@@ -14,7 +14,6 @@
   <form for="playerSearch" name="playerSearch" id="playerSearch"(ngSubmit)="onSearchSubmit(searching)">
   @if(userOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
-      <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: grabbing; margin-left: 0.5vw;">{{this.info.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
       <input type="text" placeholder="Search Friend Code" maxlength="20" class="smallinput" id="search" name="search"  [(ngModel)]="searching"><img alt="Search" src="SearchIco.png" class="iconbutt" type="submit">
         <div style="display: flex; align-items: center; gap: 10px;">
           @if(playerSearch!=''){
@@ -137,7 +136,7 @@
         @if(this.info.id!='Guest'){
         New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}" [(ngModel)]="newNameValue" #ctrl="ngModel">
         <button type="submit" class="buttsign">Save</button>}
-        <div>Friend Code: <span style="margin-left:2vw">{{info.info.code}}</span></div>
+      <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: pointer; margin-left: 0.5vw;">{{this.info.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
         <button type="button" class="buttsign" (click)="signOut()">Sign Out</button>
       </div>
     }

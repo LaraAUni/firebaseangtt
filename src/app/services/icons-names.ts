@@ -117,7 +117,7 @@ export class IconsNames {
 
   async deleteList(type:boolean, name:string=this.rules.name, gameID:number=this.rules.gameID){
     const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
-    deleteDoc(listRef);
+    await deleteDoc(listRef);
   };
 
   async toReserve(n: number, ind: number, id=this.rules.gameID, name=this.rules.name){

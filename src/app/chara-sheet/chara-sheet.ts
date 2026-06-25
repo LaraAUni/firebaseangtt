@@ -173,7 +173,7 @@ if(inp){inp=Number(inp);
   if(this.depChange){
     if(this.oldDep!=this.Chara.role[1]){
     let newind=this.rules.depsList.indexOf(this.Chara.role[1]); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
-    if(this.isdead=false){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
+    if(!this.isdead){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
     if(newind==-1) newind=6;
     this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
     this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva

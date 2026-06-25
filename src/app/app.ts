@@ -92,19 +92,15 @@ export class App {
     const rulesRef=doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
     let uRules = snapshot1.data()!;
+
     if(!uRules.DMIds.includes(you)) return;
-    uRules.charaList.forEach(element => {
-      this.deleteChara(element, undefined, name, date, false);
-    });
-    uRules.deadCh.forEach(element => {
-      this.deleteChara(element, undefined, name, date, false);
-    });
-    uRules.abnoList.forEach(element => {
-      this.deleteAbno(element, undefined, name, date, false);
-    });
+    for (const element of uRules.charaList) {this.deleteChara(element, undefined, name, date, false);}
+    for (const element of uRules.deadCh){this.deleteChara(element, undefined, name, date, false);}
+    for (const element of uRules.abnoList){this.deleteAbno(element, undefined, name, date, false);}
     this.iconsNames.deleteList(false, name, date);
     this.iconsNames.deleteList(true, name, date);
-    uRules.DMIds.forEach(async element=>{
+
+    for (const element of uRules.DMIds){
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             let uInfo: UserData = snapshot1.data()!;
@@ -118,10 +114,10 @@ export class App {
                 i--;
               }
             }
-            setDoc(userRef, uInfo)
+            await setDoc(userRef, uInfo)
             if(element==you) this.userd.info=uInfo;
-    })
-    uRules.playerIDs.forEach(async element=>{
+    }
+    for (const element of uRules.playerIDs){
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
             let uInfo: UserData = snapshot1.data()!;
@@ -135,9 +131,9 @@ export class App {
                 i--;
               }
             }
-            setDoc(userRef, uInfo);
-    })
-    this.rules.deleteRules(date, name);
+            await setDoc(userRef, uInfo);
+    }
+    await this.rules.deleteRules(date, name);
   }
 
   trumpetSound(n:number){

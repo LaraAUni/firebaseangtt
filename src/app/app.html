@@ -47,10 +47,10 @@
             @for(j of this.iconsNames.ordCharaList[6]; track $index){
                @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.deleteChara(j.id, 0)">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-               @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;">
+               @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=0;">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
               }
-          <span class="newbutt" (click)="this.rules.lookDep=0; showChara=1; drawer.toggle(); this.rules.lookFor=0; this.rules.lookDep=0">+</span>
+          <span class="newbutt" (click)="showChara=1; drawer.toggle(); this.rules.lookFor=0; this.rules.lookDep=0">+</span>
           @if(deleting){
         <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleting=false;">}
           @else{
@@ -88,12 +88,12 @@
         }
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
-        <mat-expansion-panel-header class="links"
-          (click)="showArmo=1; drawer.toggle();">Armoury</mat-expansion-panel-header>
+        <mat-list-item class="links"
+          (click)="showArmo=1; drawer.toggle();">Armoury</mat-list-item>
       </mat-expansion-panel>
       <mat-expansion-panel hideToggle class="expansion">
-        <mat-expansion-panel-header class="links"
-          (click)="showRes=1; drawer.toggle();">Research</mat-expansion-panel-header>
+        <mat-list-item class="links"
+          (click)="showRes=1; drawer.toggle();">Research</mat-list-item>
       </mat-expansion-panel>
     </mat-list>
     <div>

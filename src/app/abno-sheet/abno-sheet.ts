@@ -35,9 +35,10 @@ export class AbnoSheet {
     this.dangerColor="var(--Bonus)";
   }
 
-ngOnInit(){
+async ngOnInit(){
   this.getAbno(this.rules.lookFor);
-  this.getData().then((res)=>{if(!res){
+  try{
+    await this.getData();
     this.AbnoData=new AbnoData();
     this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true);
     this.depColorUp();
@@ -45,7 +46,7 @@ ngOnInit(){
     this.clockFill();
     this.ref.markForCheck();
     this.addData();
-  }}).catch((err)=>{console.log(err)});
+  }catch(err){console.log(err)};
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {

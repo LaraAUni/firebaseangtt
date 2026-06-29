@@ -170,9 +170,10 @@ if(inp){inp=Number(inp);
     this.depColorUp();
     this.isdead = this.rules.deadCh.includes(this.charID);
     this.oldDep=this.Chara.role[1];
-    this.checkownership().then((e)=>{
-    this.ref.markForCheck();
-    })
+    try{
+      await this.checkownership();
+      this.ref.markForCheck();
+    }catch(err){console.log(err)};
     }
   }
   async addChara( name:string=this.rules.name, gameID:number=this.rules.gameID) : Promise<void>{

@@ -65,9 +65,9 @@ export class IconsNames {
     this.ordAbnoList=Array(6).fill([]);
     if(type && this.rules.abnoList.length==0) return
       for(let i=0; i<this.rules.abnoList.length; i++){
-        let ret=this.getIcon(this.rules.abnoList[i], true)
-        if(!ret)continue;
-        ret.then((res)=>{
+        let res= await this.getIcon(this.rules.abnoList[i], true)
+        if(!res)continue;
+        try{
           if(res){
             let [ico, dep] = res;
           for(let j=0; j<this.rules.depsList.length; j++){
@@ -77,17 +77,16 @@ export class IconsNames {
             }
           }
         }
-        }).catch((err)=>{console.log(err)});
+        }catch(err){console.log(err)};
       }
     return;
     }
     this.ordCharaList=Array(8).fill([]);
     if(!type && this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
-      let ret=this.getIcon(this.rules.charaList[i], false)
-      if(!ret)continue;
-      ret.then((res)=>{
-        if(res){
+      try{
+      let res= await this.getIcon(this.rules.charaList[i], false);
+      if(!res)continue;
           let [chara, dep] = res;
           if(dep==0){
           if(!this.ordCharaList[6])this.ordCharaList[6]=[chara];
@@ -98,19 +97,16 @@ export class IconsNames {
              else this.ordCharaList[j]=[...this.ordCharaList[j], chara];
             }
           }
-        }
-      }).catch((err)=>{console.log(err)});
+        }catch(err){console.log(err);}
     }
     for(let i=0; i<this.rules.deadCh.length; i++){
-        let ret=this.getIcon(this.rules.deadCh[i], false)
-        if(!ret)continue;
-        ret.then((res)=>{
-          if(res){
-            let [chara, dep] = res;
-              if(!this.ordCharaList[7])this.ordCharaList[7]=[chara];
-              else this.ordCharaList[7]=[...this.ordCharaList[7], chara];
-          }
-        }).catch((err)=>{console.log(err)});
+        try{
+          let res=await this.getIcon(this.rules.deadCh[i], false)
+                  if(!res)continue;
+                      let [chara, dep] = res;
+                        if(!this.ordCharaList[7])this.ordCharaList[7]=[chara];
+                        else this.ordCharaList[7]=[...this.ordCharaList[7], chara];
+        }catch(err){console.log(err);}
     }
     this.addList(type);
   }

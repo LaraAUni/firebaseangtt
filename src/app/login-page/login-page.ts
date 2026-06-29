@@ -127,8 +127,7 @@ onSearchSubmit(code: string) {
 }
 
   signIn(email: string, password: string, auth = this.auth): void {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
         // Signed in
         this.inpopen = false;
         // ...
@@ -141,8 +140,7 @@ onSearchSubmit(code: string) {
   }
   
   SignInAnonymously(auth = this.auth): void {
-  signInAnonymously(auth)
-  .then(() => {
+  signInAnonymously(auth).then(() => {
         this.inpopen = false;
         this.signedIn = true;
         this.userName = 'Guest';
@@ -172,7 +170,7 @@ onSearchSubmit(code: string) {
     });
   }
 
-  checkAuthState(auth = this.auth): void {
+  async checkAuthState(auth = this.auth): Promise<void> {
     onAuthStateChanged(auth, (user) => this.ngZone.run(async () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -181,7 +179,8 @@ onSearchSubmit(code: string) {
         this.signedIn = true;
         this.userName = user.displayName || user.email || 'NewUser';
         this.newNameValue=this.userName;
-        this.info.getUser().then(async (e)=>{
+        try{
+        await this.info.getUser()
         if(this.userName && this.userName!=this.info.info.name){
         this.info.info.name=this.userName;
         this.info.addUser(this.info.id);}
@@ -190,10 +189,12 @@ onSearchSubmit(code: string) {
         do{ done=false;
         this.info.info.code=(this.userName?.slice(0,3)||'Abc')+this.generateRandomString(5);
         const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.info.code.toLowerCase()));
-        getDocs(q).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+        try{
+          let querySnapshot= await getDocs(q);
+          querySnapshot.forEach((doc) => {
           if(this.info.info.code=doc.data()['code'])done=true;
-        });}).catch((err)=>{console.log(err)});
+        });
+        }catch(err){console.log(err)};
         }while(done);
         this.info.addUser(this.info.id);
         }
@@ -202,7 +203,7 @@ onSearchSubmit(code: string) {
         console.log('Codice Partita:', game, date);
         if(game && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
-        });
+        }catch(err){console.log(err);};
         // ...
       } else {
         // User is signed out
@@ -274,12 +275,12 @@ onSearchSubmit(code: string) {
         }
         return;
     }
-    this.rules.getRules(date, name).then((e)=>{
-      if(!e){
+    try{
+      let success=await this.rules.getRules(date, name);
+      if(!success){
         this.getGame(0, 'NoGame');
         return;
       }
-    
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
       this.notifs.getMessage(date);
@@ -293,12 +294,13 @@ onSearchSubmit(code: string) {
         this.rules.depsList.includes(15), this.rules.depsList.includes(16)];
     window.history.pushState({}, '', '/game/' + name + '-' + date);
     this.ref.markForCheck();
-    });
+    }catch(err){console.log(err);}
   }
 
   async deleteGame(date:number, name:string){
     this.deleting = false; //esco dalla modalità elimina per evitare eliminazioni accidentali
-    await this.app.deleteGame(name, date).then(async ()=>{
+    try{
+    await this.app.deleteGame(name, date);
     this.ref.markForCheck();
     if(name==this.rules.name && date==this.rules.gameID){
       window.history.back();
@@ -307,18 +309,20 @@ onSearchSubmit(code: string) {
         if(game && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
     }
-    }).catch((err)=>{console.log(err)});
+    }catch(err){console.log(err);}
   }
 
   async searchUser(code: string){
     if(code.length==0||code==this.info.info.code) return;
     console.log('Searching...', code);
     const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", code.toLowerCase()));
-    getDocs(q).then((querySnapshot) => {
+    try{
+    let querySnapshot= await getDocs(q);
     querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
     this.playerSearch=doc.data()['name'];
-    });}).catch((err)=>{console.log(err)});
+    });
+    }catch(err){console.log(err);}
     this.ref.markForCheck();
   }
 

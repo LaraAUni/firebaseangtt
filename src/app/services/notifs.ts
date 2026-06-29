@@ -16,7 +16,7 @@ export class Notifs {
   constructor(){
   }
 
-  trumpetSound(tier:number){
+  async trumpetSound(tier:number){
   if(!("Notification"in window)){
     alert("This browser does not support desktop notification");
   }else if(Notification.permission==='granted'){
@@ -47,9 +47,10 @@ export class Notifs {
     default: break; //4th se la partita viene cancellata?
     }
   }else if(Notification.permission !== 'denied'){
-    Notification.requestPermission().then((permission)=>{
+    try{
+      let permission=await Notification.requestPermission();
       if (permission=='granted'){ const notification= new Notification("Example");}
-    })
+    }catch(err){console.log(err);}
   }
   }
     async addMessage(date=this.rules.gameID, name=this.rules.name) : Promise<void>{

@@ -147,6 +147,7 @@ input{
 input[inputmode="numeric"] {
     max-width: max-content;
 }
+
 textarea{
     background: inherit;
     color: inherit;

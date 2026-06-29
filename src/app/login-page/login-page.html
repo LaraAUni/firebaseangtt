@@ -25,7 +25,7 @@
     </div>
   }
 </form>
-  <form for="newGameName" name="MapOp" id="MapOp"(ngSubmit)="onMapFormSubmit(newGameName)">
+  <form for="newGameName" #newGameName="ngForm" name="MapOp" id="MapOp"(ngSubmit)="onMapFormSubmit(newGameName)">
     @if(mapOp && this.signedIn && this.info.id!='Guest'){
     <div class="infobox">
       @if(deleting){@for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
@@ -34,7 +34,7 @@
         @for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
       }
       @if(newGame){
-        <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Name" [(ngModel)]="newGameName">
+        <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Name" ngModel>
         <img class="iconbutt" src="Undo.ico" alt="Undo" title="Undo" (click)="newGame=false;">
       }@else{
         <button class="newbutt" title="Nuova partita" (click)="newGame=true">+</button>
@@ -134,7 +134,7 @@
     @if(optionsOp){
       <div class="infobox">
         @if(this.info.id!='Guest'){
-        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}" [(ngModel)]="newNameValue" #ctrl="ngModel">
+        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}" [(ngModel)]="newNameValue">
         <button type="submit" class="buttsign">Save</button>}
       <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: pointer; margin-left: 0.5vw;">{{this.info.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
         <button type="button" class="buttsign" (click)="signOut()">Sign Out</button>

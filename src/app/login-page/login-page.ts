@@ -50,7 +50,6 @@ export class LoginPage {
   playerSearch: string='';
   friendsList: {name: string, code: string}[]=[];
   newNameValue='';
-  newGameName='New';
 
   // NgZone serve per rientrare nella zona di Angular dopo le callback di Firebase,
   // che girano fuori zona — senza questo il menu non si aggiorna
@@ -73,7 +72,8 @@ onSignFormSubmit(f: NgForm) {
   else if (this.subopen) this.signUp(f.value.email, f.value.password);
 }
 
-async onMapFormSubmit(gameName: string) {
+async onMapFormSubmit(newGameName: NgForm) {
+  let gameName=newGameName.value.newGameName;
   if (!this.newGame || !gameName) return;
   this.newGame = false;
   const time = new Date();
@@ -84,7 +84,6 @@ async onMapFormSubmit(gameName: string) {
   await this.rules.newGame(gameName, date);
   this.info.info.games = [...this.info.info.games, { date, name: gameName }];
   await this.info.addUser(this.info.id);
-  this.newGameName='New';
   this.ref.markForCheck();
 }
 

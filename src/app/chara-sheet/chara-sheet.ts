@@ -9,10 +9,11 @@ import { Sharedrules , Departments} from '../services/sharedrules';
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { Notifs } from '../services/notifs';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-chara-sheet',
-  imports: [CommonModule, RouterOutlet, NgTemplateOutlet],
+  imports: [CommonModule, RouterOutlet, NgTemplateOutlet, FormsModule],
   templateUrl: './chara-sheet.html',
   changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './chara-sheet.css',
@@ -40,6 +41,7 @@ export class CharaSheet {
   oldDep=0;
   new=false;
   owns=false;
+  fullName='';
 constructor(private ref: ChangeDetectorRef){
   this.Chara = new Character();
 }
@@ -54,12 +56,12 @@ ngOnInit(){
     let maxD:number;
     if(this.rules.deadCh.length) maxD=Math.max(...this.rules.deadCh);
     else  maxD=0;
-    console.log('Alive:',maxA,'Dead:', maxD)
     this.charID=(maxA>maxD?maxA+1:maxD+1);
     this.new=true;
     this.rules.lookFor=this.charID;
+    this.oldDep=this.Chara.role[1];
   }
-  this.oldDep=this.Chara.role[1];
+/*
   const form = document.getElementById('charForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -69,9 +71,7 @@ ngOnInit(){
 
   // Rest of the logic (collect data, updatewiew)
 const formData = new FormData(form);
-
 if(!this.owns) return;
-
 let inp;
 this.oldDep=this.Chara.role[1];
 inp=formData.get('charName');
@@ -152,68 +152,8 @@ inp=formData.get('Skirmish');
 if(inp){inp=Number(inp);
   if(inp>=0&&inp<5)this.Chara.skills[9]=inp;}
 
-  
-  let ind=this.rules.depsList.indexOf(this.oldDep); //oldDep in caso è nuovo e per far funzionare Changedep
-  if(this.oldDep==0) ind=6;
-  if(this.isdead) ind=7;
-
-  if(this.new){
-    ind=this.rules.depsList.indexOf(this.Chara.role[1]);
-    if(this.Chara.role[1]==0) ind=6
-    this.rules.charaList=[...this.rules.charaList, this.charID];
-    this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
-    this.new=false;
-    this.userd.info.characters=[...this.userd.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
-    this.userd.addUser();
-    this.rules.addRules();
-  } else{
-  let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
-  this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName;
-  
-  if(this.depChange){
-    if(this.oldDep!=this.Chara.role[1]){
-    let newind=this.rules.depsList.indexOf(this.Chara.role[1]); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
-    if(!this.isdead){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
-    if(newind==-1) newind=6;
-    this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
-    this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva
-    this.depChange=false;
-  }
-    ind=newind;
-}
-}
-}
-    if(this.Chara.physHealth[5]||this.Chara.physHealth[6]||this.Chara.physHealth[7]||this.Chara.physHealth[8]||this.Chara.physHealth[9]){
-      if(!this.rules.deadCh.includes(this.charID)){
-      this.rules.charaList=this.rules.charaList.filter(c=>c!=this.charID);
-        this.rules.deadCh=[...this.rules.deadCh, this.charID]
-        this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
-        this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[7], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
-      this.isdead=true
-      this.rules.addRules();
-      let [a, ...last4]=this.notifs.last5;
-      if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
-      else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
-      this.notifs.addMessage(this.rules.gameID);
-    }
-    }
-    else if(this.rules.deadCh.includes(this.charID)){
-      this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
-      this.rules.charaList=[...this.rules.charaList, this.charID];
-        this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=this.charID);
-        ind=this.rules.depsList.indexOf(this.Chara.role[1]); //oldDep in caso è nuovo e per far funzionare Changedep
-        if(this.Chara.role[1]==0) ind=6;
-        this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
-      this.isdead=false
-      this.rules.addRules();
-      let [a, ...last4]=this.notifs.last5;
-      if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
-      else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
-      this.notifs.addMessage(this.rules.gameID);
-    }
-this.addChara();
-this.ref.markForCheck();
 });
+*/
 }
   async getChara(id:number, name:string=this.rules.name, gameID:number=this.rules.gameID): Promise<void> {
     const charRef = doc(this.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter());
@@ -229,6 +169,7 @@ this.ref.markForCheck();
     this.depAbsUp();
     this.depColorUp();
     this.isdead = this.rules.deadCh.includes(this.charID);
+    this.oldDep=this.Chara.role[1];
     this.checkownership().then((e)=>{
     this.ref.markForCheck();
     })
@@ -238,6 +179,114 @@ this.ref.markForCheck();
     if(this.charID==0) return; //per evitare di sovrascrivere il char0 di default quando si preme salva senza aver caricato un char o creato un nuovo char con id diverso da 0
     const charRef = doc(this.db, 'charas/' + name + '-' + gameID + '-' + this.charID).withConverter(new CharaConverter()); //(this.gameID*200) ?? ma non vaaaa
     await setDoc(charRef, this.Chara);
+  }
+
+    async onCharaFormSubmit(f:NgForm): Promise<void> {
+    // leggere i valori dal form usando le proprietà del componente
+    let ind=6; //Dep=0 è riserva, non fa parte di depsList quindi è default
+    if(this.isdead) ind=7;
+    else if(this.oldDep!=0) ind=this.rules.depsList.indexOf(this.oldDep); //basato su oldDep per far funzionare Changedep
+
+    if(this.new){
+      ind=this.rules.depsList.indexOf(this.Chara.role[1]);
+      if(this.Chara.role[1]==0) ind=6
+      this.rules.charaList=[...this.rules.charaList, this.charID];
+      this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+      this.new=false;
+      this.userd.info.characters=[...this.userd.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
+      await this.userd.addUser();
+      await this.rules.addRules();
+    } else{
+    console.log('ind:', ind)
+    let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
+    if(charIndex!=-1) this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName;
+    
+    if(this.depChange){
+      if(this.oldDep!=this.Chara.role[1]){
+      let newind=this.rules.depsList.indexOf(this.Chara.role[1]); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
+      if(!this.isdead){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
+      if(newind==-1) newind=6;
+      this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+      this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva
+      this.depChange=false;
+      this.oldDep=this.Chara.role[1];
+    }
+      ind=newind;
+  }
+  this.depAbsUp();
+  this.depColorUp();
+  }
+  }
+      if(this.Chara.physHealth[5]||this.Chara.physHealth[6]||this.Chara.physHealth[7]||this.Chara.physHealth[8]||this.Chara.physHealth[9]){
+        if(!this.rules.deadCh.includes(this.charID)){
+        this.rules.charaList=this.rules.charaList.filter(c=>c!=this.charID);
+          this.rules.deadCh=[...this.rules.deadCh, this.charID]
+          this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
+          this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[7], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+        this.isdead=true
+        await this.rules.addRules();
+        let [a, ...last4]=this.notifs.last5;
+        if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
+        else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
+        await this.notifs.addMessage(this.rules.gameID);
+      }
+      }
+      else if(this.rules.deadCh.includes(this.charID)){
+        this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
+        this.rules.charaList=[...this.rules.charaList, this.charID];
+          this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=this.charID);
+          ind=this.rules.depsList.indexOf(this.Chara.role[1]); //oldDep in caso è nuovo e per far funzionare Changedep
+          if(this.Chara.role[1]==0) ind=6;
+          this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+        this.isdead=false
+        await this.rules.addRules();
+        let [a, ...last4]=this.notifs.last5;
+        if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
+        else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
+        await this.notifs.addMessage(this.rules.gameID);
+      }
+
+      if(f.value.stress>=1 && ( f.value.stress<=6) || (this.Chara.role[0]=='Captain' && f.value.stress<=8) ) this.Chara.stress=f.value.stress;
+      else if(f.value.stress==0) this.Chara.stress=0;
+
+      if(f.value.exp>=1 && f.value.exp<=6) this.Chara.exp[0]=f.value.exp;
+      else if(f.value.exp==0) this.Chara.exp[0]=0;
+      if(f.value.exp1>=1 && f.value.exp1<=6) this.Chara.exp[1]=f.value.exp1;
+      else if(f.value.exp1==0) this.Chara.exp[1]=0;
+      if(f.value.exp2>=1 && f.value.exp2<=6) this.Chara.exp[2]=f.value.exp2;
+      else if(f.value.exp2==0) this.Chara.exp[2]=0;
+      if(f.value.exp3>=1 && f.value.exp3<=6) this.Chara.exp[3]=f.value.exp3;
+      else if(f.value.exp3==0) this.Chara.exp[3]=0;
+      if(f.value.exp4>=1 && f.value.exp4<=6) this.Chara.exp[4]=f.value.exp4;
+      else if(f.value.exp4==0) this.Chara.exp[4]=0;
+      
+      if(f.value.Excel>=1 && f.value.Excel<=4) this.Chara.skills[0]=f.value.Excel;
+      else if(f.value.Excel==0) this.Chara.skills[0]=0;
+      if(f.value.Endure>=1 && f.value.Endure<=4) this.Chara.skills[1]=f.value.Endure;
+      else if(f.value.Endure==0) this.Chara.skills[1]=0;
+      if(f.value.Lurk>=1 && f.value.Lurk<=4) this.Chara.skills[2]=f.value.Lurk;
+      else if(f.value.Lurk==0) this.Chara.skills[2]=0;
+      if(f.value.Rush>=1 && f.value.Rush<=4) this.Chara.skills[3]=f.value.Rush;
+      else if(f.value.Rush==0) this.Chara.skills[3]=0;
+      if(f.value.Observe>=1 && f.value.Observe<=4) this.Chara.skills[4]=f.value.Observe;
+      else if(f.value.Observe==0) this.Chara.skills[4]=0;
+      if(f.value.Consort>=1 && f.value.Consort<=4) this.Chara.skills[5]=f.value.Consort;
+      else if(f.value.Consort==0) this.Chara.skills[5]=0;
+      if(f.value.Hunt>=1 && f.value.Hunt<=4) this.Chara.skills[6]=f.value.Hunt;
+      else if(f.value.Hunt==0) this.Chara.skills[6]=0;
+      if(f.value.Operate>=1 && f.value.Operate<=4) this.Chara.skills[7]=f.value.Operate;
+      else if(f.value.Operate==0) this.Chara.skills[7]=0;
+      if(f.value.Command>=1 && f.value.Command<=4) this.Chara.skills[8]=f.value.Command;
+      else if(f.value.Command==0) this.Chara.skills[8]=0;
+      if(f.value.Skirmish>=1 && f.value.Skirmish<=4) this.Chara.skills[9]=f.value.Skirmish;
+      else if(f.value.Skirmish==0) this.Chara.skills[9]=0;
+
+      this.vexpUpdate(1);
+      this.vexpUpdate(2);
+      this.vexpUpdate(3);
+      this.vexpUpdate(4);
+      await this.addChara();
+      this.ref.markForCheck();
   }
 
   async checkownership(){

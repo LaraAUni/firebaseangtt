@@ -290,25 +290,24 @@ if(inp){inp=Number(inp);
   }
 
   async checkownership(){
-    if(this.rules.isDM) this.owns=true;
+    if(this.rules.isDM){ this.owns=true;
+      return;
+    }
     else{
     for(let i=0; i<this.userd.info.characters.length;i++){
     let [name ,game, findId]=this.userd.info.characters[i].split('-');
     if(name!=this.rules.name) continue;
     if(Number(game)!=this.rules.gameID) continue;
-    if(Number(findId)==this.charID) this.owns=true;
-    break;
+    if(Number(findId)==this.charID){ this.owns=true; return;}
     }
-        if(this.owns==false){
-        for(let i=0; i<this.userd.info.characters.length;i++){
-        let [name ,game, findId]=this.userd.info.characters[i].split('-');
-        if(name!=this.rules.name) continue;
-        if(Number(game)!=this.rules.gameID) continue;
-        if(Number(findId)==this.charID) this.owns=true;
-        break;
-        }
-      }
+    for(let i=0; i<this.userd.info.borrow.length;i++){
+    let [name ,game, findId]=this.userd.info.borrow[i].split('-');
+    if(name!=this.rules.name) continue;
+    if(Number(game)!=this.rules.gameID) continue;
+    if(Number(findId)==this.charID){ this.owns=true; return;}
     }
+    }
+    this.owns=false;
   }
 
   depAbsUp(c: number=this.Chara.role[1]){

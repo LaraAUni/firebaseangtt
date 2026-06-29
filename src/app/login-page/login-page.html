@@ -37,7 +37,7 @@
         <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Name" ngModel>
         <img class="iconbutt" src="Undo.ico" alt="Undo" title="Undo" (click)="newGame=false;">
       }@else{
-        <button class="newbutt" title="Nuova partita" (click)="newGame=true">+</button>
+        <button type="button" class="newbutt" title="Nuova partita" (click)="newGame=true">+</button>
       @if(deleting){
         <img class="iconbutt" src="Undo.ico" alt="Undo" title="Undo Delete" (click)="deleting=false;">}
         @else{

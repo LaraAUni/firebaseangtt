@@ -27,7 +27,7 @@
             <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
               @for(j of this.iconsNames.ordCharaList[ind]; track $index){
             @if(deleting){
-              <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.deleteChara(j.id, i)">
+              <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
               <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             @else{
               <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
@@ -45,7 +45,7 @@
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
             @for(j of this.iconsNames.ordCharaList[6]; track $index){
-               @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.deleteChara(j.id, 0)">
+               @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.gameServ.deleteChara(j.id, 0)">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=0;">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
@@ -78,10 +78,11 @@
             @for(j of this.iconsNames.ordAbnoList[ind]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
               (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
             <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
+            <form></form>
           @if(this.rules.isDM){
             <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
             @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-            <select id="newAbno" name="newAbno"><option value="1" (click)="this.rules.lookFor=1; showAbno=1; drawer.toggle(); addAbno=false">Pinocchio</option></select>}
+            <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno"><option [ngValue]="1">Pinocchio</option></select>}
           }
           </span>
         </mat-expansion-panel>

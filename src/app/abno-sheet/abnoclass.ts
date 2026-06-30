@@ -17,7 +17,7 @@ export class Abnormality {
   management: string[];
   story: string[];
 constructor(
-  dmID=['AlphaTT'],
+  dmID:string[]=[],
   icoUrl="000",
   fullName={ Name: "Standard Training Dummy Rabbit", Nickname: "", Code: "0-00-00"},
   danger=2,
@@ -110,7 +110,7 @@ export class AbnoData{
   clock4: [number, number];
   mapCoord : [number, number, number]; //x,y,floor
   constructor(
-    dmID=['AlphaTT'],
+    dmID:string[]=[],
     department=0,
     qClock=1,
     suppProg=0,

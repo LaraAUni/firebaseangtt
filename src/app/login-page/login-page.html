@@ -2,17 +2,17 @@
   @if(!signedIn){
   <button type="button" class="butt" (click)="inpopen=!inpopen; subopen=false">Sign In</button>
   <button type="button" class="butt" (click)="subopen=!subopen; inpopen=false">Sign Up</button>
-  <span>'{{userName}}'</span>}
+  <span>'{{this.info.name}}'</span>}
   @else{
-    <span>{{userName}}</span>
+    <span>{{this.info.name}}</span>
     <img class="icon" src="cogIco.png" alt="Options" (click)="optionsOp=!optionsOp">
     }
-  @if(this.signedIn && this.info.id!='Guest'){
+  @if(this.signedIn && this.info.uid!='Guest'){
   <img class="icon" src="MapIco.png" alt="Change Game" (click)="mapOp=!mapOp">
   <img class="icon" src="User.png" alt="Players" (click)="userOp=!userOp">
   }
   <form for="playerSearch" name="playerSearch" id="playerSearch"(ngSubmit)="onSearchSubmit(searching)">
-  @if(userOp && this.signedIn && this.info.id!='Guest'){
+  @if(userOp && this.signedIn && this.info.uid!='Guest'){
     <div class="infobox">
       <input type="text" placeholder="Search Friend Code" maxlength="20" class="smallinput" id="search" name="search"  [(ngModel)]="searching"><img alt="Search" src="SearchIco.png" class="iconbutt" type="submit">
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -26,12 +26,12 @@
   }
 </form>
   <form for="newGameName" #newGameName="ngForm" name="MapOp" id="MapOp"(ngSubmit)="onMapFormSubmit(newGameName)">
-    @if(mapOp && this.signedIn && this.info.id!='Guest'){
+    @if(mapOp && this.signedIn && this.info.uid!='Guest'){
     <div class="infobox">
-      @if(deleting){@for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
+      @if(deleting){@for(i of info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.deleteGame(i.date, i.name);">{{i.name}}</button>}
       }
       @else{
-        @for(i of info.info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
+        @for(i of info.games; track $index; let ind=$index){<button type="button" class="butt" (click)="this.getGame(i.date, i.name);">{{i.name}}</button>}
       }
       @if(newGame){
         <input type="text" id="newGameName" name="newGameName" maxlength="12" class="smallerinput" placeholder="Name" ngModel>
@@ -133,10 +133,10 @@
       <form for="Options" name="optionsForm" id="optionsForm"(ngSubmit)="onUpdateNameSubmit(newNameValue)">
     @if(optionsOp){
       <div class="infobox">
-        @if(this.info.id!='Guest'){
-        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{userName}}" [(ngModel)]="newNameValue">
+        @if(this.info.uid!='Guest'){
+        New Username: <input type="text" id="newName" name="newName" maxlength="20" class="smallinput" placeholder="{{this.info.name}}" [(ngModel)]="newNameValue">
         <button type="submit" class="buttsign">Save</button>}
-      <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: pointer; margin-left: 0.5vw;">{{this.info.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
+      <div>Your Friend Code: <span (click)="copyFriendCode()" style="cursor: pointer; margin-left: 0.5vw;">{{this.info.code}}<img alt="Copy" src="copyIcon.png" class="iconbutt" style="margin-left: 0.5vw;"></span></div>
         <button type="button" class="buttsign" (click)="signOut()">Sign Out</button>
       </div>
     }

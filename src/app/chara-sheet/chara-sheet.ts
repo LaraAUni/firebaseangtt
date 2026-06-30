@@ -24,7 +24,7 @@ export class CharaSheet {
   fireInit = inject(FireInit);
   rules = inject(Sharedrules);
   iconsNames = inject(IconsNames);
-  userd=inject(Userinfo);
+  info=inject(Userinfo);
   notifs=inject(Notifs);
   deps=Departments;
   db = this.fireInit.db;
@@ -49,7 +49,7 @@ constructor(private ref: ChangeDetectorRef){
 ngOnInit(){
   if(this.rules.lookFor){this.charID=this.rules.lookFor; this.getChara(this.charID);}
   else{this.Chara.role[1]=this.rules.lookDep; this.depColorUp();
-    this.owns=true
+    this.owns=true;
     let maxA:number;
     if(this.rules.charaList.length) maxA=Math.max(...this.rules.charaList);
     else  maxA=0;
@@ -61,99 +61,6 @@ ngOnInit(){
     this.rules.lookFor=this.charID;
     this.oldDep=this.Chara.role[1];
   }
-/*
-  const form = document.getElementById('charForm') as HTMLFormElement;
-// Add submit event listener
-  form.addEventListener('submit', async (event) => {
-
-  // Prevent default form submission (page reload)
-  event.preventDefault();
-
-  // Rest of the logic (collect data, updatewiew)
-const formData = new FormData(form);
-if(!this.owns) return;
-let inp;
-this.oldDep=this.Chara.role[1];
-inp=formData.get('charName');
-if(inp){this.Chara.fullName=inp.toString();}
-inp=formData.get('role1');
-if(inp)this.Chara.role[0]=inp.toString();
-inp=formData.get('role2');
-if(inp)this.Chara.role[1]=Number(inp);
-this.depAbsUp();
-this.depColorUp();
-inp=formData.get('armor');
-if(inp)this.Chara.armor=(inp.toString()=='on'?true:false);
-inp=formData.get('ability0');
-if(inp){inp=inp.toString();
-  this.Chara.abilities[0]=(inp=='Empty'?"":inp)}
-inp=formData.get('ability1');
-if(inp){inp=inp.toString();
-  this.Chara.abilities[1]=(inp=='Empty'?"":inp)}
-inp=formData.get('ability2');
-if(inp){inp=inp.toString();
-  this.Chara.abilities[2]=(inp=='Empty'?"":inp)}
-inp=formData.get('stress');
-if(inp){inp=Number(inp);
-  if(this.Chara.role[0]=='Captain'){if(inp>=0&&inp<9)this.Chara.stress=inp;}
-  else{if(inp>=0&&inp<7)this.Chara.stress=inp;}
-}
-inp=formData.get('trauma0');
-if(inp){inp=inp.toString();
-  this.Chara.trauma[0]=(inp=='Empty'?"":inp)}
-inp=formData.get('trauma1');
-if(inp){inp=inp.toString();
-  this.Chara.trauma[1]=(inp=='Empty'?"":inp)}
-inp=formData.get('trauma2');
-if(inp){inp=inp.toString();
-  this.Chara.trauma[2]=(inp=='Empty'?"":inp)}
-inp=formData.get('exp');
-if(inp)this.Chara.exp[0]=Number(inp);
-inp=formData.get('exp1');
-if(inp){this.Chara.exp[1]=Number(inp);
-    this.vexpUpdate(1);}
-inp=formData.get('exp2');
-if(inp){this.Chara.exp[2]=Number(inp);
-    this.vexpUpdate(2);}
-inp=formData.get('exp3');
-if(inp){this.Chara.exp[3]=Number(inp);
-    this.vexpUpdate(3);}
-inp=formData.get('exp4');
-if(inp){this.Chara.exp[4]=Number(inp);
-    this.vexpUpdate(4);}
-inp=formData.get('Excel');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[0]=inp;}
-inp=formData.get('Endure');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[1]=inp;}
-inp=formData.get('Lurk');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[2]=inp;}
-inp=formData.get('Rush');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[3]=inp;}
-inp=formData.get('Observe');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[4]=inp;}
-inp=formData.get('Consort');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[5]=inp;}
-inp=formData.get('Hunt');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[6]=inp;}
-inp=formData.get('Operate');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[7]=inp;}
-inp=formData.get('Command');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[8]=inp;}
-inp=formData.get('Skirmish');
-if(inp){inp=Number(inp);
-  if(inp>=0&&inp<5)this.Chara.skills[9]=inp;}
-
-});
-*/
 }
   async getChara(id:number, name:string=this.rules.name, gameID:number=this.rules.gameID): Promise<void> {
     const charRef = doc(this.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter());
@@ -194,8 +101,8 @@ if(inp){inp=Number(inp);
       this.rules.charaList=[...this.rules.charaList, this.charID];
       this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
       this.new=false;
-      this.userd.info.characters=[...this.userd.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
-      await this.userd.addUser();
+      this.info.characters=[...this.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
+      await this.info.addUser();
       await this.rules.addRules();
     } else{
     console.log('ind:', ind)
@@ -227,7 +134,7 @@ if(inp){inp=Number(inp);
         this.isdead=true
         await this.rules.addRules();
         let [a, ...last4]=this.notifs.last5;
-        if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
+        if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
         await this.notifs.addMessage(this.rules.gameID);
       }
@@ -242,7 +149,7 @@ if(inp){inp=Number(inp);
         this.isdead=false
         await this.rules.addRules();
         let [a, ...last4]=this.notifs.last5;
-        if(this.userd.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
+        if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
         await this.notifs.addMessage(this.rules.gameID);
       }
@@ -295,14 +202,14 @@ if(inp){inp=Number(inp);
       return;
     }
     else{
-    for(let i=0; i<this.userd.info.characters.length;i++){
-    let [name ,game, findId]=this.userd.info.characters[i].split('-');
+    for(let i=0; i<this.info.characters.length;i++){
+    let [name ,game, findId]=this.info.characters[i].split('-');
     if(name!=this.rules.name) continue;
     if(Number(game)!=this.rules.gameID) continue;
     if(Number(findId)==this.charID){ this.owns=true; return;}
     }
-    for(let i=0; i<this.userd.info.borrow.length;i++){
-    let [name ,game, findId]=this.userd.info.borrow[i].split('-');
+    for(let i=0; i<this.info.borrow.length;i++){
+    let [name ,game, findId]=this.info.borrow[i].split('-');
     if(name!=this.rules.name) continue;
     if(Number(game)!=this.rules.gameID) continue;
     if(Number(findId)==this.charID){ this.owns=true; return;}

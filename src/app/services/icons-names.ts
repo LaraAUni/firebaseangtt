@@ -4,7 +4,7 @@ import { doc, getDoc, DocumentSnapshot, setDoc, deleteDoc } from 'firebase/fires
 import { FireInit } from '../fire-init';
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from '../abno-sheet/abnoclass';
 import { Character, CharaConverter } from '../chara-sheet/characlass';
-import { Sharedrules } from './sharedrules';
+import { Departments, Sharedrules } from './sharedrules';
 import { Iconsclass, listConverter } from '../iconsclass';
 
 @Injectable({
@@ -63,52 +63,44 @@ export class IconsNames {
     console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     if(type){
     this.ordAbnoList=Array(6).fill([]);
-    if(type && this.rules.abnoList.length==0) return
+    if(this.rules.abnoList.length==0) return;
       for(let i=0; i<this.rules.abnoList.length; i++){
-        let res= await this.getIcon(this.rules.abnoList[i], true)
-        if(!res)continue;
+          console.log("Called once?")
         try{
+          const res= await this.getIcon(this.rules.abnoList[i], true)
+        if(!res)continue;
           if(res){
-            let [ico, dep] = res;
-          for(let j=0; j<this.rules.depsList.length; j++){
-            if(dep==this.rules.depsList[j]){
-              if(!this.ordAbnoList[j])this.ordAbnoList[j]=[ico];
-              else this.ordAbnoList[j]=[...this.ordAbnoList[j], ico];
-            }
+            const [ico, dep] = res;
+            const d=this.rules.depsList.indexOf(dep);
+            if(d>=0)this.ordAbnoList[d]=[...this.ordAbnoList[d], ico];
           }
-        }
         }catch(err){console.log(err)};
       }
     return;
     }
     this.ordCharaList=Array(8).fill([]);
-    if(!type && this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
+    if(this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
+      console.log("Called once? Chara N°", i+1)
       try{
-      let res= await this.getIcon(this.rules.charaList[i], false);
+      const res= await this.getIcon(this.rules.charaList[i], false);
       if(!res)continue;
-          let [chara, dep] = res;
-          if(dep==0){
-          if(!this.ordCharaList[6])this.ordCharaList[6]=[chara];
-             else this.ordCharaList[6]=[...this.ordCharaList[6], chara];}
-          else for(let j=0; j<this.rules.depsList.length; j++){
-          if(dep==this.rules.depsList[j]){
-            if(!this.ordCharaList[j])this.ordCharaList[j]=[chara];
-             else this.ordCharaList[j]=[...this.ordCharaList[j], chara];
-            }
-          }
+          const [chara, dep] = res;
+          const d=this.rules.depsList.indexOf(dep)
+            if(d>=0)this.ordCharaList[d]=[...this.ordCharaList[d], chara];
+            else this.ordCharaList[6]=[...this.ordCharaList[6], chara];
         }catch(err){console.log(err);}
     }
     for(let i=0; i<this.rules.deadCh.length; i++){
         try{
-          let res=await this.getIcon(this.rules.deadCh[i], false)
+          const res=await this.getIcon(this.rules.deadCh[i], false)
                   if(!res)continue;
-                      let [chara, dep] = res;
-                        if(!this.ordCharaList[7])this.ordCharaList[7]=[chara];
-                        else this.ordCharaList[7]=[...this.ordCharaList[7], chara];
+                    const [chara, dep] = res;
+                    this.ordCharaList[7]=[...this.ordCharaList[7], chara];
         }catch(err){console.log(err);}
     }
-    this.addList(type);
+    console.log("New List:", (type?this.ordAbnoList:this.ordCharaList))
+    //this.addList(type);
   }
 
   async deleteList(type:boolean, name:string=this.rules.name, gameID:number=this.rules.gameID){

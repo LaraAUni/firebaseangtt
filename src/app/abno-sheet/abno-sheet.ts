@@ -5,6 +5,8 @@ import { Abnormality, AbnoData, AbnoConverter, DataConverter } from './abnoclass
 import { Sharedrules, Danger } from '../services/sharedrules';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { IconsNames } from '../services/icons-names';
+import { Userinfo } from '../services/userinfo';
 
 @Component({
   selector: 'app-abno-sheet',
@@ -16,10 +18,13 @@ import { ChangeDetectorRef } from '@angular/core';
 export class AbnoSheet {
   fireInit = inject(FireInit);
   rules= inject(Sharedrules);
+  icons=inject(IconsNames);
+  info=inject(Userinfo);
     app = this.fireInit.app;
     db = this.fireInit.db;
     lang='en';
     isDM=this.rules.isDM;
+    owned=false;
     AbnoSheet : Abnormality;
     AbnoData : AbnoData;
     abnoID=0;
@@ -30,23 +35,36 @@ export class AbnoSheet {
     dang= Danger;
   constructor(private ref: ChangeDetectorRef){
     this.AbnoSheet=new Abnormality();
-    this.AbnoData=new AbnoData(); //Se non ha altri nomi inutile chiedere, meno rischi di sbagli per DM
+    this.AbnoData=new AbnoData();
     this.depColor="var(--Bonus)";
     this.dangerColor="var(--Bonus)";
   }
 
 async ngOnInit(){
-  this.getAbno(this.rules.lookFor);
   try{
-    await this.getData();
-    this.AbnoData=new AbnoData();
-    this.showname=(this.AbnoSheet.fullName.Nickname?this.AbnoData.trueNameRev:true);
+    await this.getAbno(this.rules.lookFor);
+    if(this.abnoID && !this.rules.abnoList.includes(this.abnoID)){
+      this.rules.abnoList=[...this.rules.abnoList, this.abnoID];
+      this.rules.addRules();
+      this.AbnoData.department=this.rules.lookDep;
+      this.depColorUp();
+      this.addData();
+      const i=this.rules.depsList.indexOf(this.AbnoData.department);
+      const newname=(this.showname? (this.AbnoSheet.fullName.Nickname?this.AbnoSheet.fullName.Nickname:this.AbnoSheet.fullName.Name):'???')
+      if(i>=0) this.icons.ordAbnoList[i]=[...this.icons.ordAbnoList[i], {id: this.abnoID, name: newname, icon: this.AbnoSheet.icoUrl}];
+    }
+    else{
+    try{
+    let res=await this.getData(); //Se non ha altri nomi inutile chiedere, meno rischi di sbagli per DM
+    if(!res){
+    this.AbnoData.department=this.rules.lookDep;
     this.depColorUp();
-    this.dangerColorUp();
-    this.clockFill();
     this.ref.markForCheck();
-    this.addData();
-  }catch(err){console.log(err)};
+    this.addData()}
+    }catch(err){console.log(err)};
+    }
+  }catch(err){console.log(err);}
+  
   const form = document.getElementById('abnoForm') as HTMLFormElement;
 // Add submit event listener
   form.addEventListener('submit', async (event) => {
@@ -77,8 +95,8 @@ this.addData();
     if (uChara) {
     this.AbnoSheet = uChara;
     this.abnoID=id;
+    if(this.AbnoSheet.dmID.includes(this.info.uid)) this.owned=true;
     this.dangerColorUp();
-    this.getData();
     }
   }
 

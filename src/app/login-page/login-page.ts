@@ -15,9 +15,9 @@ import { UserData } from '../services/userdata';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
-import { App } from '../app';
 import { Notifs } from '../services/notifs';
 import { FormsModule, NgForm } from '@angular/forms';
+import { GameService } from '../services/game-service';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class LoginPage {
   auth = getAuth(this.fireInit.app);
   iconsNames=inject(IconsNames);
   info=inject(Userinfo)
-  app=inject(App);
+  gameServ=inject(GameService);
   notifs=inject(Notifs);
   provider = new GoogleAuthProvider();
   signedIn = false;
@@ -41,7 +41,6 @@ export class LoginPage {
   subopen = false;
   optionsOp = false;
   deleting=false;
-  userName: string | null = 'Guest';
   mapOp = false;
   userOp=false;
   newGame= false; //funzione?
@@ -50,7 +49,7 @@ export class LoginPage {
   playerSearch: string='';
   friendsList: {name: string, code: string}[]=[];
   newNameValue='';
-
+  
   // NgZone serve per rientrare nella zona di Angular dopo le callback di Firebase,
   // che girano fuori zona — senza questo il menu non si aggiorna
   ngZone = inject(NgZone);
@@ -82,8 +81,8 @@ async onMapFormSubmit(newGameName: NgForm) {
     + time.getHours() + time.getMinutes() + time.getSeconds()
   );
   await this.rules.newGame(gameName, date);
-  this.info.info.games = [...this.info.info.games, { date, name: gameName }];
-  await this.info.addUser(this.info.id);
+  this.info.games = [...this.info.games, { date, name: gameName }];
+  await this.info.addUser(this.info.uid);
   this.ref.markForCheck();
 }
 
@@ -100,26 +99,24 @@ onSearchSubmit(code: string) {
     const credential = await createUserWithEmailAndPassword(auth, email, password);
     this.subopen = false;
     const user = credential.user;
-    this.userName = user.displayName || user.email || 'Username';
-    this.info.id = user.uid;
-    this.info.info.name = this.userName;
-
+    this.info.name = user.email || 'Username';
+    this.info.uid=user.uid;
     // cerca un codice non ancora usato
     let taken = true;
     while (taken) {
-      const code = this.generateRandomString();
+      const code = (this.info.name?.slice(0,3)||'Abc')+this.generateRandomString(5);
       const q = query(
         collection(this.fireInit.db, 'userdata'),
         where('code', '==', code)
       );
       const snap = await getDocs(q);
       if (snap.empty) {
-        this.info.info.code = code;
+        this.info.code = code;
         taken = false;
       }
     }
 
-    await this.info.addUser(this.info.id);
+    await this.info.addUser(user.uid);
     this.ref.markForCheck();
   } catch (error) {
     console.error('Errore registrazione:', error);
@@ -143,10 +140,10 @@ onSearchSubmit(code: string) {
   signInAnonymously(auth).then(() => {
         this.inpopen = false;
         this.signedIn = true;
-        this.userName = 'Guest';
         this.getGame(0, 'NoGame'); //da usare il link
-        this.info.id='Guest';
-        this.info.info.name='guest';
+        this.info.code='Guest';
+        this.info.name='Guest';
+        this.info.uid='Guest'
         this.rules.isDM=false;
         // ...
         this.ref.markForCheck();
@@ -161,8 +158,7 @@ onSearchSubmit(code: string) {
   signOut(auth = this.auth): void {
     auth.signOut().then(() => {
       this.optionsOp = false;
-      this.info.info = new UserData();
-      this.info.id = '';
+      this.info.getUser('');
       this.ref.markForCheck();
     }).catch((error) => {
       const errorCode = error.code;
@@ -175,28 +171,26 @@ onSearchSubmit(code: string) {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-        this.info.id = user.uid;
         this.signedIn = true;
-        this.userName = user.displayName || user.email || 'NewUser';
-        this.newNameValue=this.userName;
+        const userName = user.displayName || user.email || 'NewUser';
         try{
-        await this.info.getUser()
-        if(this.userName && this.userName!=this.info.info.name){
-        this.info.info.name=this.userName;
-        this.info.addUser(this.info.id);}
-        if(!this.info.info.code){
+        await this.info.getUser(user.uid)
+        if(userName!=this.info.name){
+        this.info.name=userName;
+        this.info.addUser(user.uid);}
+        if(!this.info.code){
         let done=false;
         do{ done=false;
-        this.info.info.code=(this.userName?.slice(0,3)||'Abc')+this.generateRandomString(5);
-        const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.info.code.toLowerCase()));
+        this.info.code=(this.info.name?.slice(0,3)||'Abc')+this.generateRandomString(5);
+        const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.code.toLowerCase()));
         try{
           let querySnapshot= await getDocs(q);
           querySnapshot.forEach((doc) => {
-          if(this.info.info.code=doc.data()['code'])done=true;
+          if(this.info.code=doc.data()['code'])done=true;
         });
         }catch(err){console.log(err)};
         }while(done);
-        this.info.addUser(this.info.id);
+        this.info.addUser(user.uid);
         }
         let name=window.document.location.href;
         let [game, date]=name?.split('/game/')[1]?.split('-')??[];
@@ -208,14 +202,13 @@ onSearchSubmit(code: string) {
       } else {
         // User is signed out
         this.signedIn = false;
-        this.userName = 'Guest';
+        this.info.name = 'Guest';
         let name=window.history.state;
         let [game, date]=name?.url?.split('/game/')[1]?.split('-')??['',''];
         console.log('Codice Partita:', name, date);
         if(name && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
-        this.info.info = new UserData();
-        this.info.id = '';
+        this.info.getUser('');
         // ...
       }
       this.ref.detectChanges(); // Aggiorna la vista dopo il cambiamento dello stato di autenticazione
@@ -223,7 +216,7 @@ onSearchSubmit(code: string) {
   }
 
   copyFriendCode(){
-    navigator.clipboard.writeText(this.info.info.code);
+    navigator.clipboard.writeText(this.info.code);
   }
 
   updateName(name: string): void {
@@ -233,9 +226,8 @@ onSearchSubmit(code: string) {
       updateProfile(user, {
         displayName: name
       }).then(() => {
-        this.userName = name;
-        this.info.info.name = this.userName ?? '';
-        this.info.addUser(this.info.id);
+        this.info.name = name ?? '';
+        this.info.addUser(user.uid);
         this.ref.markForCheck();
         // Update successful
       }).catch((error) => {
@@ -300,7 +292,7 @@ onSearchSubmit(code: string) {
   async deleteGame(date:number, name:string){
     this.deleting = false; //esco dalla modalità elimina per evitare eliminazioni accidentali
     try{
-    await this.app.deleteGame(name, date);
+    await this.gameServ.deleteGame(name, date);
     this.ref.markForCheck();
     if(name==this.rules.name && date==this.rules.gameID){
       window.history.back();
@@ -313,11 +305,11 @@ onSearchSubmit(code: string) {
   }
 
   async searchUser(code: string){
-    if(code.length==0||code==this.info.info.code) return;
+    if(code.length==0||code==this.info.code) return;
     console.log('Searching...', code);
     const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", code.toLowerCase()));
     try{
-    let querySnapshot= await getDocs(q);
+    let querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
     this.playerSearch=doc.data()['name'];

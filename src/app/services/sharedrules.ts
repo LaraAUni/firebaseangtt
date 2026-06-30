@@ -93,7 +93,7 @@ export class Sharedrules {
       this.traumas = uRules.traumas;
       this.traum3nabled = uRules.traum3nabled;
     }
-    this.isDM=this.DMIds.includes(this.info.id);
+    this.isDM=this.DMIds.includes(this.info.uid);
     return true;
   }
   
@@ -113,7 +113,7 @@ export class Sharedrules {
   async newGame(n: string, date: number): Promise<void> {
       if(date==0) return;
       const rulesRef = doc(this.init.db, 'rules/'  + n + '-' + date).withConverter(new RulesConverter()); //(this.gameID*200) ?? ma non vaaaa
-      await setDoc(rulesRef, new Rules([this.info.id]));
+      await setDoc(rulesRef, new Rules([this.info.uid]));
   }
 
   depColorUp(c: Departments) {

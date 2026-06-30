@@ -7,30 +7,37 @@ import { FireInit } from '../fire-init';
   providedIn: 'root',
 })
 export class Userinfo {
-  info=new UserData;
+  name: string='NewUser';
+  games: {date:number, name: string}[]= [];
+  language: string = 'en';
+  characters: string[]=[];
+  borrow: string[]=[];
+  code: string = ''
+  uid:string=''
   fireInit = inject(FireInit);
-  id:string='';
     constructor() {
       
     }
     
-  async addUser(id:string=this.id) : Promise<void>{
+  async addUser(id:string=this.uid) : Promise<void>{
     if(id=='') return;
     const useRef = doc(this.fireInit.db, 'userdata/'+id).withConverter(new UserConverter());
-    await setDoc(useRef, this.info);
+    await setDoc(useRef, new UserData(this.name, this.games, this.language, this.characters, this.borrow, this.code));
   }
 
-  async getUser(id:string=this.id): Promise<void> {
+  async getUser(id:string=this.uid): Promise<void> {
     console.log("Getting user info for ID: ", id);
-    if(id=='') return;
-      const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());
+      let uInfo=new UserData;
+      if(id!=''){const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
-      const uInfo: UserData = snapshot1.data()!;
-      if (uInfo) {
-      this.info = uInfo;
-      console.log("User info retrieved: ", this.info);
-      }
+      uInfo= snapshot1.data()!;
+      this.uid=id;}
+      else this.uid='';
+      this.name = uInfo.name;
+      this.games=uInfo.games;
+      this.language=uInfo.language;
+      this.characters=uInfo.characters;
+      this.borrow=uInfo.borrow;
+      this.code=uInfo.code;
     }
-
-    
 }

@@ -11,14 +11,14 @@ import {
   createUserWithEmailAndPassword,
   updateProfile
 } from "firebase/auth";
-import { UserData } from '../services/userdata';
+import { UserConverter, UserData } from '../services/userdata';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
 import { Notifs } from '../services/notifs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { GameService } from '../services/game-service';
-
+import { DocumentSnapshot, doc, getDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-login-page',
@@ -46,8 +46,8 @@ export class LoginPage {
   newGame= false; //funzione?
   depsList= Array(16).fill(false);
   searching='';
-  playerSearch: string='';
-  friendsList: {name: string, code: string}[]=[];
+  playerSearch: [string,string][]=[]; //unire a playerSearch?
+  invitedList: boolean[]=[]; //cambiare a Boolean mappata a Ind
   newNameValue='';
   
   // NgZone serve per rientrare nella zona di Angular dopo le callback di Firebase,
@@ -59,11 +59,6 @@ export class LoginPage {
 
 ngOnInit() {
   this.checkAuthState();
-  const gameLink = window.location.href.split('/game/')[1];
-  if (gameLink) {
-    const [game, date] = gameLink.split('-');
-    if (game && date) this.getGame(Number(date), game);
-  }
 }
 
 onSignFormSubmit(f: NgForm) {
@@ -115,7 +110,6 @@ onSearchSubmit(code: string) {
         taken = false;
       }
     }
-
     await this.info.addUser(user.uid);
     this.ref.markForCheck();
   } catch (error) {
@@ -160,6 +154,7 @@ onSearchSubmit(code: string) {
       this.optionsOp = false;
       this.info.getUser('');
       this.ref.markForCheck();
+      this.playerSearch=[];
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -178,25 +173,27 @@ onSearchSubmit(code: string) {
         if(userName!=this.info.name){
         this.info.name=userName;
         this.info.addUser(user.uid);}
-        if(!this.info.code){
-        let done=false;
-        do{ done=false;
-        this.info.code=(this.info.name?.slice(0,3)||'Abc')+this.generateRandomString(5);
-        const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.code.toLowerCase()));
-        try{
-          let querySnapshot= await getDocs(q);
-          querySnapshot.forEach((doc) => {
-          if(this.info.code=doc.data()['code'])done=true;
-        });
-        }catch(err){console.log(err)};
-        }while(done);
-        this.info.addUser(user.uid);
-        }
+          if(!this.info.code){
+          let done=false;
+          do{ done=false;
+          this.info.code=(this.info.name?.slice(0,3)||'Abc')+this.generateRandomString(5);
+          const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", this.info.code.toLowerCase()));
+          try{
+            let querySnapshot= await getDocs(q);
+            querySnapshot.forEach((doc) => {
+            if(this.info.code=doc.data()['code'])done=true;
+          });
+          }catch(err){console.log(err)};
+          }while(done);
+          this.info.addUser(user.uid);
+          }
         let name=window.document.location.href;
         let [game, date]=name?.split('/game/')[1]?.split('-')??[];
-        console.log('Codice Partita:', game, date);
-        if(game && date) await this.getGame(Number(date), game);
-        else {await this.getGame(0, 'NoGame');}
+        if(game && date){ 
+          await this.getGame(Number(date), game);
+        }
+        else {await this.getGame(0, 'NoGame');
+        }
         }catch(err){console.log(err);};
         // ...
       } else {
@@ -205,7 +202,6 @@ onSearchSubmit(code: string) {
         this.info.name = 'Guest';
         let name=window.history.state;
         let [game, date]=name?.url?.split('/game/')[1]?.split('-')??['',''];
-        console.log('Codice Partita:', name, date);
         if(name && date) await this.getGame(Number(date), game);
         else {await this.getGame(0, 'NoGame');}
         this.info.getUser('');
@@ -259,6 +255,7 @@ onSearchSubmit(code: string) {
   async getGame(date: number, name: string): Promise<void> {
     if(date==0) {
         this.depsList= Array(16).fill(false);
+        this.invitedList=this.info.friends.length>0?Array(this.info.friends.length).fill(false):[];
         this.ref.markForCheck();
         const href = window.document.location.href;
         if (href.includes('/game/')) {
@@ -276,14 +273,13 @@ onSearchSubmit(code: string) {
       this.iconsNames.makeList(true);
       this.iconsNames.makeList(false);
       this.notifs.getMessage(date);
-      this.depsList=[this.rules.depsList.includes(1), this.rules.depsList.includes(2),
-        this.rules.depsList.includes(3), this.rules.depsList.includes(4),
-        this.rules.depsList.includes(5), this.rules.depsList.includes(6),
-        this.rules.depsList.includes(7), this.rules.depsList.includes(8),
-        this.rules.depsList.includes(9), this.rules.depsList.includes(10),
-        this.rules.depsList.includes(11), this.rules.depsList.includes(12),
-        this.rules.depsList.includes(13), this.rules.depsList.includes(14),
-        this.rules.depsList.includes(15), this.rules.depsList.includes(16)];
+      const sortedList = this.rules.depsList.sort((a, b) => a - b);
+      this.depsList= Array(16).fill(false);
+      for(let i=0; i<sortedList.length; i++){
+        this.depsList[sortedList[i]-1]=true;
+      }
+      if(!this.rules.isDM)this.invitedList=this.info.friends.length>0?Array(this.info.friends.length).fill(false):[];
+      else this.invitedList=this.info.friends.map(f => this.rules.playerIDs.includes(f.id));
     window.history.pushState({}, '', '/game/' + name + '-' + date);
     this.ref.markForCheck();
     }catch(err){console.log(err);}
@@ -304,17 +300,87 @@ onSearchSubmit(code: string) {
     }catch(err){console.log(err);}
   }
 
-  async searchUser(code: string){
-    if(code.length==0||code==this.info.code) return;
-    console.log('Searching...', code);
-    const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", code.toLowerCase()));
+  async searchUser(find: string){
+    if(find.length==0||find==this.info.code) return;
+    this.playerSearch=[];
+    const q = query(collection(this.fireInit.db, 'userdata'), where("code", "==", find));
+    const n = query(collection(this.fireInit.db, 'userdata'), where("name", "==", find));
     try{
     let querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-    this.playerSearch=doc.data()['name'];
+    if(!this.info.friends.some(f => f.id === doc.id)){
+      this.playerSearch=[...this.playerSearch, [doc.data()['name'], doc.id]];
+    }
     });
     }catch(err){console.log(err);}
+    if(this.playerSearch.length==0){
+      try{
+      let querySnapshot = await getDocs(n);
+      querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+      if(doc.id!=this.info.uid && !this.info.friends.some(f => f.id === doc.id)){
+        this.playerSearch=[...this.playerSearch, [doc.data()['name'], doc.id]];
+      }
+      });
+      }catch(err){console.log(err);}
+    }
+    this.searching='';
+    this.ref.markForCheck();
+  }
+
+  async addFriend(ind :number){
+    const id=this.playerSearch[ind][1];
+    this.info.friends=[...this.info.friends, {name: this.playerSearch[ind][0], id}];
+    try{
+    await this.info.addUser(this.info.uid);
+    this.playerSearch=[];
+    this.ref.markForCheck();
+    }catch(err){console.log(err);}
+    try{
+    let friend= await this.info.getUserData(id);
+    friend.friends=[...friend.friends, {name: this.info.name, id: this.info.uid}];
+    await this.info.addUser(id, friend);
+    }catch(err){console.log(err);}
+  }
+
+  async removeFriend(ind: number){
+    const friendId=this.info.friends[ind].id;
+    try{
+    this.info.friends=this.info.friends.filter(c=>c.id!=friendId);
+    await this.info.addUser();
+    this.ref.markForCheck();
+    }catch(err){console.log(err);}
+    try{
+    let friend= await this.info.getUserData(friendId);
+    if(friend.name=='NewUser') {console.log('Friend not found'); return;}
+    friend.friends=friend.friends.filter(c=>c.id!=this.info.uid);
+    await this.info.addUser(friendId, friend);
+    }catch(err){console.log(err);}
+  }
+
+  async inviteFriend(ind: number){
+    if(!this.rules.isDM) return;
+    let  uInfo= await this.info.getUserData(this.info.friends[ind].id);
+    if(uInfo.games.some(g=>g.date==this.rules.gameID && g.name==this.rules.name))return;
+    uInfo.games=[...uInfo.games, {date: this.rules.gameID, name: this.rules.name}];
+    try{
+    await this.info.addUser(this.info.friends[ind].id, uInfo);
+    this.rules.playerIDs=[...this.rules.playerIDs, this.info.friends[ind].id];
+    await this.rules.addRules();
+    this.invitedList=[...this.invitedList, true];
+    this.ref.markForCheck();
+    }catch(err){console.log(err);}
+  }
+
+  async unInvite(ind: number){
+    if(!this.rules.isDM) return;
+    let  uInfo= await this.info.getUserData(this.info.friends[ind].id);
+    if(!uInfo.games.some(g=>g.date==this.rules.gameID && g.name==this.rules.name))return;
+    uInfo.games=uInfo.games.filter(g=>!(g.date==this.rules.gameID && g.name==this.rules.name));
+    await this.info.addUser(this.info.friends[ind].id, uInfo);
+    this.rules.playerIDs=this.rules.playerIDs.filter(id=>id!=this.info.friends[ind].id);
+    await this.rules.addRules();
+    this.invitedList=this.invitedList.filter((v, i) => i !== ind);
     this.ref.markForCheck();
   }
 

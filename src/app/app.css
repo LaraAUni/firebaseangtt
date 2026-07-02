@@ -87,10 +87,15 @@
     left: 4vh;
     font-family: "Norwester" !important;
     line-height: unset;
+    position: relative;
+    cursor: pointer; 
+    
 }
 .links:hover {
     color: aliceblue;
 }
+
+
 .closebtn {
     position: fixed;
     right: 30vw;

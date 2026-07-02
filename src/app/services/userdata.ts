@@ -7,14 +7,16 @@ export class UserData {
     characters: string[];
     borrow: string[];
     code: string = '';
+    friends: {name: string, id: string}[] = [];
     //light mode?
-    constructor(name: string='NewUser', games: {date:number, name: string}[]= [], language: string = 'en', characters: string[]=[], borrow: string[]=[], code: string = '') {
+    constructor(name: string='NewUser', games: {date:number, name: string}[]= [], language: string = 'en', characters: string[]=[], borrow: string[]=[], code: string = '', friends: {name: string, id: string}[] = []){
         this.name=name;
         this.games=games;
         this.language=language;
         this.characters=characters;
         this.borrow=borrow;
         this.code=code;
+        this.friends=friends;
     }
 }
 
@@ -26,6 +28,7 @@ interface UserFS{
     characters: string[];
     borrow: string[];
     code: string;
+    friends: {name: string, id: string}[];
 }
 
 export class UserConverter implements FirestoreDataConverter<UserData, UserFS> {
@@ -36,12 +39,13 @@ export class UserConverter implements FirestoreDataConverter<UserData, UserFS> {
             lang: user.language,
             characters: user.characters,
             borrow: user.borrow,
-            code: user.code
+            code: user.code,
+            friends: user.friends
         };
     }
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): UserData {
         const data = snapshot.data(options) as UserFS;
-        return new UserData(data.name, data.games, data.lang, data.characters, data.borrow, data.code);
+        return new UserData(data.name, data.games, data.lang, data.characters, data.borrow, data.code, data.friends);
     }
 }

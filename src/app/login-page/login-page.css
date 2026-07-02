@@ -26,6 +26,18 @@
 .butt:active{
     transform: translateY(2px);
 }
+
+.smallbutt{
+  margin: 0.2%;
+  cursor: pointer;
+  width: 2.5vh;
+  height: 2.5vh;
+}
+
+.smallbutt:active{
+    transform: translateY(2px);
+}
+
 .buttsign{
   color: var(--border);
   border: 0.2vh solid var(--border);
@@ -43,8 +55,8 @@
   align-items: center;
   margin-bottom: 8px;
   cursor: pointer;
-  user-select: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 /* nascondo il checkbox originale del browser, uso lo span colorato come indicatore visivo */
@@ -142,6 +154,10 @@ input{
 }
 .buttsign{
   font-size: 2.3vh;
+}
+.smallbutt{
+  width: 3vh;
+  height: 3vh;
 }
 input{
   width: 70%;

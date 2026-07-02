@@ -105,7 +105,6 @@ ngOnInit(){
       await this.info.addUser();
       await this.rules.addRules();
     } else{
-    console.log('ind:', ind)
     let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
     if(charIndex!=-1) this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName;
     

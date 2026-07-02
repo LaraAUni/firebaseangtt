@@ -88,15 +88,11 @@
         </mat-expansion-panel>
         }
       </mat-expansion-panel>
-      <mat-expansion-panel hideToggle class="expansion">
-        <mat-list-item class="links"
-          (click)="showArmo=1; drawer.toggle();">Armoury</mat-list-item>
-      </mat-expansion-panel>
-      <mat-expansion-panel hideToggle class="expansion">
-        <mat-list-item class="links"
-          (click)="showRes=1; drawer.toggle();">Research</mat-list-item>
-      </mat-expansion-panel>
-    </mat-list>
+        <a class="links"
+          (click)="showArmo=1; drawer.toggle();">Armoury</a>
+        <a class="links"
+          (click)="showRes=1; drawer.toggle();">Research</a>
+        </mat-list>
     <div>
     <img mat-button class="trumpetbutton" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
     <img mat-button class="trumpetbutton" alt="FT" src="SecondTrumpet.png" (click)="this.trumpetSound(2);">

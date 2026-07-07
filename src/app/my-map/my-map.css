@@ -53,7 +53,8 @@
 @media (max-width: 600px){
     .map{
         width: 200vw;
-        overflow-x:scroll;
+        overflow-x: scroll;
+        overflow-y: scroll;
     }
 .stairs{
     max-width: 100%;

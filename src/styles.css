@@ -267,6 +267,10 @@ input{
 
 
 @media (max-width: 600px){
+.body{
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
 .sheet{
     width: 100vw;
 }

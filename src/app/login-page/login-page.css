@@ -68,11 +68,11 @@
 .checkmark {
   display: block;
   width: 9vw;
-  min-height: 2.2vh;
+  height: 2.2vh;
   line-height: 2vh;
   padding-top: 0.3vh;
   text-align: center;
-  font-size: 1.3vw;
+  font-size: 1.5vh;
   background-color: #eee;
   color: var(--darkbackg);
   cursor: pointer;
@@ -168,7 +168,8 @@ input{
   width: 55vw;}
   .checkmark {
     width: 30vw;
-    height: 6vh;
+    height: 2.5vh;
+    font-size: 2vh;
     overflow-y: hidden;
     overflow-x: hidden;
   }

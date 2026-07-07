@@ -41,11 +41,24 @@ export class App {
   selectedAbno: number = 0;
   deleting=false;
   constructor(private ref: ChangeDetectorRef){
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js", {scope: "../../"}).then(
+    (registration) => {
+      console.log("Service worker registration succeeded:", registration);
+    },
+    (error) => {
+      console.error(`Service worker registration failed: ${error}`);
+    },
+  );
+} else {
+  console.error("Service workers are not supported.");
+}
   }
   
   
   ngOnInit(){
   }
+
 
   onAbnoSelected() {
   this.rules.lookFor = this.selectedAbno;
@@ -58,4 +71,5 @@ export class App {
     this.notifs.trumpets=n;
     this.notifs.addMessage(this.rules.gameID);
   }
+  
 }

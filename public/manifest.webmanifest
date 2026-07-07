@@ -1,16 +1,28 @@
 {
+  "short_name": "TTT!!!",
   "name": "Third TrumpeT",
-  "short_name": "ThirdTrumpet",
-  "theme_color": "#1a1a1a",
-  "background_color": "#1a1a1a",
-  "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
+  "description":"A character sheet and map database for Third Trumpet TTRPG",
   "icons": [
     {
-      "src": "icons/logo-192.png",
+      "src": "/icons/logo-192.png",
       "sizes": "192x192",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/logo.png",
+      "sizes": "512x512",
+      "type": "any"
+    },
+    {
+      "src": "/icons/logo.ico",
+      "sizes": "128x128",
+      "type": "image/ico"
     }
-  ]
+  ],
+  "id": "/",
+  "start_url": "./",
+  "display": "browser",
+  "theme_color": "black",
+  "background_color": "white",
+  "scope":"/"
 }

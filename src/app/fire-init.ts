@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from 'firebase/auth';
-
+import { onAuthStateChanged, getIdToken } from 'firebase/auth';
 @Injectable({
   providedIn: 'root',
 })

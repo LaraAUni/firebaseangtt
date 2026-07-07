@@ -15,10 +15,13 @@ import { Messages } from "./messages/messages";
 import { Notifs } from './services/notifs';
 import { GameService } from './services/game-service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { LayoutModule, BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, Research, LoginPage, NgStyle, Messages, FormsModule],
+  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, Research, LoginPage, NgStyle, Messages, FormsModule, LayoutModule],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Default,
   styleUrls: ['./app.css']
@@ -35,12 +38,18 @@ export class App {
   deps=Departments;
   showChara = 0;
   showAbno = 0;
-  showArmo = 0;
-  showRes=0;
+  //showArmo = 0;
+  //showRes=0;
   addAbno=false;
   selectedAbno: number = 0;
   deleting=false;
-  constructor(private ref: ChangeDetectorRef){
+  isSmallScreen: Observable<Boolean>;
+  constructor(private breakpointObserver: BreakpointObserver){
+    this.isSmallScreen = this.breakpointObserver.observe(Breakpoints.Small) // Watch for "Small" breakpoint
+    .pipe(
+      map(state => state.matches), // Extract boolean "matches" value
+      shareReplay(1) // Cache last value for new subscribers
+    );
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js", {scope: "../../"}).then(
     (registration) => {
@@ -53,7 +62,7 @@ if ("serviceWorker" in navigator) {
 } else {
   console.error("Service workers are not supported.");
 }
-  }
+}
   
   
   ngOnInit(){

@@ -4,7 +4,6 @@ import { MatExpansionModule} from '@angular/material/expansion';
 import { CharaSheet } from './chara-sheet/chara-sheet';
 import { AbnoSheet } from './abno-sheet/abno-sheet';
 import { Armoury } from './armoury/armoury';
-import { Research } from './research/research';
 import { MyMap } from './my-map/my-map';
 import {MatListModule} from '@angular/material/list';
 import { LoginPage } from "./login-page/login-page";
@@ -18,7 +17,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, Research, LoginPage, NgStyle, Messages, FormsModule],
+  imports: [MatSidenavModule, MatExpansionModule, MatListModule, MyMap, CharaSheet, AbnoSheet, Armoury, LoginPage, NgStyle, Messages, FormsModule],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Default,
   styleUrls: ['./app.css']
@@ -40,9 +39,11 @@ export class App {
   addAbno=false;
   selectedAbno: number = 0;
   deleting=false;
+  deleteAbno=false;
+  selectableAbnos=[{id:1, name:'Pinocchio'}, {id:2, name:'The Stars Go out'}, {id:3, name: 'Words of a Feather'}]
   constructor(private ref: ChangeDetectorRef){
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js", {scope: "../../"}).then(
+  navigator.serviceWorker.register("/sw.js").then(
     (registration) => {
       console.log("Service worker registration succeeded:", registration);
     },
@@ -55,12 +56,11 @@ if ("serviceWorker" in navigator) {
 }
   }
   
-  
   ngOnInit(){
   }
 
-
   onAbnoSelected() {
+  if(this.selectedAbno==0) return;
   this.rules.lookFor = this.selectedAbno;
   this.showAbno = 1;
   this.addAbno = false;

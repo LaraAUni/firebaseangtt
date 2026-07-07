@@ -13,6 +13,7 @@
     <app-messages></app-messages>
   </mat-drawer-content>
   <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
+    <!-- Per creare personaggi e salvarli -->
     <mat-list>
       <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
@@ -45,10 +46,9 @@
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
             @for(j of this.iconsNames.ordCharaList[6]; track $index){
-               @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.gameServ.deleteChara(j.id, 0)">
-            <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-               @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=0;">
-            <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
+              @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.gameServ.deleteChara(j.id, 0)">
+             }@else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=0;">}
+            <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
               }
           <span class="newbutt" (click)="showChara=1; drawer.toggle(); this.rules.lookFor=0; this.rules.lookDep=0">+</span>
           @if(deleting){
@@ -75,14 +75,22 @@
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordAbnoList[ind]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item
-              (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">
+            @for(j of this.iconsNames.ordAbnoList[ind]; track $index){
+              @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
+              @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
             <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
             <form></form>
           @if(this.rules.isDM){
             <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
             @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-            <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno"><option [ngValue]="1">Pinocchio</option></select>}
+            <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
+              @for(i of this.selectableAbnos; track $index)
+              {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}
+            </select>}
+          @if(deleteAbno){
+        <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleteAbno=false;">}
+          @else{
+        <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleteAbno=true;">}
           }
           </span>
         </mat-expansion-panel>
@@ -90,8 +98,6 @@
       </mat-expansion-panel>
         <a class="links"
           (click)="showArmo=1; drawer.toggle();">Armoury</a>
-        <a class="links"
-          (click)="showRes=1; drawer.toggle();">Research</a>
         </mat-list>
     <div>
     <img mat-button class="trumpetbutton" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
@@ -118,8 +124,4 @@
 @if(showArmo>0){
 <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
 <app-armoury></app-armoury>
-}
-@if(showRes>0){
-<img class="closebtn" (click)="drawer.toggle(); showRes=0" src="buttonclose.png" alt="">
-<app-research></app-research>
 }

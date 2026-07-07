@@ -12,9 +12,9 @@
     <app-my-map></app-my-map>
     <app-messages></app-messages>
   </mat-drawer-content>
-  <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav" [opened]="!!this.isSmallScreen">
+  <mat-drawer position="end" mode="side" role="directory" #drawer class="sidenav">
     <mat-list>
-@if(!this.isSmallScreen){<img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">}
+      <img class="closebtn" (click)="drawer.toggle();" src="buttonclose.png" alt="">
       <mat-expansion-panel hideToggle class="expansion">
         <mat-expansion-panel-header class="links">Agents</mat-expansion-panel-header>
         @for(i of this.rules.depsList; track  $index; let ind = $index){
@@ -88,12 +88,10 @@
         </mat-expansion-panel>
         }
       </mat-expansion-panel>
-      <!-- 
         <a class="links"
           (click)="showArmo=1; drawer.toggle();">Armoury</a>
         <a class="links"
           (click)="showRes=1; drawer.toggle();">Research</a>
-          -->
         </mat-list>
     <div>
     <img mat-button class="trumpetbutton" alt="FT" src="FirstTrumpet.png" (click)="this.trumpetSound(1);">
@@ -109,8 +107,6 @@
   </mat-drawer>
 </mat-drawer-container>
 
-@if(this.isSmallScreen){}
-
 @if(showChara>0){
 <img class="closebtn" (click)="drawer.toggle(); showChara=0" src="buttonclose.png" alt="">
 <app-chara-sheet></app-chara-sheet>
@@ -119,7 +115,6 @@
 <img class="closebtn" (click)="drawer.toggle(); showAbno=0" src="buttonclose.png" alt="">
 <app-abno-sheet></app-abno-sheet>
 }
-<!-- 
 @if(showArmo>0){
 <img class="closebtn" (click)="drawer.toggle(); showArmo=0" src="buttonclose.png" alt="">
 <app-armoury></app-armoury>
@@ -128,4 +123,3 @@
 <img class="closebtn" (click)="drawer.toggle(); showRes=0" src="buttonclose.png" alt="">
 <app-research></app-research>
 }
--->

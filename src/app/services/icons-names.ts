@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { doc, getDoc, DocumentSnapshot, setDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, DocumentSnapshot, setDoc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore';
 import { FireInit } from '../fire-init';
 import { Abnormality, AbnoData, AbnoConverter, DataConverter } from '../abno-sheet/abnoclass';
 import { Character, CharaConverter } from '../chara-sheet/characlass';
@@ -15,16 +15,15 @@ import { Iconsclass, listConverter } from '../iconsclass';
 export class IconsNames {
   fireInit = inject(FireInit);
   rules = inject(Sharedrules);
-  ordCharaList: {id: number, name: string, icon: string}[][] = [];
-  ordAbnoList: {id: number, name: string, icon: string}[][] = [];
+  ordCharaList: Iconsclass = new Iconsclass;
+  ordAbnoList: Iconsclass = new Iconsclass;
   constructor() {
   }
   
 
   async addList(bool: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<void>{
         const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        console.log('FirstChara:',this.ordCharaList[0])
-        let list=(new Iconsclass());
+        let list=(bool?this.ordAbnoList:this.ordCharaList);
         console.log("List to save: ", list);
         await setDoc(listRef, list);
   }
@@ -35,34 +34,36 @@ export class IconsNames {
         const list: Iconsclass = snapshot1.data()!;
         if (list) {
           if(bool) {
-            if(list.dep1) this.ordAbnoList=[list.dep1];
-            if(list.dep2) this.ordAbnoList=[...this.ordAbnoList, list.dep2];
-            if(list.dep3) this.ordAbnoList=[...this.ordAbnoList, list.dep3];
-            if(list.dep4) this.ordAbnoList=[...this.ordAbnoList, list.dep4];
-            if(list.dep5) this.ordAbnoList=[...this.ordAbnoList, list.dep5];
-            if(list.dep6) this.ordAbnoList=[...this.ordAbnoList, list.dep6];
-            if(list.dep7) this.ordAbnoList=[...this.ordAbnoList, list.dep7];
-            if(list.dep8) this.ordAbnoList=[...this.ordAbnoList, list.dep8];
-        console.log("Finished List: ", this.ordAbnoList);
+            this.ordAbnoList=list;
+            let tot=0;
+            for (const element in this.ordAbnoList) {
+              const dep=this.ordAbnoList[element as keyof Iconsclass];
+              tot+=dep.length;
+            }
+            if(tot<this.rules.abnoList.length) await this.makeList(bool);
+          console.log("Finished List: ", this.ordAbnoList);
           }
           else {
-            if(list.dep1) this.ordCharaList=[list.dep1];
-            if(list.dep2) this.ordCharaList=[...this.ordCharaList, list.dep2];
-            if(list.dep3) this.ordCharaList=[...this.ordCharaList, list.dep3];
-            if(list.dep4) this.ordCharaList=[...this.ordCharaList, list.dep4];
-            if(list.dep5) this.ordCharaList=[...this.ordCharaList, list.dep5];
-            if(list.dep6) this.ordCharaList=[...this.ordCharaList, list.dep6];
-            if(list.dep7) this.ordCharaList=[...this.ordCharaList, list.dep7];
-            if(list.dep8) this.ordCharaList=[...this.ordCharaList, list.dep8];
+            this.ordCharaList=list;
+            let tot=0;
+            for (const element in this.ordCharaList) {
+              const dep=this.ordCharaList[element as keyof Iconsclass];
+              tot+=dep.length;
+            }
+            if(tot<(this.rules.charaList.length+this.rules.deadCh.length)) await this.makeList(bool);
         console.log("Finished List: ", this.ordCharaList);
           }
+        }else{
+          try{
+          await this.makeList(bool);
+          }catch(err){console.log(err)}
         }
   }
 
   async makeList(type:boolean){; //CharaList funziona, quindi???
     console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     if(type){
-    this.ordAbnoList=Array(6).fill([]);
+    this.ordAbnoList=new Iconsclass;
     if(this.rules.abnoList.length==0) return;
       for(let i=0; i<this.rules.abnoList.length; i++){
           console.log("Called once?")
@@ -72,13 +73,15 @@ export class IconsNames {
           if(res){
             const [ico, dep] = res;
             const d=this.rules.depsList.indexOf(dep);
-            if(d>=0)this.ordAbnoList[d]=[...this.ordAbnoList[d], ico];
+            if(d>=0)this.ordAbnoList['dep'+d as keyof Iconsclass]=[...this.ordAbnoList['dep'+d as keyof Iconsclass]??[], ico];
           }
         }catch(err){console.log(err)};
       }
+    console.log("New List:", this.ordAbnoList);
+    await this.addList(type);
     return;
     }
-    this.ordCharaList=Array(8).fill([]);
+    this.ordCharaList=new Iconsclass;
     if(this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
       console.log("Called once? Chara N°", i+1)
@@ -87,8 +90,8 @@ export class IconsNames {
       if(!res)continue;
           const [chara, dep] = res;
           const d=this.rules.depsList.indexOf(dep)
-            if(d>=0)this.ordCharaList[d]=[...this.ordCharaList[d], chara];
-            else this.ordCharaList[6]=[...this.ordCharaList[6], chara];
+            if(d>=0)this.ordCharaList['dep'+d as keyof Iconsclass]=[...this.ordCharaList['dep'+d as keyof Iconsclass]??[], chara];
+            else this.ordCharaList.reserves=[...this.ordCharaList.reserves, chara];
         }catch(err){console.log(err);}
     }
     for(let i=0; i<this.rules.deadCh.length; i++){
@@ -96,11 +99,11 @@ export class IconsNames {
           const res=await this.getIcon(this.rules.deadCh[i], false)
                   if(!res)continue;
                     const [chara, dep] = res;
-                    this.ordCharaList[7]=[...this.ordCharaList[7], chara];
+                    this.ordCharaList.dead=[...this.ordCharaList.dead, chara];
         }catch(err){console.log(err);}
     }
-    console.log("New List:", (type?this.ordAbnoList:this.ordCharaList))
-    //this.addList(type);
+    console.log("New List:", this.ordCharaList);
+    await this.addList(type);
   }
 
   async deleteList(type:boolean, name:string=this.rules.name, gameID:number=this.rules.gameID){
@@ -114,10 +117,12 @@ export class IconsNames {
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           let uChara: Character = snapshot1.data()!;
           uChara.role[1]=0;
+          if(ind<0||ind>5) return;
           if(!this.rules.deadCh.includes(n)){
-          this.ordCharaList[ind]=this.ordCharaList[ind].filter(c=>c.id!=n);
-          this.ordCharaList[6]=[...this.ordCharaList[6], {id:n, name:uChara.fullName, icon:uChara.icoUrl}];}
+          this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=n);
+          this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id:n, name: uChara.fullName, icon: uChara.icoUrl}];}
           await setDoc(charRef, uChara);
+          await this.addList(true);
   }
 
  async getIcon(id: number, type: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<[{id: number, name: string, icon: string}, number]|null>{
@@ -126,7 +131,7 @@ export class IconsNames {
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           const uChara: Character = snapshot1.data()!;
           let res = { id: id, name: uChara.fullName, icon: uChara.icoUrl };
-          return [res,uChara.role[1]];
+          return [res, uChara.role[1]];
     }
     if(type){
           const charRef = doc(this.fireInit.db, 'abnos/'+id).withConverter(new AbnoConverter());
@@ -136,7 +141,7 @@ export class IconsNames {
           const snapshot2: DocumentSnapshot<AbnoData> = await getDoc(charRef2);
           const uData: AbnoData = snapshot2.data()!;
           let res = { id: id, name: (uData.clock1[0] == uData.clock1[1] ? (uChara.fullName.Nickname ? (uData.trueNameRev ? uChara.fullName.Name : uChara.fullName.Nickname) : uChara.fullName.Name) : "???" ), icon: uChara.icoUrl };
-          return [res,uData.department];
+          return [res, uData.department];
     }
     return null;
   }

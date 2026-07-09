@@ -7,6 +7,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Character, CharaConverter } from './characlass';
 import { Sharedrules , Departments} from '../services/sharedrules';
 import { IconsNames } from '../services/icons-names';
+import { Iconsclass } from '../iconsclass';
 import { Userinfo } from '../services/userinfo';
 import { Notifs } from '../services/notifs';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -91,30 +92,30 @@ ngOnInit(){
 
     async onCharaFormSubmit(f:NgForm): Promise<void> {
     // leggere i valori dal form usando le proprietà del componente
-    let ind=6; //Dep=0 è riserva, non fa parte di depsList quindi è default
-    if(this.isdead) ind=7;
-    else if(this.oldDep!=0) ind=this.rules.depsList.indexOf(this.oldDep); //basato su oldDep per far funzionare Changedep
+    let ind='reserves'; //Dep=0 è riserva, non fa parte di depsList quindi è default
+    if(this.isdead) ind='dead';
+    else if(this.oldDep!=0) ind='dep'+this.rules.depsList.indexOf(this.oldDep); //basato su oldDep per far funzionare Changedep
 
     if(this.new){
-      ind=this.rules.depsList.indexOf(this.Chara.role[1]);
-      if(this.Chara.role[1]==0) ind=6
+      ind='dep'+this.rules.depsList.indexOf(this.Chara.role[1]);
+      if(this.Chara.role[1]==0) ind='reserves'
       this.rules.charaList=[...this.rules.charaList, this.charID];
-      this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+      this.iconsNames.ordCharaList[ind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[ind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
       this.new=false;
       this.info.characters=[...this.info.characters, this.rules.name + '-' + this.rules.gameID + '-' + this.charID];
       await this.info.addUser();
       await this.rules.addRules();
+      await this.iconsNames.addList(false);
     } else{
-    let charIndex = this.iconsNames.ordCharaList[ind].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
-    if(charIndex!=-1) this.iconsNames.ordCharaList[ind][charIndex].name=this.Chara.fullName;
-    
+    let charIndex = this.iconsNames.ordCharaList[ind as keyof Iconsclass].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
+    if(charIndex!=-1) this.iconsNames.ordCharaList[ind as keyof Iconsclass][charIndex].name=this.Chara.fullName;
     if(this.depChange){
       if(this.oldDep!=this.Chara.role[1]){
-      let newind=this.rules.depsList.indexOf(this.Chara.role[1]); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
+      const depind=this.rules.depsList.indexOf(this.Chara.role[1])
+      let newind=(depind>=0?'dep'+depind:'reserves'); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
       if(!this.isdead){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
-      if(newind==-1) newind=6;
-      this.iconsNames.ordCharaList[newind]=[...this.iconsNames.ordCharaList[newind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
-      this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva
+      this.iconsNames.ordCharaList[newind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[newind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+      this.iconsNames.ordCharaList[ind as keyof Iconsclass]=this.iconsNames.ordCharaList[ind as keyof Iconsclass].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva
       this.depChange=false;
       this.oldDep=this.Chara.role[1];
     }
@@ -129,31 +130,31 @@ ngOnInit(){
         if(!this.rules.deadCh.includes(this.charID)){
         this.rules.charaList=this.rules.charaList.filter(c=>c!=this.charID);
           this.rules.deadCh=[...this.rules.deadCh, this.charID]
-          this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=this.charID);
-          this.iconsNames.ordCharaList[7]=[...this.iconsNames.ordCharaList[7], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
+          this.iconsNames.ordCharaList[ind as keyof Iconsclass]=this.iconsNames.ordCharaList[ind as keyof Iconsclass].filter(c=>c.id!=this.charID);
+          this.iconsNames.ordCharaList.dead=[...this.iconsNames.ordCharaList.dead, {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
         this.isdead=true
         await this.rules.addRules();
         let [a, ...last4]=this.notifs.last5;
         if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
         await this.notifs.addMessage(this.rules.gameID);
-        await this.iconsNames.addList(true);
+        await this.iconsNames.addList(false);
       }
       }
       else if(this.rules.deadCh.includes(this.charID)){
         this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
         this.rules.charaList=[...this.rules.charaList, this.charID];
-          this.iconsNames.ordCharaList[7]=this.iconsNames.ordCharaList[7].filter(c=>c.id!=this.charID);
-          ind=this.rules.depsList.indexOf(this.Chara.role[1]); //oldDep in caso è nuovo e per far funzionare Changedep
-          if(this.Chara.role[1]==0) ind=6;
-          this.iconsNames.ordCharaList[ind]=[...this.iconsNames.ordCharaList[ind], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
+          this.iconsNames.ordCharaList.dead=this.iconsNames.ordCharaList.dead.filter(c=>c.id!=this.charID);
+          if(this.Chara.role[1]==0) ind='reserves';
+          else ind='dep'+this.rules.depsList.indexOf(this.Chara.role[1]);
+          this.iconsNames.ordCharaList[ind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[ind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
         this.isdead=false
         await this.rules.addRules();
         let [a, ...last4]=this.notifs.last5;
         if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
         await this.notifs.addMessage(this.rules.gameID);
-        await this.iconsNames.addList(true);
+        await this.iconsNames.addList(false);
       }
 
       if(f.value.stress>=1 && ( f.value.stress<=6) || (this.Chara.role[0]=='Captain' && f.value.stress<=8) ) this.Chara.stress=f.value.stress;

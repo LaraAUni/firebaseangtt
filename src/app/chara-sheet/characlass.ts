@@ -1,10 +1,12 @@
+import { PhoneSingleFactorInfoOptions } from "firebase/auth";
 import { FirestoreDataConverter, WithFieldValue, QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
 
 export class Character{
     //gameID e CharID: non serve, è nel nome del documento e nella ricerca
     icoUrl: string;
     fullName: string;
-    role: [string, number];
+    role: string;
+    department: number;
     equip:  [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}];
     abilities: string[];
     stress: number;
@@ -17,7 +19,8 @@ export class Character{
     constructor(
         icoUrl = "0000",
         fullName = "Alpha",
-        role: [string, number] = ["Clerk", 0],
+        role: string = "Clerk",
+        department:number=0,
         equip: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}] = [{ imgUrl: "Standard", Name: "Riot Stick" }, { imgUrl: "Standard", Name: "Suit" }], //da mettere link all'armeria quando è finita
         abilities = Array(3).fill(""),
         stress = 0,
@@ -31,6 +34,7 @@ export class Character{
         this.icoUrl = icoUrl,
         this.fullName = fullName,
         this.role = role,
+        this.department=department,
         this.equip = equip,
         this.abilities = abilities,
         this.stress = stress,
@@ -47,7 +51,8 @@ export class Character{
 interface CharaFS{
     icoU: string;
     fName: string;
-    rl: [string, number];
+    rl: string;
+    dep: number;
     eqp: [{ imgUrl: string, Name: string},{ imgUrl: string, Name: string}];
     abs: string[];
     str: number;
@@ -65,6 +70,7 @@ export class CharaConverter implements FirestoreDataConverter<Character, CharaFS
             icoU: chara.icoUrl,
             fName: chara.fullName,
             rl: chara.role,
+            dep: chara.department,
             eqp: chara.equip,
             abs: chara.abilities,
             str: chara.stress,
@@ -79,6 +85,6 @@ export class CharaConverter implements FirestoreDataConverter<Character, CharaFS
     
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Character {
         const data = snapshot.data(options) as CharaFS;
-        return new Character(data.icoU, data.fName, data.rl, data.eqp, data.abs, data.str, data.trm, data.arm, data.psH, data.xp, data.sks, data.gfs);
+        return new Character(data.icoU, data.fName, data.rl, data.dep, data.eqp, data.abs, data.str, data.trm, data.arm, data.psH, data.xp, data.sks, data.gfs);
     }
 }

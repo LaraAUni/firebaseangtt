@@ -38,8 +38,7 @@ export class IconsNames {
               const dep=this.ordAbnoList[element as keyof Iconsclass];
               tot+=dep.length;
             }
-            if(tot<this.rules.abnoList.length) await this.makeList(bool);
-          console.log("Finished List: ", this.ordAbnoList);
+            if(tot!=this.rules.abnoList.length) await this.makeList(bool);
           }
           else {
             this.ordCharaList=list;
@@ -48,8 +47,7 @@ export class IconsNames {
               const dep=this.ordCharaList[element as keyof Iconsclass];
               tot+=dep.length;
             }
-            if(tot<(this.rules.charaList.length+this.rules.deadCh.length)) await this.makeList(bool);
-        console.log("Finished List: ", this.ordCharaList);
+            if(tot!=(this.rules.charaList.length+this.rules.deadCh.length)) await this.makeList(bool);
           }
         }else{
           try{
@@ -59,12 +57,10 @@ export class IconsNames {
   }
 
   async makeList(type:boolean){; //true=abnos
-    console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     if(type){
     this.ordAbnoList=new Iconsclass;
     if(this.rules.abnoList.length==0) return;
       for(let i=0; i<this.rules.abnoList.length; i++){
-          console.log("Called once?")
         try{
           const res= await this.getIcon(this.rules.abnoList[i], true)
         if(!res)continue;
@@ -75,14 +71,12 @@ export class IconsNames {
           }
         }catch(err){console.log(err)};
       }
-    console.log("New List:", this.ordAbnoList);
     await this.addList(type);
     return;
     }
     this.ordCharaList=new Iconsclass;
     if(this.rules.charaList.length==0 && this.rules.deadCh.length==0)return;
     for(let i=0; i<this.rules.charaList.length; i++){
-      console.log("Called once? Chara N°", i+1)
       try{
       const res= await this.getIcon(this.rules.charaList[i], false);
       if(!res)continue;
@@ -100,7 +94,6 @@ export class IconsNames {
                     this.ordCharaList.dead=[...this.ordCharaList.dead, chara];
         }catch(err){console.log(err);}
     }
-    console.log("New List:", this.ordCharaList);
     await this.addList(type);
   }
 
@@ -117,10 +110,7 @@ export class IconsNames {
           if(Chara!=undefined){this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
             this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id, name: Chara?.name, icon: Chara?.icon}]};}
           const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
-          const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
-          let uChara: Character = snapshot1.data()!;
-          uChara.role[1]=0;
-          setDoc(charRef, uChara);
+          updateDoc(charRef, {dep: 0});
           if(solo) await this.addList(false);
   }
 
@@ -139,7 +129,7 @@ export class IconsNames {
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           const uChara: Character = snapshot1.data()!;
           let res = { id: id, name: uChara.fullName, icon: uChara.icoUrl };
-          return [res, uChara.role[1]];
+          return [res, uChara.department];
     }
   }
 }

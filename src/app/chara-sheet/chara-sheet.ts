@@ -49,7 +49,7 @@ constructor(private ref: ChangeDetectorRef){
 
 ngOnInit(){
   if(this.rules.lookFor){this.charID=this.rules.lookFor; this.getChara(this.charID);}
-  else{this.Chara.role[1]=this.rules.lookDep; this.depColorUp();
+  else{this.Chara.department=this.rules.lookDep; this.depColorUp();
     this.owns=true;
     let maxA:number;
     if(this.rules.charaList.length) maxA=Math.max(...this.rules.charaList);
@@ -60,7 +60,7 @@ ngOnInit(){
     this.charID=(maxA>maxD?maxA+1:maxD+1);
     this.new=true;
     this.rules.lookFor=this.charID;
-    this.oldDep=this.Chara.role[1];
+    this.oldDep=this.Chara.department;
   }
 }
   async getChara(id:number, name:string=this.rules.name, gameID:number=this.rules.gameID): Promise<void> {
@@ -77,7 +77,7 @@ ngOnInit(){
     this.depAbsUp();
     this.depColorUp();
     this.isdead = this.rules.deadCh.includes(this.charID);
-    this.oldDep=this.Chara.role[1];
+    this.oldDep=this.Chara.department;
     try{
       await this.checkownership();
       this.ref.markForCheck();
@@ -97,8 +97,8 @@ ngOnInit(){
     else if(this.oldDep!=0) ind='dep'+this.rules.depsList.indexOf(this.oldDep); //basato su oldDep per far funzionare Changedep
 
     if(this.new){
-      ind='dep'+this.rules.depsList.indexOf(this.Chara.role[1]);
-      if(this.Chara.role[1]==0) ind='reserves'
+      ind='dep'+this.rules.depsList.indexOf(this.Chara.department);
+      if(this.Chara.department==0) ind='reserves'
       this.rules.charaList=[...this.rules.charaList, this.charID];
       this.iconsNames.ordCharaList[ind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[ind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
       this.new=false;
@@ -110,14 +110,14 @@ ngOnInit(){
     let charIndex = this.iconsNames.ordCharaList[ind as keyof Iconsclass].findIndex(c => c.id === this.charID); //aggiornare subito il nome per evitare che si perda negli altri casi speciali
     if(charIndex!=-1) this.iconsNames.ordCharaList[ind as keyof Iconsclass][charIndex].name=this.Chara.fullName;
     if(this.depChange){
-      if(this.oldDep!=this.Chara.role[1]){
-      const depind=this.rules.depsList.indexOf(this.Chara.role[1])
+      if(this.oldDep!=this.Chara.department){
+      const depind=this.rules.depsList.indexOf(this.Chara.department)
       let newind=(depind>=0?'dep'+depind:'reserves'); //se Select viene selezionato ma rimesso uguale od è nuovo saltare
       if(!this.isdead){ //non serve aggiornare Dead ma il dipartimento sì in caso Dead si aggiorna al prossimo step
       this.iconsNames.ordCharaList[newind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[newind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}];
       this.iconsNames.ordCharaList[ind as keyof Iconsclass]=this.iconsNames.ordCharaList[ind as keyof Iconsclass].filter(c=>c.id!=this.charID); //se era in riserva si deve togliere dalla lista di riserva
       this.depChange=false;
-      this.oldDep=this.Chara.role[1];
+      this.oldDep=this.Chara.department;
     }
       ind=newind;
   }
@@ -125,6 +125,7 @@ ngOnInit(){
   this.depColorUp();
   await this.iconsNames.addList(false);
   }
+  this.new=false;
   }
       if(this.Chara.physHealth[5]||this.Chara.physHealth[6]||this.Chara.physHealth[7]||this.Chara.physHealth[8]||this.Chara.physHealth[9]){
         if(!this.rules.deadCh.includes(this.charID)){
@@ -145,8 +146,8 @@ ngOnInit(){
         this.rules.deadCh=this.rules.deadCh.filter(c=>c!=this.charID);
         this.rules.charaList=[...this.rules.charaList, this.charID];
           this.iconsNames.ordCharaList.dead=this.iconsNames.ordCharaList.dead.filter(c=>c.id!=this.charID);
-          if(this.Chara.role[1]==0) ind='reserves';
-          else ind='dep'+this.rules.depsList.indexOf(this.Chara.role[1]);
+          if(this.Chara.department==0) ind='reserves';
+          else ind='dep'+this.rules.depsList.indexOf(this.Chara.department);
           this.iconsNames.ordCharaList[ind as keyof Iconsclass]=[...this.iconsNames.ordCharaList[ind as keyof Iconsclass], {id: this.charID, name: this.Chara.fullName, icon: this.Chara.icoUrl}]
         this.isdead=false
         await this.rules.addRules();
@@ -157,7 +158,7 @@ ngOnInit(){
         await this.iconsNames.addList(false);
       }
 
-      if(f.value.stress>=1 && ( f.value.stress<=6) || (this.Chara.role[0]=='Captain' && f.value.stress<=8) ) this.Chara.stress=f.value.stress;
+      if(f.value.stress>=1 && ( f.value.stress<=6) || (this.Chara.role=='Captain' && f.value.stress<=8) ) this.Chara.stress=f.value.stress;
       else if(f.value.stress==0) this.Chara.stress=0;
 
       if(f.value.exp>=1 && f.value.exp<=6) this.Chara.exp[0]=f.value.exp;
@@ -221,7 +222,7 @@ ngOnInit(){
     this.owns=false;
   }
 
-  depAbsUp(c: number=this.Chara.role[1]){
+  depAbsUp(c: number=this.Chara.department){
     switch(c){
       case 1: this.captAbs=this.rules.controlAbs;
       break;
@@ -258,7 +259,7 @@ ngOnInit(){
       default: this.captAbs=["---"];
     } //Con le Regole Custom per ogni partita confrontare nomi dalle regole, ex case Rules.deps[9] : var(--Custom1)
   }
-  depColorUp(c: number=this.Chara.role[1]){
+  depColorUp(c: number=this.Chara.department){
     this.depText="var(--darkbackg)";
     let newC=this.rules.depColorUp(c);
     if(newC[1])this.depText="aliceblue";

@@ -11,18 +11,18 @@
             <label for="role1" class="label">Carica</label>
             <label for="role2" class="label">Dipartimento</label>
             <div class="role" alt="incarico">
-                <select id="role1" name="role1" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" [disabled]="(!this.owns)" [(ngModel)]="Chara.role[0]">
+                <select id="role1" name="role1" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" [disabled]="(!this.owns)" [(ngModel)]="Chara.role">
                 @for(i of ["Captain", "Agent", "Clerk"]; track i){
-                    @if(i==Chara.role[0]){<option selected [ngValue]="i">{{i}}</option>}
+                    @if(i==Chara.role){<option selected [ngValue]="i">{{i}}</option>}
                     @else{<option [ngValue]="i">{{i}}</option>}
                 }
                 </select>
-                <select id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" (change)="this.depChange=true;" [disabled]="(!this.owns)" [(ngModel)]="Chara.role[1]">
+                <select id="role2" name="role2" class="gridbox" [ngStyle]="{'background-color': depColor, 'color': depText}" (change)="this.depChange=true;" [disabled]="(!this.owns)" [(ngModel)]="Chara.department">
                 @for(i of this.rules.depsList; track i){
-                    @if(i==Chara.role[1]){<option selected [ngValue]="i">{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
+                    @if(i==Chara.department){<option selected [ngValue]="i">{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>}
                     @else{<option [ngValue]="i">{{(i!=6?this.deps[i]:(i>10?this.rules.bonusDeps[i-11]:'Central Command'))}}</option>
                     }
-                }@if(Chara.role[1]==0){<option selected [ngValue]="0"></option>}
+                }@if(Chara.department==0){<option selected [ngValue]="0"></option>}
                 @else{<option [ngValue]="0"></option>}
                 </select>
             </div>
@@ -35,14 +35,14 @@
 
         <label for="abilities" class="label">Scegli un'abilità</label>
         <div class="abilities">
-            @if(Chara.role[0]=="Clerk"){
+            @if(Chara.role=="Clerk"){
             <div class="ability">---</div>
             <div class="ability"></div>
             <div class="ability"></div>
             }@else {
             @for(i of [0,1,2]; track i){
             @if(i==0 || Chara.abilities[i-1]){
-            @if(Chara.role[0]=="Agent"){
+            @if(Chara.role=="Agent"){
             <select name="ability{{i}}" id="abilities" class="ability" [disabled]="(!this.owns)"  [(ngModel)]="Chara.abilities[i]">
                 <option selected [ngValue]="Chara.abilities[i]">{{Chara.abilities[i]}}</option>
                 @if(Chara.abilities[i]){
@@ -58,7 +58,7 @@
                 }
             </select>
             }
-            @if(Chara.role[0]=="Captain"){
+            @if(Chara.role=="Captain"){
             <select name="ability{{i}}" id="abilities" class="ability" [disabled]="(!this.owns)"  [(ngModel)]="Chara.abilities[i]">
                 <option [ngValue]=""></option>
                 @for(l of this.captAbs; track $index){
@@ -85,7 +85,7 @@
                 </label></span></div>
                 @for(i of [0,1,2]; track i){
                     @if(i==0||Chara.trauma[i-1]){
-                    @if(i<2 || Chara.role[0]=="Captain"||this.rules.traum3nabled){
+                    @if(i<2 || Chara.role=="Captain"||this.rules.traum3nabled){
                         <select id="traumas" class="stresstrauma" name="trauma{{i}}" [disabled]="(!this.owns)" [(ngModel)]="Chara.trauma[i]">
                         <option [ngValue]=""></option>
                         @for(t of this.rules.traumas; track t){

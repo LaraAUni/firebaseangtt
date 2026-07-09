@@ -27,7 +27,6 @@ export class Userinfo {
   }
 
   async getUser(id:string=this.uid): Promise<void> {
-    console.log("Getting user info for ID: ", id);
       let uInfo: UserData;
       if(id==''){ uInfo=new UserData; this.uid='';}
       else{const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());

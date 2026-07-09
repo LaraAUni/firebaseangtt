@@ -123,7 +123,7 @@ ngOnInit(){
   }
   this.depAbsUp();
   this.depColorUp();
-  await this.iconsNames.addList(true);
+  await this.iconsNames.addList(false);
   }
   }
       if(this.Chara.physHealth[5]||this.Chara.physHealth[6]||this.Chara.physHealth[7]||this.Chara.physHealth[8]||this.Chara.physHealth[9]){
@@ -138,7 +138,7 @@ ngOnInit(){
         if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' has passed away...']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' ha perso la vita...']
         await this.notifs.addMessage(this.rules.gameID);
-        await this.iconsNames.addList(true);
+        await this.iconsNames.addList(false);
       }
       }
       else if(this.rules.deadCh.includes(this.charID)){
@@ -154,7 +154,7 @@ ngOnInit(){
         if(this.info.language=='en') this.notifs.last5=[...last4, this.Chara.fullName + ' comes back to life!']
         else this.notifs.last5=[...last4, this.Chara.fullName + ' torna in vita!']
         await this.notifs.addMessage(this.rules.gameID);
-        await this.iconsNames.addList(true);
+        await this.iconsNames.addList(false);
       }
 
       if(f.value.stress>=1 && ( f.value.stress<=6) || (this.Chara.role[0]=='Captain' && f.value.stress<=8) ) this.Chara.stress=f.value.stress;

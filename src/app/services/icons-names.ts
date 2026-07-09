@@ -22,14 +22,12 @@ export class IconsNames {
   
 
   async addList(bool: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<void>{
-        const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
-        let list=(bool?this.ordAbnoList:this.ordCharaList);
-        console.log("List to save: ", list);
-        await setDoc(listRef, list);
+        const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ab':'Ag')).withConverter(new listConverter());
+        await setDoc(listRef, (bool?this.ordAbnoList:this.ordCharaList));
   }
 
   async getList(bool: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<void>{
-    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ag':'Ab')).withConverter(new listConverter());
+    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (bool?'Ab':'Ag')).withConverter(new listConverter());
         const snapshot1: DocumentSnapshot<Iconsclass> = await getDoc(listRef);
         const list: Iconsclass = snapshot1.data()!;
         if (list) {
@@ -60,7 +58,7 @@ export class IconsNames {
         }
   }
 
-  async makeList(type:boolean){; //CharaList funziona, quindi???
+  async makeList(type:boolean){; //true=abnos
     console.log("Lists: ", this.rules.charaList , this.rules.abnoList);
     if(type){
     this.ordAbnoList=new Iconsclass;
@@ -107,32 +105,25 @@ export class IconsNames {
   }
 
   async deleteList(type:boolean, name:string=this.rules.name, gameID:number=this.rules.gameID){
-    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (type?'Ag':'Ab')).withConverter(new listConverter());
+    const listRef = doc(this.fireInit.db, 'icolist/' + name + '-' + gameID +'-'+ (type?'Ab':'Ag')).withConverter(new listConverter());
     await deleteDoc(listRef);
   };
 
-  async toReserve(n: number, ind: number, id=this.rules.gameID, name=this.rules.name){
+  async toReserve(id: number, ind: number, gameID=this.rules.gameID, name=this.rules.name){
     if(ind==0) return;
-    const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+    const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           let uChara: Character = snapshot1.data()!;
           uChara.role[1]=0;
           if(ind<0||ind>5) return;
-          if(!this.rules.deadCh.includes(n)){
-          this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=n);
-          this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id:n, name: uChara.fullName, icon: uChara.icoUrl}];}
+          if(!this.rules.deadCh.includes(id)){
+          this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
+          this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id, name: uChara.fullName, icon: uChara.icoUrl}];}
           await setDoc(charRef, uChara);
-          await this.addList(true);
+          await this.addList(false);
   }
 
  async getIcon(id: number, type: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<[{id: number, name: string, icon: string}, number]|null>{
-    if(!type){
-          const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
-          const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
-          const uChara: Character = snapshot1.data()!;
-          let res = { id: id, name: uChara.fullName, icon: uChara.icoUrl };
-          return [res, uChara.role[1]];
-    }
     if(type){
           const charRef = doc(this.fireInit.db, 'abnos/'+id).withConverter(new AbnoConverter());
           const snapshot1: DocumentSnapshot<Abnormality> = await getDoc(charRef);
@@ -142,8 +133,13 @@ export class IconsNames {
           const uData: AbnoData = snapshot2.data()!;
           let res = { id: id, name: (uData.clock1[0] == uData.clock1[1] ? (uChara.fullName.Nickname ? (uData.trueNameRev ? uChara.fullName.Name : uChara.fullName.Nickname) : uChara.fullName.Name) : "???" ), icon: uChara.icoUrl };
           return [res, uData.department];
+    }else{
+      const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+          const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
+          const uChara: Character = snapshot1.data()!;
+          let res = { id: id, name: uChara.fullName, icon: uChara.icoUrl };
+          return [res, uChara.role[1]];
     }
-    return null;
   }
 }
 

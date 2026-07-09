@@ -237,13 +237,17 @@ onSearchSubmit(code: string) {
     }
   }
 
-  updateDeps(n: number){
-    if(!this.rules.isDM || this.maxDeps) return;
+  async updateDeps(n: number){
+    if(!this.rules.isDM) return;
       let ind=this.rules.depsList.indexOf(n);
     if(this.depsList[n-1]){ // questa è depList locale per i checkmark che è true se è da togliere, false se da aggiungere
       for(const elem of this.iconsNames.ordCharaList['dep'+ind as keyof Iconsclass]){
       let id=elem.id;
-      this.iconsNames.toReserve(id, ind);}
+      try{
+        await this.iconsNames.toReserve(id, ind, false);
+      }catch(err){console.log(err)}
+      }
+      this.iconsNames.addList(false);
       this.rules.depsList=this.rules.depsList.filter(c=>c!=n);
       this.depsList[n-1]=false;
     }

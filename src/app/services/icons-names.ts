@@ -109,18 +109,19 @@ export class IconsNames {
     await deleteDoc(listRef);
   };
 
-  async toReserve(id: number, ind: number, gameID=this.rules.gameID, name=this.rules.name){
+  async toReserve(id: number, ind: number, solo:boolean=true, gameID=this.rules.gameID, name=this.rules.name){
     if(ind==0) return;
-    const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
+          if(ind<0||ind>5) return;
+          if(!this.rules.deadCh.includes(id)){
+          const Chara=this.ordCharaList['dep'+ind as keyof Iconsclass].find(c=>c.id==id);
+          if(Chara!=undefined){this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
+            this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id, name: Chara?.name, icon: Chara?.icon}]};}
+          const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
           const snapshot1: DocumentSnapshot<Character> = await getDoc(charRef);
           let uChara: Character = snapshot1.data()!;
           uChara.role[1]=0;
-          if(ind<0||ind>5) return;
-          if(!this.rules.deadCh.includes(id)){
-          this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
-          this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id, name: uChara.fullName, icon: uChara.icoUrl}];}
-          await setDoc(charRef, uChara);
-          await this.addList(false);
+          setDoc(charRef, uChara);
+          if(solo) await this.addList(false);
   }
 
  async getIcon(id: number, type: boolean, name: string = this.rules.name, gameID: number = this.rules.gameID) : Promise<[{id: number, name: string, icon: string}, number]|null>{

@@ -7,7 +7,6 @@ import { CharaConverter } from '../chara-sheet/characlass';
 import { doc, deleteDoc, getDoc, DocumentSnapshot, setDoc, namedQuery, waitForPendingWrites } from 'firebase/firestore';
 import { Rules, RulesConverter } from '../rules';
 import { UserConverter, UserData } from './userdata';
-import { Iconsclass } from '../iconsclass';
 
 @Injectable({
   providedIn: 'root',
@@ -29,30 +28,31 @@ export class GameService {
     const charRef = doc(this.init.db, 'charas/'+ name + '-' + date + '-' + n).withConverter(new CharaConverter());
     await deleteDoc(charRef);
     if(temp){
-    if(!this.rules.depsList.includes(dep))return;
-    let ind=(dep>0?'dep'+this.rules.depsList.indexOf(dep):'reserves')
+    if(dep){
+    let ind=this.rules.depsList.indexOf(dep);
+    if(ind==-1) ind=6;
     if(this.rules.deadCh.includes(n)){
-      ind='dead';
+      ind=7;
       this.rules.deadCh=this.rules.deadCh.filter(c=>c!=n);
     }
       else this.rules.charaList=this.rules.charaList.filter(c=>c!=n);
-    this.iconsNames.ordCharaList[ind as keyof Iconsclass]=this.iconsNames.ordCharaList[ind as keyof Iconsclass]?.filter(c=>c.id!=n);
+
+    this.iconsNames.ordCharaList[ind]=this.iconsNames.ordCharaList[ind].filter(c=>c.id!=n);
+    }
     this.rules.addRules();
-    this.iconsNames.addList(false);
     } //temp vuol dire che non è per cancellare la partita, altrimenti rischio di salvare le regole dopo che sono state cancellate perché è asynch
   }
 
-  async deleteAbno(n: number=this.rules.lookFor, dep:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
+  async deleteAbno(n: number=this.rules.lookFor, d:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
     const abnoRef = doc(this.init.db, 'gameabnos/'+ name + '-' + date + '-' + n).withConverter(new CharaConverter());
     if(!this.rules.isDM) return;
     await deleteDoc(abnoRef);
-    if(!this.rules.depsList.includes(dep))return;
     if(temp){ 
-      let ind=(dep>0?'dep'+this.rules.depsList.indexOf(dep):'reserves')
+    if(d){
+      let ind=this.rules.depsList.indexOf(d);
       this.rules.abnoList=this.rules.abnoList.filter(c=>c!=n);
-      this.iconsNames.ordAbnoList[ind as keyof Iconsclass]=this.iconsNames.ordAbnoList[ind as keyof Iconsclass]?.filter(c=>c.id!=n);
-      this.rules.addRules();
-      this.iconsNames.addList(true);
+      this.iconsNames.ordAbnoList[ind]=this.iconsNames.ordAbnoList[ind].filter(c=>c.id!=n);
+    } this.rules.addRules();
     }
   }
 

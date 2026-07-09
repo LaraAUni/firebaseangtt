@@ -19,7 +19,6 @@ import { Notifs } from '../services/notifs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { GameService } from '../services/game-service';
 import { DocumentSnapshot, doc, getDoc } from 'firebase/firestore';
-import { Iconsclass } from '../iconsclass';
 
 @Component({
   selector: 'app-login-page',
@@ -46,7 +45,6 @@ export class LoginPage {
   userOp=false;
   newGame= false; //funzione?
   depsList= Array(16).fill(false);
-  maxDeps=false;
   searching='';
   playerSearch: [string,string][]=[]; //unire a playerSearch?
   invitedList: boolean[]=[]; //cambiare a Boolean mappata a Ind
@@ -238,11 +236,11 @@ onSearchSubmit(code: string) {
   }
 
   updateDeps(n: number){
-    if(!this.rules.isDM || this.maxDeps) return;
+    if(!this.rules.isDM) return;
       let ind=this.rules.depsList.indexOf(n);
-    if(this.depsList[n-1]){ // questa è depList locale per i checkmark che è true se è da togliere, false se da aggiungere
-      for(const elem of this.iconsNames.ordCharaList['dep'+ind as keyof Iconsclass]){
-      let id=elem.id;
+    if(this.depsList[n-1]){
+      for(let i=0; i<this.iconsNames.ordCharaList[ind].length; i++){
+      let id=this.iconsNames.ordCharaList[ind][i].id;
       this.iconsNames.toReserve(id, ind);}
       this.rules.depsList=this.rules.depsList.filter(c=>c!=n);
       this.depsList[n-1]=false;
@@ -251,7 +249,6 @@ onSearchSubmit(code: string) {
       this.depsList[n-1]=true;
       if(n>10) this.rules.bonusDeps=[...this.rules.bonusDeps, 'Custom'];
     }
-    this.maxDeps=(this.rules.depsList.length>=6);
     this.rules.addRules();
   }
 
@@ -273,10 +270,9 @@ onSearchSubmit(code: string) {
         this.getGame(0, 'NoGame');
         return;
       }
-      this.iconsNames.getList(true);
-      this.iconsNames.getList(false);
+      this.iconsNames.makeList(true);
+      this.iconsNames.makeList(false);
       this.notifs.getMessage(date);
-      this.maxDeps=(this.rules.depsList.length>=6);
       const sortedList = this.rules.depsList.sort((a, b) => a - b);
       this.depsList= Array(16).fill(false);
       for(let i=0; i<sortedList.length; i++){

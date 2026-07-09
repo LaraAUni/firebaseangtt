@@ -26,67 +26,13 @@
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}">
             <span style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-              @switch (ind) {
-                @case(0){
-                      @for(j of this.iconsNames.ordCharaList['dep0']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                }
-                @case(1){
-                      @for(j of this.iconsNames.ordCharaList['dep1']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                    }
-                @case(2){
-                      @for(j of this.iconsNames.ordCharaList['dep2']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                }
-                @case(3){
-                      @for(j of this.iconsNames.ordCharaList['dep3']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                }
-                @case(4){
-                      @for(j of this.iconsNames.ordCharaList['dep4']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                    }
-                @case(5){
-                      @for(j of this.iconsNames.ordCharaList['dep5']; track $index){
-                @if(deleting){
-                  <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                @else{
-                  <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
-                  <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
-                }
-                }
+              @for(j of this.iconsNames.ordCharaList[ind]; track $index){
+            @if(deleting){
+              <img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=i; this.gameServ.deleteChara(j.id, i)">
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
+            @else{
+              <img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=i">
+              <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
             }
           <span class="newbutt" (click)="this.rules.lookDep=i; showChara=1; drawer.toggle(); this.rules.lookFor=0;">+</span>
           @if(deleting){
@@ -99,7 +45,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: var(--Bonus)">Reserves</mat-expansion-panel-header>
           <span style="color: var(--Bonus); display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList.reserves; track $index){
+            @for(j of this.iconsNames.ordCharaList[6]; track $index){
               @if(deleting){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.rules.lookFor=j.id; this.rules.lookDep=0; this.gameServ.deleteChara(j.id, 0)">
              }@else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id; this.rules.lookDep=0;">}
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>
@@ -114,7 +60,7 @@
         <mat-expansion-panel hideToggle class="expansion">
           <mat-expansion-panel-header class="links" style="color: grey;">Dead</mat-expansion-panel-header>
           <span style="color: grey; display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @for(j of this.iconsNames.ordCharaList.dead; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png"
+            @for(j of this.iconsNames.ordCharaList[7]; track $index){<img class="iconbtn" src="Charas/{{j.icon}}.png"
               alt="" mat-list-item (click)="showChara=1; drawer.toggle(); this.rules.lookFor=j.id;" style="filter: grayscale(80%);">
             <span style="grid-row: 2; text-align: center;">{{j.name}}</span>}
           </span>
@@ -129,79 +75,23 @@
             {{(i==6?'Central Command':(i>10?this.rules.bonusDeps[i-11] : this.deps[i]))}}
           </mat-expansion-panel-header>
           <span [ngStyle]="{'color': (i>10 ? this.rules.bonusColors[i-11][0] : 'var(--' + this.deps[i] + ')')}" style="display: grid; grid-template-rows: 1fr 0.2fr; width: min-content;">
-            @switch (ind) {
-              @case(0){
-                @for(j of this.iconsNames.ordAbnoList['dep0']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-              @case(1){
-                @for(j of this.iconsNames.ordAbnoList['dep1']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-              @case(2){
-                @for(j of this.iconsNames.ordAbnoList['dep2']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-              @case(3){
-                @for(j of this.iconsNames.ordAbnoList['dep3']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-              @case(4){
-                @for(j of this.iconsNames.ordAbnoList['dep4']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-              @case(5){
-                @for(j of this.iconsNames.ordAbnoList['dep5']; track $index){
-                @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
-                @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
-                <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
-                @if(this.rules.isDM){
-                <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
-                @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
-                <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
-                @for(i of this.selectableAbnos; track $index) {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}</select>}}
-              }
-            }
-            
+            @for(j of this.iconsNames.ordAbnoList[ind]; track $index){
+              @if(deleteAbno){<img class="iconshake" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="this.gameServ.deleteAbno(j.id, i);">}
+              @else{<img class="iconbtn" src="Charas/{{j.icon}}.png" alt="" mat-list-item (click)="showAbno=1; drawer.toggle(); this.rules.lookFor=j.id;">}
+            <span style="grid-row: 2; text-align: center; font-style: italic;">{{j.name}}</span>}
+            <form></form>
+          @if(this.rules.isDM){
+            <div class="newbutt" (click)="this.rules.lookDep=i; addAbno=true;">+</div>
+            @if(addAbno){<label for="newAbno">Choose Abnormality:</label>
+            <select id="newAbno" name="newAbno" (change)="onAbnoSelected(); drawer.close()" [(ngModel)]="this.selectedAbno">
+              @for(i of this.selectableAbnos; track $index)
+              {@if(!this.rules.abnoList.includes(i.id)){<option [ngValue]="i.id">{{i.name}}</option>}}
+            </select>}
           @if(deleteAbno){
         <img class="newbutt" src="Undo.ico" alt="undo" style="padding: 0; height:3vh; width:3vh;"  (click)="deleteAbno=false;">}
           @else{
         <img class="newbutt" src="trashcan.png" alt="delete" style="padding: 0; height:3vh; width:3vh;"   (click)="deleteAbno=true;">}
+          }
           </span>
         </mat-expansion-panel>
         }

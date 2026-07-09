@@ -80,7 +80,7 @@
         <div class="stresstraumas">
             <div class="stresstrauma"><label for="stress">Stress :</label><input type="text" name="stress" id="stress" placeholder="{{Chara.stress}}" inputmode="numeric" maxlength="1" size="1" class="stresstext" [readonly]="(!this.owns)" ngModel>
                 <span class="check"><label class="container"
-                    title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor" name="armor" [disabled]="(!this.owns)" [(ngModel)]="Chara.armor">
+                    title="Special Armor">-<input type="checkbox" id="armor" [checked]="Chara.armor" name="armor" [readonly]="(!this.owns)" [(ngModel)]="Chara.armor">
                     <span class="checkmark"></span>
                 </label></span></div>
                 @for(i of [0,1,2]; track i){

@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { IconsNames } from '../services/icons-names';
 import { Userinfo } from '../services/userinfo';
-import { Iconsclass } from '../iconsclass';
 
 @Component({
   selector: 'app-abno-sheet',
@@ -52,7 +51,7 @@ async ngOnInit(){
       this.addData();
       const i=this.rules.depsList.indexOf(this.AbnoData.department);
       const newname=(this.showname? (this.AbnoSheet.fullName.Nickname?this.AbnoSheet.fullName.Nickname:this.AbnoSheet.fullName.Name):'???')
-      if(i>=0) this.icons.ordAbnoList['dep'+i as keyof Iconsclass]=[...this.icons.ordAbnoList['dep'+i as keyof Iconsclass], {id: this.abnoID, name: newname, icon: this.AbnoSheet.icoUrl}];
+      if(i>=0) this.icons.ordAbnoList[i]=[...this.icons.ordAbnoList[i], {id: this.abnoID, name: newname, icon: this.AbnoSheet.icoUrl}];
     }
     else{
     try{

@@ -58,66 +58,66 @@
     @if(this.rules.isDM){
 <span>
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[0])" [checked]="this.depsList[0]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[0]">
     <span class="checkmark" style="background-color: var(--Control);" (click)="updateDeps(1)">Control</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[1])" [checked]="this.depsList[1]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[1]">
     <span class="checkmark" style="background-color: var(--Information); color: white;" (click)="updateDeps(2)">Information</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[2])" [checked]="this.depsList[2]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[2]">
     <span class="checkmark" style="background-color: var(--Safety);" (click)="updateDeps(3)">Safety</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[3])" [checked]="this.depsList[3]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[3]">
     <span class="checkmark" style="background-color: var(--Training);" (click)="updateDeps(4)">Training</span>
   </label>
   </span>
 
     <span>
     <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[4])" [checked]="this.depsList[4]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[4]">
     <span class="checkmark" style="background-color: var(--Disciplinary);" (click)="updateDeps(5)">Disciplinary</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[5])" [checked]="this.depsList[5]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[5]">
     <span class="checkmark" style="background-color: var(--Central);" (click)="updateDeps(6)">Central-Command</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[6])" [checked]="this.depsList[6]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[6]">
     <span class="checkmark" style="background-color: var(--Welfare); color: white;" (click)="updateDeps(7)">Welfare</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[7])" [checked]="this.depsList[7]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[7]">
     <span class="checkmark" style="background-color: var(--Extraction); color: white;" (click)="updateDeps(8)">Extraction</span>
   </label>
   </span>
   <span>
     <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[8])" [checked]="this.depsList[8]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[8]">
     <span class="checkmark" style="background-color: var(--Records);" (click)="updateDeps(9)">Records</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[9])" [checked]="this.depsList[9]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[9]">
     <span class="checkmark" style="background-color: var(--Architecture);" (click)="updateDeps(10)">Architecture</span>
   </label>
 
   @if (this.rules.bonusDeps.length>0) {
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[10])" [checked]="this.depsList[10]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[10]">
     <span class="checkmark" (click)="updateDeps(11)">Custom1</span>
   </label>
 
   <label class="container">
-    <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[11])" [checked]="this.depsList[11]">
+    <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[11]">
     <span class="checkmark" (click)="updateDeps(12)">Custom2</span>
   </label>}
 
@@ -126,17 +126,17 @@
     @if(this.rules.bonusDeps.length>2){
     <span>
       <label class="container">
-        <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[12])" [checked]="this.depsList[12]">
+        <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[12]">
         <span class="checkmark" (click)="updateDeps(13)">Custom3</span>
       </label>
 
       <label class="container">
-        <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[13])" [checked]="this.depsList[13]">
+        <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[13]">
         <span class="checkmark" (click)="updateDeps(14)">Custom5</span>
       </label>
 
       <label class="container">
-        <input type="checkbox" [readonly]="(!this.rules.isDM)" [disabled]="(maxDeps && !this.depsList[14])" [checked]="this.depsList[14]">
+        <input type="checkbox" [readonly]="(!this.rules.isDM)" [checked]="this.depsList[14]">
         <span class="checkmark" (click)="updateDeps(15)">Custom6</span>
       </label>
     </span>}

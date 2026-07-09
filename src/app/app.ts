@@ -13,8 +13,7 @@ import { NgStyle } from '@angular/common';
 import { Messages } from "./messages/messages";
 import { Notifs } from './services/notifs';
 import { GameService } from './services/game-service';
-import { FormsModule } from '@angular/forms';
-import { KeyValuePipe } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +41,7 @@ export class App {
   deleting=false;
   deleteAbno=false;
   selectableAbnos=[{id:1, name:'Pinocchio'}, {id:2, name:'The Stars Go out'}, {id:3, name: 'Words of a Feather'}]
-  constructor(){
+  constructor(private ref: ChangeDetectorRef){
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js").then(
     (registration) => {
@@ -54,7 +53,8 @@ if ("serviceWorker" in navigator) {
   );
 } else {
   console.error("Service workers are not supported.");
-}}
+}
+  }
   
   ngOnInit(){
   }

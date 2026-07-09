@@ -21,8 +21,8 @@ export class GameService {
 
   async deleteChara(n: number=this.rules.lookFor, dep:number=this.rules.lookDep,  name=this.rules.name, date=this.rules.gameID, temp: boolean=true){
     if(n==0) return;
-    if(this.info.characters.includes(name+date+n)){
-    this.info.characters=this.info.characters.filter(c=>c!=name+date+n);
+    if(this.info.characters.includes(name+'-'+date+'-'+n)){
+    this.info.characters=this.info.characters.filter(c=>c!=name+'-'+date+'-'+n);
     this.info.addUser(this.info.uid);
     }else if(!this.rules.isDM)return;
 
@@ -81,8 +81,10 @@ export class GameService {
                 i--;
               }
             }
-            await setDoc(userRef, uInfo)
-            if(element==you)await this.info.getUser();
+            if(element==you){this.info.games=uInfo.games;
+              this.info.characters=uInfo.characters;
+            }
+            setDoc(userRef, uInfo)
     }
     for (const element of uRules.playerIDs){
       const userRef = doc(this.init.db, 'userdata/'+element).withConverter(new UserConverter());
@@ -98,9 +100,9 @@ export class GameService {
                 i--;
               }
             }
-            await setDoc(userRef, uInfo);
+            setDoc(userRef, uInfo);
     }
-    await this.rules.deleteRules(date, name);
+    this.rules.deleteRules(date, name);
   }
 
 }

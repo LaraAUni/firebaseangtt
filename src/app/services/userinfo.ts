@@ -31,7 +31,7 @@ export class Userinfo {
       if(id==''){ uInfo=new UserData; this.uid='';}
       else{const userRef = doc(this.fireInit.db, 'userdata/' + id).withConverter(new UserConverter());
       const snapshot1: DocumentSnapshot<UserData> = await getDoc(userRef);
-      if(snapshot1.data()==undefined) {throw new Error("User data not found for ID: " + id);}
+      if(!snapshot1.data()) {throw new Error("User data not found for ID: " + id);}
       uInfo= snapshot1.data()!;
       this.uid=id;}
       this.name = uInfo.name;

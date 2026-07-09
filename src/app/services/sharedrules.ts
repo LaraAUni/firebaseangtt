@@ -54,7 +54,7 @@ export class Sharedrules {
     let uRules: Rules;
     if(date){const rulesRef = doc(this.init.db, 'rules/' + name + '-' + date).withConverter(new RulesConverter());
     const snapshot1: DocumentSnapshot<Rules> = await getDoc(rulesRef);
-    if(snapshot1.data()!=undefined){
+    if(snapshot1.data()){
     uRules = snapshot1.data()!;
     }
     else return false;

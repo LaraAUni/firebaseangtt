@@ -103,11 +103,10 @@ export class IconsNames {
   };
 
   async toReserve(id: number, ind: number, solo:boolean=true, gameID=this.rules.gameID, name=this.rules.name){
-    if(ind==0) return;
           if(ind<0||ind>5) return;
           if(!this.rules.deadCh.includes(id)){
           const Chara=this.ordCharaList['dep'+ind as keyof Iconsclass].find(c=>c.id==id);
-          if(Chara!=undefined){this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
+          if(Chara){this.ordCharaList['dep'+ind as keyof Iconsclass]=this.ordCharaList['dep'+ind as keyof Iconsclass].filter(c=>c.id!=id);
             this.ordCharaList.reserves=[...this.ordCharaList.reserves, {id, name: Chara?.name, icon: Chara?.icon}]};}
           const charRef = doc(this.fireInit.db, 'charas/' + name + '-' + gameID + '-' + id).withConverter(new CharaConverter()); //Icons a parte per leggere meno roba!
           updateDoc(charRef, {dep: 0});

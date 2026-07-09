@@ -242,7 +242,7 @@ onSearchSubmit(code: string) {
       let ind=this.rules.depsList.indexOf(n);
     if(this.depsList[n-1]){ // questa è depList locale per i checkmark che è true se è da togliere, false se da aggiungere
       for(const elem of this.iconsNames.ordCharaList['dep'+ind as keyof Iconsclass]){
-      let id=elem.id;
+      const id=elem.id;
       try{
         await this.iconsNames.toReserve(id, ind, false);
       }catch(err){console.log(err)}

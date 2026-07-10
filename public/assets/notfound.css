@@ -1,0 +1,10 @@
+.bigtext{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-size: 10vh;
+}
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
